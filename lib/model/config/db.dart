@@ -7,11 +7,21 @@ class DB {
     return sql.openDatabase(
       path.join(dbPath, "icecream.db"),
       onCreate: (db, version) {
-        return db.execute(
-          "CREATE TABLE products(id INTEGER PRIMARY KEY, name TEXT NOT NULL, brand TEXT NULL, price REAL NOT NULL)"
-          // brand - marca
+        // return db.execute(
+        //   "CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT NOT NULL, brand TEXT NULL, price REAL NOT NULL)",
+        //   // brand - marca
+        //   // flavors - sabores
+        // );
+        db.execute(
+          "CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT NOT NULL, brand TEXT NULL, price REAL NOT NULL)",
         );
+        db.execute(
+          'CREATE TABLE flavors (id INTEGER PRIMARY KEY, type TEXT NOT NULL)',
+        );
+
+        db.execute('CREATE TABLE productions (id INTEGER PRIMARY KEY, quantity INTEGER NOT NULL, date_production TEXT)');
       },
+      version: 1,
     );
   }
 

@@ -1,4 +1,4 @@
-# app_ice_cream
+# ice_cream
 
 A new Flutter project.
 
