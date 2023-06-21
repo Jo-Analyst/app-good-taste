@@ -8,7 +8,9 @@ class DB {
       path.join(dbPath, "icecream.db"),
       onCreate: (db, version) {
         return db.execute(
-          "CREATE TABLE juices(id integer PRIMARY KEY, name TEXT, brand TEXT, price REAL)",
+          "CREATE TABLE juices(id integer PRIMARY KEY, name TEXT, brand TEXT, price REAL)", 
+          // juice - Suco
+          // brand - marca
         );
       },
     );
