@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ice_cream/app/page/home_page.dart';
 
 import '../template/bottom_navigation_bar_item.dart';
 
@@ -14,24 +15,19 @@ class _IceCreamViewState extends State<IceCreamView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
-        child: AppBar(
-          title: const Text("ICEM CREAM - JV"),
-          backgroundColor: Colors.pink[500],
-        ),
-      ),
-      body: Center(
-        child: Text(
-          "Ice Cream",
-          style: TextStyle(fontSize: Theme.of(context).textTheme.displayLarge?.fontSize),
-        ),
-      ),
+      // appBar: PreferredSize(
+      //   preferredSize: const Size.fromHeight(100),
+      //   child: AppBar(
+      //     title: const Text("ICEM CREAM - JV"),
+      //     backgroundColor: Theme.of(context).primaryColor,
+      //   ),
+      // ),
+      body: const HomePage(),
       // extendBody: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        backgroundColor: Colors.pink[500],
+        backgroundColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -39,7 +35,7 @@ class _IceCreamViewState extends State<IceCreamView> {
         unselectedFontSize: 16,
         iconSize: 30,
         type: BottomNavigationBarType.fixed,
-        fixedColor: Colors.pink[500],
+        fixedColor: Theme.of(context).primaryColor,
         currentIndex: _currentIndex,
         onTap: (currentIndex) => setState(() {
           _currentIndex = currentIndex;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:ice_cream/app/view/ice_cream_view.dart';
+import 'package:ice_cream/app/page/ice_cream_view.dart';
 import 'package:ice_cream/route/routes.dart';
 
 void main() async {
@@ -16,8 +16,7 @@ class MyApp extends StatelessWidget {
       title: "APP - Ice Cream",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-            ),
+        primaryColor: Colors.pink[500],
         textTheme: const TextTheme(
           displayLarge: TextStyle(fontSize: 18),
         ),
