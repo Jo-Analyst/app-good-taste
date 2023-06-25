@@ -16,9 +16,10 @@ class MyApp extends StatelessWidget {
       title: "APP - Ice Cream",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        // scaffoldBackgroundColor: Colors.white70,
         primaryColor: Colors.pink[500],
         textTheme: const TextTheme(
-          displayLarge: TextStyle(fontSize: 18),
+          displayLarge: TextStyle(fontSize: 18, color: Colors.black),
         ),
       ),
       routes: {

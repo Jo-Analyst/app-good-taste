@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ice_cream/app/page/home_page.dart';
+import 'package:ice_cream/app/page/movement_details_page.dart';
 
 import '../template/bottom_navigation_bar_item.dart';
 
@@ -15,15 +15,8 @@ class _IceCreamViewState extends State<IceCreamView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: PreferredSize(
-      //   preferredSize: const Size.fromHeight(100),
-      //   child: AppBar(
-      //     title: const Text("ICEM CREAM - JV"),
-      //     backgroundColor: Theme.of(context).primaryColor,
-      //   ),
-      // ),
-      body: const HomePage(),
-      // extendBody: true,
+      body: const MovementDetailsPage(),
+      extendBody: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -33,6 +26,7 @@ class _IceCreamViewState extends State<IceCreamView> {
       bottomNavigationBar: BottomNavigationBar(
         selectedFontSize: 18,
         unselectedFontSize: 16,
+        unselectedItemColor: Colors.black87,
         iconSize: 30,
         type: BottomNavigationBarType.fixed,
         fixedColor: Theme.of(context).primaryColor,
@@ -40,7 +34,7 @@ class _IceCreamViewState extends State<IceCreamView> {
         onTap: (currentIndex) => setState(() {
           _currentIndex = currentIndex;
         }),
-        items: [...BottomNavigationBarItemTemplate.items()],
+        items: BottomNavigationBarItemTemplate.items(),
       ),
     );
   }
