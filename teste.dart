@@ -17,16 +17,32 @@ class MovementDetailsTemplate extends StatefulWidget {
 class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
   bool _expanded = false;
   final List<Map<String, dynamic>> _items = [
-    {"name": "Açucar", "price": 39.00, "quantity": 1},
-    {"name": "Saquinho", "price": 24.50, "quantity": 1},
-    {"name": "Suco de Maracujá", "price": 13.5, "quantity": 10},
-    {"name": "Suco de Morango", "price": 27.00, "quantity": 20},
+    {
+      "name": "Açucar",
+      "price": 39.00,
+      "quantity": 1
+    },
+    {
+      "name": "Saquinho",
+      "price": 24.50,
+      "quantity": 1
+    },
+    {
+      "name": "Suco de Maracujá",
+      "price": 13.5,
+      "quantity": 10
+    },
+    {
+      "name": "Suco de Maracujá",
+      "price": 13.5,
+      "quantity": 10
+    },
   ];
 
   Color changeColorByDescription() {
     switch (widget.description.toLowerCase()) {
       case "entrada":
-        return const Color.fromARGB(255, 155, 112, 48);
+        return Colors.blue.shade300;
       case "total":
         return Colors.green;
       default:
@@ -95,10 +111,6 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                           padding: EdgeInsets.zero, // Remover o padding
                           itemCount: _items.length,
                           itemBuilder: (ctx, index) {
-                            final name = _items[index]['name'];
-                            final price = _items[index]['price'];
-                            final quantity = _items[index]['quantity'];
-
                             return Container(
                               width: double.infinity,
                               color: const Color.fromARGB(255, 222, 219, 219),
@@ -109,9 +121,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                                     vertical: 10,
                                     horizontal: 10,
                                   ),
-                                  child: Text(
-                                    "${quantity}x $name ${NumberFormat('R\$ #.00', 'PT-BT').format(price)}",
-                                  ),
+                                  child: Text(_items[0]["name"]),
                                 ),
                               ),
                             );
@@ -119,30 +129,22 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                         ),
                       )
                     : Column(
-                        children: _items.map(
-                          (item) {
-                            final name = item['name'];
-                            final price = item['price'];
-                            final quantity = item['quantity'];
-
-                            return Container(
-                              width: double.infinity,
-                              color: const Color.fromARGB(255, 222, 219, 219),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 10,
-                                  ),
-                                  child: Text(
-                                    "${quantity}x $name ${NumberFormat('R\$ #.00', 'PT-BT').format(price)}",
-                                  ),
+                        children: _items.map((item) {
+                          return Container(
+                            width: double.infinity,
+                            color: const Color.fromARGB(255, 222, 219, 219),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: 10,
                                 ),
+                                child: Text(item[0]),
                               ),
-                            );
-                          },
-                        ).toList(),
+                            ),
+                          );
+                        }).toList(),
                       ),
               ),
             ],

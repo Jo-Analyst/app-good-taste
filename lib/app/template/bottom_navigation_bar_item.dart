@@ -4,8 +4,8 @@ class BottomNavigationBarItemTemplate {
   static List<BottomNavigationBarItem> items() {
     return const [
       BottomNavigationBarItem(
-        label: "Início",
-        icon: Icon(Icons.home_outlined),
+        label: "Finança",
+        icon: Icon(Icons.auto_graph),
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.save_outlined),

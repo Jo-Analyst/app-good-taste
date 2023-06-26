@@ -11,7 +11,7 @@ class MovementDetailsPage extends StatelessWidget {
         Column(
           children: [
             Container(
-              height: 150,
+              height: 180,
               width: double.infinity,
               color: Theme.of(context).primaryColor,
               child: Container(
@@ -29,7 +29,7 @@ class MovementDetailsPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 28),
             SizedBox(
               width: 330,
               child: Row(
@@ -54,18 +54,18 @@ class MovementDetailsPage extends StatelessWidget {
               ),
             ),
             // const SizedBox(height: 10),
-            // const SizedBox(height: 10),
+            const SizedBox(height: 20),
             const Column(
               children: [
                 MovementDetailsTemplate(price: 25, description: "Entrada"),
                 MovementDetailsTemplate(price: 25, description: "Saida"),
-                MovementDetailsTemplate(price: 25, description: "Total")
+                // MovementDetailsTemplate(price: 25, description: "Total")
               ],
             )
           ],
         ),
         Positioned(
-          top: 90,
+          top: 120,
           left: 50,
           width: 250,
           child: Card(
@@ -80,12 +80,25 @@ class MovementDetailsPage extends StatelessWidget {
                     'Lucro Total',
                     style: TextStyle(fontSize: 18),
                   ),
-                  Text(
-                    'R\$ 650,00',
-                    style: TextStyle(
-                        fontSize: 30,
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w700),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'R\$ 650,00',
+                        style: TextStyle(
+                            fontSize: 30,
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.w700),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.add_circle,
+                          color: Theme.of(context).primaryColor,
+                          size: 35,
+                        ),
+                      )
+                    ],
                   ),
                 ],
               ),

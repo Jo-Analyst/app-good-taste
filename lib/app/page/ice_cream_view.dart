@@ -16,13 +16,7 @@ class _IceCreamViewState extends State<IceCreamView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: const MovementDetailsPage(),
-      extendBody: true,
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: Theme.of(context).primaryColor,
-        child: const Icon(Icons.add),
-      ),
+      // extendBody: true,
       bottomNavigationBar: BottomNavigationBar(
         selectedFontSize: 18,
         unselectedFontSize: 16,
