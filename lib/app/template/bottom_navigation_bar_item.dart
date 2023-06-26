@@ -4,7 +4,7 @@ class BottomNavigationBarItemTemplate {
   static List<BottomNavigationBarItem> items() {
     return const [
       BottomNavigationBarItem(
-        label: "Finança",
+        label: "Finanças",
         icon: Icon(Icons.auto_graph),
       ),
       BottomNavigationBarItem(

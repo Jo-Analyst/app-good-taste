@@ -66,7 +66,7 @@ class MovementDetailsPage extends StatelessWidget {
         ),
         Positioned(
           top: 120,
-          left: 50,
+          left: 55,
           width: 250,
           child: Card(
             elevation: 6,
