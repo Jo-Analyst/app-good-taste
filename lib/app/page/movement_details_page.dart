@@ -73,8 +73,8 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
         ),
         Positioned(
           top: 120,
-          left: MediaQuery.of(context).size.width / 2 - 165,
-          width: 330,
+          left: MediaQuery.of(context).size.width / 2 - 125,
+          width: 250,
           child: Card(
             elevation: 6,
             // shadowColor: Theme.of(context).primaryColor,
