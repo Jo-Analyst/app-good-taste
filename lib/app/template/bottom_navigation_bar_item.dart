@@ -12,12 +12,12 @@ class BottomNavigationBarItemTemplate {
         label: "Cadastro",
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.attach_money),
-        label: "Gastos",
-      ),
-      BottomNavigationBarItem(
         icon: Icon(Icons.picture_as_pdf_outlined),
         label: "Relatório",
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.settings_outlined),
+        label: "Configuração",
       ),
       // BottomNavigationBarItemTemplate.buttomItem(const Icon(Icons.home), "Início"),
     ];

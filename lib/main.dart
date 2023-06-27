@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:ice_cream/app/page/ice_cream_view.dart';
-import 'package:ice_cream/route/routes.dart';
+import 'package:ice_cream/app/route/routes.dart';
 
 void main() async {
   runApp(const MyApp());

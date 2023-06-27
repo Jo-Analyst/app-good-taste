@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:ice_cream/app/partils/month.dart';
 import 'package:ice_cream/app/template/movement_details_template.dart';
 
-class MovementDetailsPage extends StatelessWidget {
+class MovementDetailsPage extends StatefulWidget {
   const MovementDetailsPage({super.key});
 
+  @override
+  State<MovementDetailsPage> createState() => _MovementDetailsPageState();
+}
+
+class _MovementDetailsPageState extends State<MovementDetailsPage> {
+  int numberMonth = int.parse(DateTime.now().month.toString()) - 1;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -36,18 +43,18 @@ class MovementDetailsPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () => setState(() {
+                      if (numberMonth == 0) return;
+                      numberMonth--;
+                    }),
                     icon: const Icon(Icons.keyboard_arrow_left),
                   ),
-                  Text(
-                    "Janeiro",
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.displayLarge?.fontSize,
-                    ),
-                  ),
+                  MonthPartils(numberMonth),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () => setState(() {
+                      if (numberMonth == 11) return;
+                      numberMonth++;
+                    }),
                     icon: const Icon(Icons.keyboard_arrow_right),
                   ),
                 ],
@@ -57,8 +64,8 @@ class MovementDetailsPage extends StatelessWidget {
             const SizedBox(height: 20),
             const Column(
               children: [
-                MovementDetailsTemplate(price: 25, description: "Entrada"),
-                MovementDetailsTemplate(price: 25, description: "Saida"),
+                MovementDetailsTemplate(price: 150, description: "Entrada"),
+                MovementDetailsTemplate(price: 50, description: "Saida"),
                 // MovementDetailsTemplate(price: 25, description: "Total")
               ],
             )
