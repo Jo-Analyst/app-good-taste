@@ -8,8 +8,8 @@ class BottomNavigationBarItemTemplate {
         icon: Icon(Icons.auto_graph),
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.save_outlined),
-        label: "Cadastro",
+        icon: Icon(Icons.money_off_csred_outlined),
+        label: "Despesa",
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.picture_as_pdf_outlined),

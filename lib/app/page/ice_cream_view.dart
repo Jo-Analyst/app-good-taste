@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ice_cream/app/page/movement_details_page.dart';
+import 'package:ice_cream/app/page/expenses.dart';
+// import 'package:ice_cream/app/page/movement_details_page.dart';
 
 import '../template/bottom_navigation_bar_item.dart';
 
@@ -15,7 +16,7 @@ class _IceCreamViewState extends State<IceCreamView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const MovementDetailsPage(),
+      body: const ExpensesPage(),
       // extendBody: true,
       bottomNavigationBar: BottomNavigationBar(
         selectedFontSize: 18,

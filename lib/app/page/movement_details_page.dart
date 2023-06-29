@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ice_cream/app/partils/month.dart';
+// import 'package:ice_cream/app/partils/month.dart';
 import 'package:ice_cream/app/template/movement_details_template.dart';
 
-class MovementDetailsPage extends StatefulWidget {
+import '../template/slide_month.dart';
+
+class MovementDetailsPage extends StatelessWidget {
   const MovementDetailsPage({super.key});
 
-  @override
-  State<MovementDetailsPage> createState() => _MovementDetailsPageState();
-}
-
-class _MovementDetailsPageState extends State<MovementDetailsPage> {
-  int numberMonth = int.parse(DateTime.now().month.toString()) - 1;
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -37,29 +33,9 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
               ),
             ),
             const SizedBox(height: 28),
-            SizedBox(
-              width: 330,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    onPressed: () => setState(() {
-                      if (numberMonth == 0) return;
-                      numberMonth--;
-                    }),
-                    icon: const Icon(Icons.keyboard_arrow_left),
-                  ),
-                  MonthPartils(numberMonth),
-                  IconButton(
-                    onPressed: () => setState(() {
-                      if (numberMonth == 11) return;
-                      numberMonth++;
-                    }),
-                    icon: const Icon(Icons.keyboard_arrow_right),
-                  ),
-                ],
-              ),
-            ),
+
+            const SlideMonth(),
+
             // const SizedBox(height: 10),
             const SizedBox(height: 20),
             const Column(
