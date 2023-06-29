@@ -60,7 +60,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                     Chip(
                       backgroundColor: changeColorByDescription(),
                       label: Text(
-                        NumberFormat('R\$ #.00', 'PT-BR').format(widget.price),
+                        NumberFormat('R\$ 0#.00', 'PT-BR').format(widget.price),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: Theme.of(context)
@@ -110,7 +110,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                                     horizontal: 10,
                                   ),
                                   child: Text(
-                                    "${quantity}x $name ${NumberFormat('R\$ #.00', 'PT-BT').format(price)}",
+                                    "${quantity}x $name ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}",
                                   ),
                                 ),
                               ),
@@ -136,7 +136,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                                     horizontal: 10,
                                   ),
                                   child: Text(
-                                    "${quantity}x $name ${NumberFormat('R\$ #.00', 'PT-BT').format(price)}",
+                                    "${quantity}x $name ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}",
                                   ),
                                 ),
                               ),
