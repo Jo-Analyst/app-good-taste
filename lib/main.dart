@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
         textTheme: const TextTheme(
           displayLarge: TextStyle(fontSize: 18, color: Colors.black),
         ),
+        textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.pink[500]),
       ),
       routes: {
         AppRoutes.home: (ctx) => const IceCreamView(),

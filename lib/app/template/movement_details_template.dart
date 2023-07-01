@@ -60,7 +60,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                     Chip(
                       backgroundColor: changeColorByDescription(),
                       label: Text(
-                        NumberFormat('R\$ 0#.00', 'PT-BR').format(widget.price),
+                        NumberFormat('R\$ #0.00', 'PT-BR').format(widget.price),
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: Theme.of(context)
