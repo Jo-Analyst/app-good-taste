@@ -10,8 +10,11 @@ class ExpenseForm extends StatefulWidget {
 
 class _ExpenseFormState extends State<ExpenseForm> {
   final _key = GlobalKey<FormState>();
+
   final _name = TextEditingController();
+
   final _price = TextEditingController();
+
   final _brand = TextEditingController();
 
   void save() {
@@ -38,31 +41,37 @@ class _ExpenseFormState extends State<ExpenseForm> {
               controller: _name,
               decoration: InputDecoration(
                 labelText: "Nome",
-                // hoverColor: Colors.black87,
                 floatingLabelStyle: TextStyle(
                   color: Theme.of(context).primaryColor,
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).primaryColor,
+                    width: 2,
+                  ),
                 ),
               ),
               validator: (name) {
                 if (name!.isEmpty) return "Informe o nome do produto!";
                 return null;
               },
+              onFieldSubmitted: (_) => save(),
             ),
             TextFormField(
               controller: _brand,
               decoration: InputDecoration(
                 labelText: "Marca",
-                // hoverColor: Colors.black87,
                 floatingLabelStyle: TextStyle(
                   color: Theme.of(context).primaryColor,
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                  borderSide: BorderSide(
+                    color: Theme.of(context).primaryColor,
+                    width: 2,
+                  ),
                 ),
               ),
+              onFieldSubmitted: (_) => save(),
             ),
             TextFormField(
               keyboardType: TextInputType.number,
@@ -75,7 +84,10 @@ class _ExpenseFormState extends State<ExpenseForm> {
                   color: Theme.of(context).primaryColor,
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Theme.of(context).primaryColor),
+                  borderSide: BorderSide(
+                    width: 2,
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
               ),
               validator: (price) {
@@ -87,6 +99,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
 
                 return null;
               },
+              onFieldSubmitted: (_) => save(),
             ),
             Container(
               margin: const EdgeInsets.only(top: 15),

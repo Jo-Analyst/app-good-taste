@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ice_cream/app/template/expense_form.dart';
 import 'package:ice_cream/app/template/expense_list.dart';
 
 class ExpensesPage extends StatelessWidget {
@@ -20,13 +21,22 @@ class ExpensesPage extends StatelessWidget {
       {"name": "Suco de Iorgute de Maracujá", "price": .95, "brand": "MID"},
     ];
 
+    showModal(BuildContext context) {
+      showModalBottomSheet(
+        context: context,
+        builder: (_) {
+          return const ExpenseForm();
+        },
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () => showModal(context),
               icon: const Icon(
                 Icons.add,
                 size: 40,
