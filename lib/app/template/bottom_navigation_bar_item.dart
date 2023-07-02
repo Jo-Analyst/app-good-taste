@@ -16,8 +16,8 @@ class BottomNavigationBarItemTemplate {
         label: "Produtos",
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.settings_outlined),
-        label: "Configuração",
+        icon: Icon(Icons.picture_as_pdf_outlined),
+        label: "Relatório",
       ),
       // BottomNavigationBarItemTemplate.buttomItem(const Icon(Icons.home), "Início"),
     ];

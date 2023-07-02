@@ -15,13 +15,13 @@ class DB {
           "CREATE TABLE raw_materials (id INTEGER PRIMARY KEY, name TEXT NOT NULL, brand TEXT NULL, price REAL NOT NULL)",
         );
         db.execute(
-          'CREATE TABLE flavors (id INTEGER PRIMARY KEY, type TEXT NOT NULL)',
+          'CREATE TABLE flavors (id INTEGER PRIMARY KEY, type TEXT NOT NULL, product_id INTEGER FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE)',
         );
           db.execute(
-          'CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT NOT NULL, price)',
+          'CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT NOT NULL, price INTEGER)',
         );
 
-        db.execute('CREATE TABLE productions (id INTEGER PRIMARY KEY, quantity INTEGER NOT NULL, date_production TEXT)');
+        db.execute('CREATE TABLE productions (id INTEGER PRIMARY KEY, quantity INTEGER NOT NULL, date_production TEXT');
       },
       version: 1,
     );

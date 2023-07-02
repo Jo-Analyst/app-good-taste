@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class Feedstock extends StatefulWidget {
@@ -15,12 +14,14 @@ class _FeedstockState extends State<Feedstock> {
   final _product = TextEditingController();
   final _price = TextEditingController();
   final _brand = TextEditingController();
+  late final int _productId;
 
   @override
   void initState() {
     super.initState();
     if (widget.feedstockItem.isEmpty) return;
 
+    _productId = widget.feedstockItem["id"];
     _product.text = widget.feedstockItem["name"];
     _brand.text = widget.feedstockItem["brand"];
     _price.text =
@@ -94,8 +95,11 @@ class _FeedstockState extends State<Feedstock> {
                   onFieldSubmitted: (_) => save(),
                 ),
                 TextFormField(
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  // keyboardType: TextInputType.number,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   controller: _price,
                   decoration: InputDecoration(
                     labelText: "Preço",

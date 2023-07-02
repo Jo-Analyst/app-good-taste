@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ice_cream/app/page/feedstock.dart';
+import 'package:ice_cream/app/page/feedstock_page.dart';
 import 'package:ice_cream/app/page/movement_details_page.dart';
+import 'package:ice_cream/app/page/product_page.dart';
 
 import '../template/bottom_navigation_bar_item.dart';
 
@@ -36,6 +37,7 @@ class _IceCreamViewState extends State<IceCreamView> {
         children: const [
           MovementDetailsPage(),
           FeedstockPage(),
+          ProductPage()
         ],
       ),
       // extendBody: true,

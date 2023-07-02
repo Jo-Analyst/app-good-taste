@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:ice_cream/app/page/ice_cream_view.dart';
+import 'package:ice_cream/app/page/ice_cream_page.dart';
 import 'package:ice_cream/app/route/routes.dart';
 
 void main() async {
-  runApp(const MyApp());
+  runApp(const AppIcemCream());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AppIcemCream extends StatelessWidget {
+  const AppIcemCream({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +19,14 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(179, 246, 245, 245),
         primaryColor: Colors.pink[500],
         textTheme: const TextTheme(
-          displayLarge: TextStyle(fontSize: 18, color: Colors.black),
+          displayLarge: TextStyle(
+            fontSize: 18,
+            color: Colors.black,
+          ),
         ),
-        textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.pink[500]),
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.pink[500],
+        ),
       ),
       routes: {
         AppRoutes.home: (ctx) => const IceCreamView(),
