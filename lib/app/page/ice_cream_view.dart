@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ice_cream/app/page/expenses.dart';
+import 'package:ice_cream/app/page/feedstock.dart';
 import 'package:ice_cream/app/page/movement_details_page.dart';
 
 import '../template/bottom_navigation_bar_item.dart';
@@ -35,7 +35,7 @@ class _IceCreamViewState extends State<IceCreamView> {
         onPageChanged: setCurrentPage,
         children: const [
           MovementDetailsPage(),
-          ExpensesPage(),
+          FeedstockPage(),
         ],
       ),
       // extendBody: true,

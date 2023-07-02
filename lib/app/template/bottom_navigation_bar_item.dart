@@ -8,12 +8,12 @@ class BottomNavigationBarItemTemplate {
         icon: Icon(Icons.auto_graph),
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.money_off_csred_outlined),
-        label: "Despesa",
+        icon: Icon(Icons.card_travel_sharp),
+        label: "M. Prima",
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.picture_as_pdf_outlined),
-        label: "Relatório",
+        icon: Icon(Icons.shopify_rounded),
+        label: "Produtos",
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.settings_outlined),
