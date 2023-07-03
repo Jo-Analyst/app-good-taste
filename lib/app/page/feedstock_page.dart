@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ice_cream/app/partils/modal.dart';
-import 'package:ice_cream/app/template/feedstock_list.dart';
+import 'package:app_good_taste/app/partils/modal.dart';
+import 'package:app_good_taste/app/template/feedstock_list.dart';
 
 class FeedstockPage extends StatelessWidget {
   const FeedstockPage({super.key});
@@ -14,13 +14,27 @@ class FeedstockPage extends StatelessWidget {
       {"id": 3, "name": "Leite", "price": 3.50, "brand": "ML"},
       {"id": 4, "name": "Suco de morango", "price": 1.35, "brand": "TANG"},
       {"id": 5, "name": "Suco de maracujá", "price": 1.35, "brand": "TANG"},
-      {"id": 6, "name": "Suco de baunilha com limão", "price": 0.95, "brand": "MID"},
+      {
+        "id": 6,
+        "name": "Suco de baunilha com limão",
+        "price": 0.95,
+        "brand": "MID"
+      },
       {"id": 7, "name": "Suco de Abacaxi", "price": 1.00, "brand": "Torange"},
       {"id": 8, "name": "Suco de Uva", "price": 1.35, "brand": "TANG"},
-      {"id": 9, "name": "Suco de Iorgute de Morango", "price": .95, "brand": "MID"},
-      {"id": 10, "name": "Suco de Iorgute de Maracujá", "price": .95, "brand": "MID"},
+      {
+        "id": 9,
+        "name": "Suco de Iorgute de Morango",
+        "price": .95,
+        "brand": "MID"
+      },
+      {
+        "id": 10,
+        "name": "Suco de Iorgute de Maracujá",
+        "price": .95,
+        "brand": "MID"
+      },
     ];
-
 
     return Scaffold(
       appBar: AppBar(

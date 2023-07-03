@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:ice_cream/app/partils/month.dart';
-import 'package:ice_cream/app/template/movement_details_template.dart';
+// import 'package:app_good_taste/app/partils/month.dart';
+import 'package:app_good_taste/app/template/movement_details_template.dart';
 
 import '../template/slide_month.dart';
 
@@ -22,7 +22,7 @@ class MovementDetailsPage extends StatelessWidget {
                 child: const Align(
                   alignment: Alignment.center,
                   child: Text(
-                    'ICE CREAM',
+                    'Bom Paladar',
                     style: TextStyle(
                       fontSize: 35,
                       color: Colors.white,

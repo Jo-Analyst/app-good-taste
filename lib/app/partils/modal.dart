@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ice_cream/app/template/feedstock_form.dart';
+import 'package:app_good_taste/app/template/feedstock_form.dart';
 
 class Modal {
   static showModal(BuildContext context, Map<String, dynamic> feedstockItem) {

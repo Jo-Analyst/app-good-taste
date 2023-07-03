@@ -1,5 +1,6 @@
+import 'package:app_good_taste/app/page/product_form.dart';
 import 'package:flutter/material.dart';
-import 'package:ice_cream/app/template/product_list.dart';
+import 'package:app_good_taste/app/template/product_list.dart';
 
 class ProductPage extends StatelessWidget {
   const ProductPage({super.key});
@@ -92,7 +93,12 @@ class ProductPage extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProductFormPage()),
+                );
+              },
               icon: const Icon(
                 Icons.add,
                 size: 40,

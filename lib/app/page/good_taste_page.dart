@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:ice_cream/app/page/feedstock_page.dart';
-import 'package:ice_cream/app/page/movement_details_page.dart';
-import 'package:ice_cream/app/page/product_page.dart';
+import 'package:app_good_taste/app/page/feedstock_page.dart';
+import 'package:app_good_taste/app/page/movement_details_page.dart';
+import 'package:app_good_taste/app/page/product_page.dart';
 
 import '../template/bottom_navigation_bar_item.dart';
 
-class IceCreamView extends StatefulWidget {
-  const IceCreamView({super.key});
+class GoodTastPage extends StatefulWidget {
+  const GoodTastPage({super.key});
 
   @override
-  State<IceCreamView> createState() => _IceCreamViewState();
+  State<GoodTastPage> createState() => _GoodTastPageState();
 }
 
-class _IceCreamViewState extends State<IceCreamView> {
+class _GoodTastPageState extends State<GoodTastPage> {
   int _currentIndex = 0;
   late PageController _pageController;
 
@@ -37,7 +37,7 @@ class _IceCreamViewState extends State<IceCreamView> {
         children: const [
           MovementDetailsPage(),
           FeedstockPage(),
-          ProductPage()
+          ProductPage(),
         ],
       ),
       // extendBody: true,

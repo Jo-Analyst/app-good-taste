@@ -5,7 +5,7 @@ class DB {
   static Future<sql.Database> database() async {
     final dbPath = await sql.getDatabasesPath();
     return sql.openDatabase(
-      path.join(dbPath, "icecream.db"),
+      path.join(dbPath, "goodtaste.db"),
       onCreate: (db, version) {
         // brand - marca
         // flavors - sabores

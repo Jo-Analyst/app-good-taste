@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 
-import 'package:ice_cream/app/page/ice_cream_page.dart';
-import 'package:ice_cream/app/route/routes.dart';
+import 'app/page/good_taste_page.dart';
+import 'app/route/routes.dart';
 
 void main() async {
-  runApp(const AppIcemCream());
+  runApp(const AppGoodTaste());
 }
 
-class AppIcemCream extends StatelessWidget {
-  const AppIcemCream({super.key});
+class AppGoodTaste extends StatelessWidget {
+  const AppGoodTaste({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "APP - Ice Cream",
+      title: "APP - Good Taste",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: const Color.fromARGB(179, 246, 245, 245),
+        primarySwatch: Colors.pink,
         primaryColor: Colors.pink[500],
         textTheme: const TextTheme(
           displayLarge: TextStyle(
@@ -29,7 +30,7 @@ class AppIcemCream extends StatelessWidget {
         ),
       ),
       routes: {
-        AppRoutes.home: (ctx) => const IceCreamView(),
+        AppRoutes.home: (ctx) => const GoodTastPage(),
       },
     );
   }
