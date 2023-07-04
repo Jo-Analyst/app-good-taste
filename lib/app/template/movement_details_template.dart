@@ -101,7 +101,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
 
                             return Container(
                               width: double.infinity,
-                              color: Color.fromARGB(255, 192, 190, 190),
+                              color: const Color.fromARGB(255, 192, 190, 190),
                               child: Align(
                                 alignment: Alignment.centerRight,
                                 child: Padding(

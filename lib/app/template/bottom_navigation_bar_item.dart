@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BottomNavigationBarItemTemplate {
   static List<BottomNavigationBarItem> items() {
@@ -8,7 +9,7 @@ class BottomNavigationBarItemTemplate {
         icon: Icon(Icons.auto_graph),
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.card_travel_sharp),
+        icon: Icon(FontAwesomeIcons.toolbox),
         label: "M. Prima",
       ),
       BottomNavigationBarItem(
