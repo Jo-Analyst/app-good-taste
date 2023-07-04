@@ -1,3 +1,4 @@
+import 'package:app_good_taste/app/template/feedstock_form.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/partils/modal.dart';
 import 'package:intl/intl.dart';
@@ -37,7 +38,10 @@ class FeedstockList extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              onPressed: () => Modal.showModal(context, feedstockItem),
+              onPressed: () => showModal(
+                context,
+                Feedstock(feedstockItem: feedstockItem),
+              ),
               icon: const Icon(
                 Icons.edit_sharp,
                 color: Colors.blue,

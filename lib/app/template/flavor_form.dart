@@ -5,17 +5,47 @@ class FlavorForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _key = GlobalKey<FormState>();
-    return Form(
-      key: _key,
+    final key = GlobalKey<FormState>();
+    return Padding(
+      padding: const EdgeInsets.all(15),
       child: Column(
         children: [
-          TextFormField(
-            decoration: const InputDecoration(
-              labelText: "Sabor ou tipo",
+          Container(
+            width: 50,
+            height: 10,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Theme.of(context).primaryColor,
             ),
           ),
-          ElevatedButton(onPressed: (){}, child: Text("oi"))
+          Form(
+            key: key,
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: "Sabor ou tipo",
+                    labelText: "Sabor ou tipo",
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: const Row(
+                        children: [
+                          Icon(Icons.add),
+                          Text("Adicionar"),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
         ],
       ),
     );

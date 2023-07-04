@@ -1,4 +1,4 @@
-import 'package:app_good_taste/app/page/product_form.dart';
+import 'package:app_good_taste/app/page/product_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/product_list.dart';
 

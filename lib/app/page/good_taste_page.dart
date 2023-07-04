@@ -41,6 +41,7 @@ class _GoodTastPageState extends State<GoodTastPage> {
         ],
       ),
       // extendBody: true,
+     
       bottomNavigationBar: BottomNavigationBar(
         selectedFontSize: 18,
         unselectedFontSize: 16,

@@ -1,3 +1,4 @@
+import 'package:app_good_taste/app/template/feedstock_form.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/partils/modal.dart';
 import 'package:app_good_taste/app/template/feedstock_list.dart';
@@ -42,7 +43,10 @@ class FeedstockPage extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () => Modal.showModal(context, {}),
+              onPressed: () => showModal(
+                context,
+                const Feedstock(feedstockItem: {}),
+              ),
               icon: const Icon(
                 Icons.add,
                 size: 40,
