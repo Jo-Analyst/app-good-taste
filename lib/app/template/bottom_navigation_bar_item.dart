@@ -9,7 +9,7 @@ class BottomNavigationBarItemTemplate {
         icon: Icon(Icons.auto_graph),
       ),
       BottomNavigationBarItem(
-        icon: Icon(FontAwesomeIcons.toolbox),
+        icon: Icon(FontAwesomeIcons.productHunt),
         label: "M. Prima",
       ),
       BottomNavigationBarItem(

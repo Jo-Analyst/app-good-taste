@@ -13,15 +13,15 @@ class ProductFormPage extends StatefulWidget {
 class _ProductFormPageState extends State<ProductFormPage> {
   final _key = GlobalKey<FormState>();
   List<String> flavors = [
-    // "Morango",
-    // "Abacaxi",
-    // "Maracujá",
-    // "Uva",
-    // "Baunilha com limão",
-    // "Iorgute de morango",
-    // "Iorgute de maracujá",
-    // "Chocolate",
-    // "Açai"
+    "Morango",
+    "Abacaxi",
+    "Maracujá",
+    "Uva",
+    "Baunilha com limão",
+    "Iorgute de morango",
+    "Iorgute de maracujá",
+    "Chocolate",
+    "Açai"
   ];
 
   @override
@@ -136,7 +136,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       margin: const EdgeInsets.only(top: 8),
                       width: double.infinity,
                       height: 1,
-                      color: Theme.of(context).primaryColor,
+                      color: const Color.fromARGB(255, 238, 173, 195),
                     ),
                     flavors.isEmpty
                         ? Container(
