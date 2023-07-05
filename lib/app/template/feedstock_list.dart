@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/feedstock_form.dart';
 import 'package:flutter/material.dart';

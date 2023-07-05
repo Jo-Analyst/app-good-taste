@@ -12,6 +12,8 @@ class ProductFormPage extends StatefulWidget {
 
 class _ProductFormPageState extends State<ProductFormPage> {
   final _key = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _priceController = TextEditingController();
   List<String> flavors = [
     "Morango",
     "Abacaxi",
@@ -52,12 +54,16 @@ class _ProductFormPageState extends State<ProductFormPage> {
           ),
           leading: IconButton(
             onPressed: () {
-              if (flavors.isEmpty) {
-                showExitDialog(context, messageDialog[0]).then((confirmExit) {
-                  if (confirmExit!) {
-                    Navigator.of(context).pop();
-                  }
-                });
+              if (flavors.isNotEmpty ||
+                  _nameController.text.isNotEmpty ||
+                  _priceController.text.isNotEmpty) {
+                showExitDialog(context, messageDialog[0]).then(
+                  (confirmExit) {
+                    if (confirmExit!) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                );
               } else {
                 Navigator.of(context).pop();
               }
@@ -71,7 +77,12 @@ class _ProductFormPageState extends State<ProductFormPage> {
             Container(
               margin: const EdgeInsets.only(right: 10),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (_key.currentState!.validate()) {
+                    // salva os dados e fecha a tela
+                    Navigator.of(context).pop();
+                  }
+                },
                 icon: const Icon(
                   Icons.check_outlined,
                   size: 35,
@@ -100,11 +111,20 @@ class _ProductFormPageState extends State<ProductFormPage> {
                           Column(
                             children: [
                               TextFormField(
+                                controller: _nameController,
                                 decoration:
                                     const InputDecoration(labelText: "Nome"),
                                 textInputAction: TextInputAction.next,
+                                validator: (name) {
+                                  if (name!.isEmpty) {
+                                    return "Informe o nome do produto!";
+                                  }
+
+                                  return null;
+                                },
                               ),
                               TextFormField(
+                                controller: _priceController,
                                 keyboardType:
                                     const TextInputType.numberWithOptions(
                                   decimal: true,
@@ -112,6 +132,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                 textInputAction: TextInputAction.next,
                                 decoration:
                                     const InputDecoration(labelText: "Preço"),
+                                validator: (price) {
+                                  if (price!.isEmpty) {
+                                    return "Informe o preço do produto!";
+                                  }
+
+                                  return null;
+                                },
                               ),
                             ],
                           ),
