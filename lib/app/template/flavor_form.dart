@@ -24,7 +24,6 @@ class FlavorForm extends StatelessWidget {
               children: [
                 TextFormField(
                   decoration: const InputDecoration(
-                    hintText: "Sabor ou tipo",
                     labelText: "Sabor ou tipo",
                   ),
                 ),

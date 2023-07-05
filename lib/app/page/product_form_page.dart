@@ -1,5 +1,5 @@
-import 'package:app_good_taste/app/partils/modal.dart';
-import 'package:app_good_taste/app/template/dialog.dart';
+import 'package:app_good_taste/app/utils/modal.dart';
+import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/flavor_form.dart';
 import 'package:flutter/material.dart';
 
@@ -24,11 +24,24 @@ class _ProductFormPageState extends State<ProductFormPage> {
     "Açai"
   ];
 
+  final List<Map<String, String>> messageDialog = [
+    {
+      "title": "Deseja sair?",
+      "content": "Você tem certeza que deseja sair sem confirmar a transação?",
+      "action": "Sair",
+    },
+    {
+      "title": "Deseja excluir?",
+      "content": "Você realmente tem certeza que deseja excluir?",
+      "action": "Excluir",
+    }
+  ];
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        final confirmExit = await showExitDialog(context);
+        final confirmExit = await showExitDialog(context, messageDialog[0]);
         return confirmExit ?? false;
       },
       child: Scaffold(
@@ -40,7 +53,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           leading: IconButton(
             onPressed: () {
               if (flavors.isEmpty) {
-                showExitDialog(context).then((confirmExit) {
+                showExitDialog(context, messageDialog[0]).then((confirmExit) {
                   if (confirmExit!) {
                     Navigator.of(context).pop();
                   }
@@ -174,7 +187,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                             ),
                                           ),
                                           IconButton(
-                                            onPressed: () {},
+                                            onPressed: () => showExitDialog(
+                                                    context, messageDialog[1])
+                                                .then((message) {
+                                              if (message!) {
+                                                print("Sabor excluido");
+                                              }
+                                            }),
                                             icon: const Icon(
                                               Icons.delete,
                                               color: Colors.red,

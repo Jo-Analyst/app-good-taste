@@ -1,6 +1,7 @@
+import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/feedstock_form.dart';
 import 'package:flutter/material.dart';
-import 'package:app_good_taste/app/partils/modal.dart';
+import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:intl/intl.dart';
 
 class FeedstockList extends StatelessWidget {
@@ -9,6 +10,11 @@ class FeedstockList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, String> messageDialog = {
+      "title": "Deseja excluir?",
+      "content": "Você realmente tem certeza que deseja excluir?",
+      "action": "Excluir",
+    };
     return ListTile(
       leading: CircleAvatar(
         radius: 30,
@@ -48,7 +54,13 @@ class FeedstockList extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showExitDialog(context, messageDialog).then((message) {
+                  if (message!) {
+                    print("Matéria prima excluido");
+                  }
+                });
+              },
               icon: Icon(
                 Icons.delete,
                 color: Theme.of(context).colorScheme.error,

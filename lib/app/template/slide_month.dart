@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../partils/month.dart';
+import '../utils/month.dart';
 
 class SlideMonth extends StatefulWidget {
   const SlideMonth({super.key});

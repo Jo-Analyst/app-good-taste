@@ -1,6 +1,6 @@
 import 'package:app_good_taste/app/template/feedstock_form.dart';
 import 'package:flutter/material.dart';
-import 'package:app_good_taste/app/partils/modal.dart';
+import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:app_good_taste/app/template/feedstock_list.dart';
 
 class FeedstockPage extends StatelessWidget {

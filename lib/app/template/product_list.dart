@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../utils/dialog.dart';
+
 class ProductList extends StatelessWidget {
   final Map<String, dynamic> productItem;
   const ProductList(this.productItem, {super.key});
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, String> messageDialog = {
+      "title": "Deseja excluir?",
+      "content": "Você realmente tem certeza que deseja excluir?",
+      "action": "Excluir",
+    };
+
     return ListTile(
       leading: CircleAvatar(
         radius: 30,
@@ -41,7 +49,13 @@ class ProductList extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () => showExitDialog(context, messageDialog).then(
+                (message) {
+                  if (message!) {
+                    print("produto excluido");
+                  }
+                },
+              ),
               icon: Icon(
                 Icons.delete,
                 color: Theme.of(context).colorScheme.error,
