@@ -54,7 +54,7 @@ import 'package:flutter/material.dart';
 // // }
 
 Future<bool?> showExitDialog(
-    BuildContext context, Map<String, String> messageDialog) async {
+    BuildContext context, Map<String, dynamic> messageDialog) async {
   return showDialog<bool>(
     context: context,
     builder: (BuildContext context) {
@@ -62,17 +62,23 @@ Future<bool?> showExitDialog(
         title: Text(messageDialog["title"]!),
         content: Text(messageDialog["content"]!),
         actions: [
-          TextButton(
-            child: const Text('Cancelar'),
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
+          Visibility(
+            visible: messageDialog["show_button_cancel"],
+            child: TextButton(
+              child: const Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
           ),
-          TextButton(
-            child:  Text(messageDialog["action"]!),
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
+          Container(
+            margin: const EdgeInsets.only(right: 20),
+            child: ElevatedButton(
+              child:  Text(messageDialog["action"]!),
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+            ),
           ),
         ],
       );

@@ -26,17 +26,25 @@ class _ProductFormPageState extends State<ProductFormPage> {
     "Açai"
   ];
 
-  final List<Map<String, String>> messageDialog = [
+  final List<Map<String, dynamic>> messageDialog = [
     {
       "title": "Deseja sair?",
       "content": "Você tem certeza que deseja sair sem confirmar a transação?",
       "action": "Sair",
+      "show_button_cancel": true,
     },
     {
       "title": "Deseja excluir?",
       "content": "Você realmente tem certeza que deseja excluir?",
       "action": "Excluir",
-    }
+      "show_button_cancel": true,
+    },
+    {
+      "title": "Mensagem",
+      "content": "Adicione pelo menos um sabor",
+      "action": "OK",
+      "show_button_cancel": false,
+    },
   ];
 
   @override
@@ -78,7 +86,18 @@ class _ProductFormPageState extends State<ProductFormPage> {
               margin: const EdgeInsets.only(right: 10),
               child: IconButton(
                 onPressed: () {
-                  if (_key.currentState!.validate()) {
+                  if(_key.currentState!.validate() && flavors.isEmpty)
+                  {
+                     showExitDialog(context, messageDialog[2]).then(
+                  (confirmExit) {
+                    // if (confirmExit!) {
+                    //   Navigator.of(context).pop();
+                    // }
+                  },
+                );
+                  }
+
+                  if (_key.currentState!.validate() && flavors.isNotEmpty) {
                     // salva os dados e fecha a tela
                     Navigator.of(context).pop();
                   }
@@ -159,10 +178,12 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                 fontWeight: FontWeight.w700),
                           ),
                           IconButton(
-                            onPressed: () => showModal(
-                              context,
-                              const FlavorForm(),
-                            ),
+                            onPressed: () {
+                              showModal(
+                                context,
+                                const FlavorForm(),
+                              );
+                            },
                             icon: Icon(
                               Icons.add_circle_outline,
                               color: Theme.of(context).primaryColor,
@@ -218,7 +239,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                                     context, messageDialog[1])
                                                 .then((message) {
                                               if (message!) {
-                                                print("Sabor excluido");
+                                                flavors.removeAt(index);
+                                                setState(
+                                                  () {},
+                                                );
                                               }
                                             }),
                                             icon: const Icon(

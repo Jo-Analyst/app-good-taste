@@ -32,7 +32,7 @@ class FlavorForm extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => Navigator.of(context).pop(),
                       child: const Row(
                         children: [
                           Icon(Icons.add),

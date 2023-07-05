@@ -12,10 +12,11 @@ class FeedstockList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, String> messageDialog = {
+    final Map<String, dynamic> messageDialog = {
       "title": "Deseja excluir?",
       "content": "Você realmente tem certeza que deseja excluir?",
       "action": "Excluir",
+      "show_button_cancel": true,
     };
     return ListTile(
       leading: CircleAvatar(
