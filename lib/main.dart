@@ -16,6 +16,7 @@ class AppGoodTaste extends StatelessWidget {
       title: "APP - Good Taste",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        // useMaterial3: true,
         scaffoldBackgroundColor: const Color.fromARGB(179, 246, 245, 245),
         primarySwatch: Colors.pink,
         primaryColor: Colors.pink[500],

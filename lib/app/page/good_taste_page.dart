@@ -1,3 +1,4 @@
+import 'package:app_good_taste/app/page/setting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/page/feedstock_page.dart';
 import 'package:app_good_taste/app/page/movement_details_page.dart';
@@ -38,10 +39,11 @@ class _GoodTastPageState extends State<GoodTastPage> {
           MovementDetailsPage(),
           FeedstockPage(),
           ProductPage(),
+          SettingPage(),
         ],
       ),
       // extendBody: true,
-     
+
       bottomNavigationBar: BottomNavigationBar(
         selectedFontSize: 18,
         unselectedFontSize: 16,
