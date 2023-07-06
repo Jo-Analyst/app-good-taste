@@ -24,52 +24,69 @@ class MovementDetailsPage extends StatelessWidget {
           ),
         ),
       ),
-      appBar: AppBar(
-        actions: [],
-        title: Align(
-          alignment: Alignment.center,
-          child: Stack(children: [
-            Container(
-              width: 250,
-              height: 100,
-              color: Colors.white,
-            ),
-            
-          ]),
-        ),
-        toolbarHeight: 150,
-      ),
       body: Stack(
         children: [
-          const SizedBox(
+          SizedBox(
             width: double.infinity,
             child: Column(
               children: [
-                // Container(
-                //   height: 150,
-                //   width: double.infinity,
-                //   color: Theme.of(context).primaryColor,
-                //   child: Container(
-                //     margin: const EdgeInsets.only(bottom: 20),
-                //     child: const Align(
-                //       alignment: Alignment.center,
-                //       // child: Text(
-                //       //   'Bom Paladar',
-                //       //   style: TextStyle(
-                //       //     fontSize: 35,
-                //       //     color: Colors.white,
-                //       //     fontWeight: FontWeight.w900,
-                //       //   ),
-                //       // ),
-                //     ),
-                //   ),
-                // ),
-                SizedBox(height: 28),
-                SlideMonth(),
+                Container(
+                  height: 150,
+                  width: double.infinity,
+                  color: Theme.of(context).primaryColor,
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(left: 20),
+                          child: const Text(
+                            'Bom Paladar',
+                            style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                        PopupMenuButton(
+                          color: Colors.white,
+                          iconSize: 30,
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<String>>[
+                            const PopupMenuItem(
+                              value: "add",
+                              child: Text("Adicionar"),
+                            ),
+                            const PopupMenuItem(
+                              value: "remove",
+                              child: Text("Remover"),
+                            ),
+                          ],
+                          onSelected: (value) {
+                            if (value == "add") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const BalanceteSheetPage(),
+                                ),
+                              );
+                            } else if (value == "remove") {
+                              print("remove");
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 28),
+                const SlideMonth(),
 
                 // const SizedBox(height: 5),
                 // const SizedBox(height: 20),
-                Column(
+                const Column(
                   children: [
                     MovementDetailsTemplate(price: 150, description: "Entrada"),
                     MovementDetailsTemplate(price: 50, description: "Saida"),
@@ -79,7 +96,7 @@ class MovementDetailsPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: AppBar().preferredSize.height,
+            top: 90,
             left: MediaQuery.of(context).size.width / 2 - 125,
             width: 250,
             child: Card(
