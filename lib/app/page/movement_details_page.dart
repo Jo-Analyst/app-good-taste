@@ -1,3 +1,5 @@
+import 'package:app_good_taste/app/template/balance_sheet_Page.dart';
+import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:flutter/material.dart';
 // import 'package:app_good_taste/app/partils/month.dart';
 import 'package:app_good_taste/app/template/movement_details_template.dart';
@@ -90,12 +92,18 @@ class MovementDetailsPage extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.add_circle,
-                            color: Theme.of(context).primaryColor,
-                            size: 35,
+                        CircleAvatar(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          child: IconButton(
+                            onPressed: () => showModal(
+                              context,
+                              const BalanceteSheetPage(),
+                            ),
+                            icon: const Icon(
+                              Icons.balance,
+                              color: Colors.white,
+                              // size: 35,
+                            ),
                           ),
                         ),
                       ],

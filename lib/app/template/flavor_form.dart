@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/scroll_button_modal.dart';
+
 class FlavorForm extends StatelessWidget {
   const FlavorForm({super.key});
 
@@ -10,14 +12,7 @@ class FlavorForm extends StatelessWidget {
       padding: const EdgeInsets.all(15),
       child: Column(
         children: [
-          Container(
-            width: 50,
-            height: 10,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
+           const ScrollButtomModal(),
           Form(
             key: key,
             child: Column(
