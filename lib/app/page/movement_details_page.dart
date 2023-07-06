@@ -1,7 +1,5 @@
 import 'package:app_good_taste/app/template/balance_sheet_page.dart';
-import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:flutter/material.dart';
-// import 'package:app_good_taste/app/partils/month.dart';
 import 'package:app_good_taste/app/template/movement_details_template.dart';
 
 import '../template/slide_month.dart';
@@ -26,46 +24,62 @@ class MovementDetailsPage extends StatelessWidget {
           ),
         ),
       ),
+      appBar: AppBar(
+        actions: [],
+        title: Align(
+          alignment: Alignment.center,
+          child: Stack(children: [
+            Container(
+              width: 250,
+              height: 100,
+              color: Colors.white,
+            ),
+            
+          ]),
+        ),
+        toolbarHeight: 150,
+      ),
       body: Stack(
         children: [
-          Column(
-            children: [
-              Container(
-                height: 150,
-                width: double.infinity,
-                color: Theme.of(context).primaryColor,
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  child: const Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      'Bom Paladar',
-                      style: TextStyle(
-                        fontSize: 35,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 28),
+          const SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: [
+                // Container(
+                //   height: 150,
+                //   width: double.infinity,
+                //   color: Theme.of(context).primaryColor,
+                //   child: Container(
+                //     margin: const EdgeInsets.only(bottom: 20),
+                //     child: const Align(
+                //       alignment: Alignment.center,
+                //       // child: Text(
+                //       //   'Bom Paladar',
+                //       //   style: TextStyle(
+                //       //     fontSize: 35,
+                //       //     color: Colors.white,
+                //       //     fontWeight: FontWeight.w900,
+                //       //   ),
+                //       // ),
+                //     ),
+                //   ),
+                // ),
+                SizedBox(height: 28),
+                SlideMonth(),
 
-              const SlideMonth(),
-
-              // const SizedBox(height: 5),
-              // const SizedBox(height: 20),
-              const Column(
-                children: [
-                  MovementDetailsTemplate(price: 150, description: "Entrada"),
-                  MovementDetailsTemplate(price: 50, description: "Saida"),
-                  // MovementDetailsTemplate(price: 25, description: "Total")
-                ],
-              )
-            ],
+                // const SizedBox(height: 5),
+                // const SizedBox(height: 20),
+                Column(
+                  children: [
+                    MovementDetailsTemplate(price: 150, description: "Entrada"),
+                    MovementDetailsTemplate(price: 50, description: "Saida"),
+                  ],
+                )
+              ],
+            ),
           ),
           Positioned(
-            top: 90,
+            top: AppBar().preferredSize.height,
             left: MediaQuery.of(context).size.width / 2 - 125,
             width: 250,
             child: Card(

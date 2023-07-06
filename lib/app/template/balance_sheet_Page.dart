@@ -2,7 +2,6 @@ import 'package:app_good_taste/app/utils/drop_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../utils/scroll_button_modal.dart';
 
 class BalanceteSheetPage extends StatefulWidget {
   const BalanceteSheetPage({super.key});
