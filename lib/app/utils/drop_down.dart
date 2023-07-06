@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 
-class DropDownUtils extends StatelessWidget {
+class DropDownUtils extends StatefulWidget {
   final List<String> flavors;
   final String hint;
   const DropDownUtils(this.flavors, this.hint, {super.key});
 
   @override
+  State<DropDownUtils> createState() => _DropDownUtilsState();
+}
+
+class _DropDownUtilsState extends State<DropDownUtils> {
+  final valueNotifier = ValueNotifier("");
+  final textController = TextEditingController();
+
+  @override
+  void dispose() {
+    valueNotifier.dispose();
+    textController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final valueNotifier = ValueNotifier("");
+    
     return ValueListenableBuilder(
       valueListenable: valueNotifier,
       builder: (BuildContext context, String valueDrop, _) {
@@ -15,13 +30,13 @@ class DropDownUtils extends StatelessWidget {
           // icon: Icon(fonta),
           isExpanded: true,
           decoration: InputDecoration(
-            labelText: hint,
+            labelText: widget.hint,
             labelStyle: const TextStyle(fontSize: 18),
           ),
           // hint: Text(hint),
           value: (valueDrop.isEmpty ? null : valueDrop),
           onChanged: (option) => valueNotifier.value = option.toString(),
-          items: flavors
+          items: widget.flavors
               .map(
                 (flavor) => DropdownMenuItem(
                   value: flavor,

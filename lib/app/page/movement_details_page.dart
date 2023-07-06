@@ -1,4 +1,4 @@
-import 'package:app_good_taste/app/template/balance_sheet_Page.dart';
+import 'package:app_good_taste/app/template/balance_sheet_page.dart';
 import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:flutter/material.dart';
 // import 'package:app_good_taste/app/partils/month.dart';
@@ -95,9 +95,12 @@ class MovementDetailsPage extends StatelessWidget {
                         CircleAvatar(
                           backgroundColor: Theme.of(context).primaryColor,
                           child: IconButton(
-                            onPressed: () => showModal(
+                            onPressed: () => Navigator.push(
                               context,
-                              const BalanceteSheetPage(),
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const BalanceteSheetPage(),
+                              ),
                             ),
                             icon: const Icon(
                               Icons.balance,
