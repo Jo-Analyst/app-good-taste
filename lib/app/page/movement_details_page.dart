@@ -36,47 +36,20 @@ class MovementDetailsPage extends StatelessWidget {
                   color: Theme.of(context).primaryColor,
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 20),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(left: 20),
-                          child: const Text(
-                            'Bom Paladar',
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                        ),
-                        PopupMenuButton(
-                          color: Colors.white,
-                          iconSize: 30,
-                          itemBuilder: (BuildContext context) =>
-                              <PopupMenuEntry<String>>[
-                            const PopupMenuItem(
-                              value: "add",
-                              child: Text("Adicionar"),
-                            ),
-                            const PopupMenuItem(
-                              value: "remove",
-                              child: Text("Remover"),
-                            ),
-                          ],
-                          onSelected: (value) {
-                            if (value == "add") {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const BalanceteSheetPage(),
-                                ),
-                              );
-                            } else if (value == "remove") {
-                              print("remove");
-                            }
-                          },
-                        ),
+                        // Container(
+                        //   margin: const EdgeInsets.only(left: 20),
+                        //   child: const Text(
+                        //     'Bom Paladar',
+                        //     style: TextStyle(
+                        //       fontSize: 25,
+                        //       color: Colors.white,
+                        //       fontWeight: FontWeight.w900,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -123,22 +96,32 @@ class MovementDetailsPage extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        CircleAvatar(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          child: IconButton(
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const BalanceteSheetPage(),
-                              ),
+                        PopupMenuButton(
+                          // color: Colors.white,
+                          iconSize: 30,
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<String>>[
+                            const PopupMenuItem(
+                              value: "add",
+                              child: Text("Adicionar"),
                             ),
-                            icon: const Icon(
-                              Icons.balance,
-                              color: Colors.white,
-                              // size: 35,
+                            const PopupMenuItem(
+                              value: "remove",
+                              child: Text("Remover"),
                             ),
-                          ),
+                          ],
+                          onSelected: (value) {
+                            if (value == "add") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const BalanceteSheetPage(),
+                                ),
+                              );
+                            } else if (value == "remove") {
+                              print("remove");
+                            }
+                          },
                         ),
                       ],
                     ),
