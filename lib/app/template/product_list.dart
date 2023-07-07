@@ -1,3 +1,4 @@
+import 'package:app_good_taste/app/utils/message_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -9,14 +10,7 @@ class ProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> messageDialog = {
-      "title": "Deseja excluir?",
-      "content": "Você realmente tem certeza que deseja excluir?",
-      "action": "Excluir",
-      "show_button_cancel": true,
-    };
-
-    return ListTile(
+       return ListTile(
       leading: CircleAvatar(
         radius: 30,
         backgroundColor: Theme.of(context).primaryColor,
@@ -50,10 +44,10 @@ class ProductList extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () => showExitDialog(context, messageDialog).then(
+              onPressed: () => showExitDialog(context, ListMessageDialog.messageDialog[1]).then(
                 (message) {
                   if (message!) {
-                    print("produto excluido");
+                 
                   }
                 },
               ),

@@ -1,4 +1,6 @@
+import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/utils/drop_down.dart';
+import 'package:app_good_taste/app/utils/message_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -11,32 +13,32 @@ class BalanceteSheetPage extends StatefulWidget {
 }
 
 class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
+  final List<String> flavors = [
+    "Morango",
+    "Maracujá",
+    "Uva",
+    "Baunilha com limão"
+  ];
+  final List<Map<String, dynamic>> feedstocks = [
+    {
+      "name": "leite",
+      "price": 4,
+      "brand": "ML",
+    },
+    {
+      "name": "Suco de Maracujá",
+      "price": 1.35,
+      "brand": "TANG",
+    },
+    {
+      "name": "Açucar",
+      "price": 18.75,
+      "brand": "",
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final List<String> flavors = [
-      "Morango",
-      "Maracujá",
-      "Uva",
-      "Baunilha com limão"
-    ];
-    final List<Map<String, dynamic>> feedstocks = [
-      {
-        "name": "leite",
-        "price": 4,
-        "brand": "ML",
-      },
-      {
-        "name": "Suco de Maracujá",
-        "price": 1.35,
-        "brand": "TANG",
-      },
-      {
-        "name": "Açucar",
-        "price": 18.75,
-        "brand": "",
-      },
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -131,57 +133,81 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
                           height: 2,
                           color: const Color.fromARGB(255, 228, 108, 148),
                         ),
-                        Flexible(
-                          child: ListView.builder(
-                            itemCount: feedstocks.length,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                children: [
-                                  ListTile(
-                                    title: Text(
-                                      "${feedstocks[index]['name']}",
-                                      style: const TextStyle(fontSize: 18),
-                                    ),
-                                    subtitle: Text(
-                                      "${feedstocks[index]['brand']}",
-                                      style: const TextStyle(fontSize: 14),
-                                    ),
-                                    leading: CircleAvatar(
-                                      radius: 30,
-                                      child: Text(
-                                        NumberFormat("R\$ #0.00", "PT-BR")
-                                            .format(feedstocks[index]["price"]),
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                    ),
-                                    trailing: SizedBox(
-                                      width: 100,
-                                      child: Row(
-                                        children: [
-                                          IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(
-                                              Icons.edit,
-                                              color: Colors.blue,
+                        feedstocks.isEmpty
+                            ? const Flexible(
+                                child: Center(
+                                child: Text(
+                                  "Não há matéria adicionada.",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ))
+                            : Flexible(
+                                child: ListView.builder(
+                                  itemCount: feedstocks.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      children: [
+                                        ListTile(
+                                          title: Text(
+                                            "${feedstocks[index]['name']}",
+                                            style:
+                                                const TextStyle(fontSize: 18),
+                                          ),
+                                          subtitle: Text(
+                                            "${feedstocks[index]['brand']}",
+                                            style:
+                                                const TextStyle(fontSize: 14),
+                                          ),
+                                          leading: CircleAvatar(
+                                            radius: 30,
+                                            child: Text(
+                                              NumberFormat("R\$ #0.00", "PT-BR")
+                                                  .format(feedstocks[index]
+                                                      ["price"]),
+                                              style:
+                                                  const TextStyle(fontSize: 12),
                                             ),
                                           ),
-                                          IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(
-                                              Icons.delete,
-                                              color: Colors.red,
+                                          trailing: SizedBox(
+                                            width: 100,
+                                            child: Row(
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {},
+                                                  icon: const Icon(
+                                                    Icons.edit,
+                                                    color: Colors.blue,
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  onPressed: () {
+                                                    showExitDialog(
+                                                            context,
+                                                            ListMessageDialog
+                                                                .messageDialog[1])
+                                                        .then((dialogResult) {
+                                                      if (dialogResult!) {
+                                                        feedstocks
+                                                            .removeAt(index);
+                                                        setState(() {});
+                                                      }
+                                                    });
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.delete,
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const Divider()
-                                ],
-                              );
-                            },
-                          ),
-                        ),
+                                        ),
+                                        const Divider()
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
                       ],
                     ),
                   ),

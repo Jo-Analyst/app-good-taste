@@ -86,44 +86,30 @@ class MovementDetailsPage extends StatelessWidget {
                             const PopupMenuItem(
                               padding: EdgeInsets.zero,
                               value: "balance-of-the-day",
-                              child: Column(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                      ),
-                                      Text("Lançar balanço do dia"),
-                                    ],
-                                  ),
-                                  Divider(
+                                  Icon(
+                                    Icons.add,
                                     color: Colors.white,
-                                  )
+                                  ),
+                                  Text("Adicionar Produção"),
                                 ],
                               ),
                             ),
                             const PopupMenuItem(
                               value: "all-balance-sheets",
                               padding: EdgeInsets.zero,
-                              child: Column(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.balance,
-                                        color: Colors.white,
-                                      ),
-                                      Text(
-                                        "Todas os balancetes",
-                                      ),
-                                    ],
-                                  ),
-                                  Divider(
+                                  Icon(
+                                    Icons.zoom_in,
                                     color: Colors.white,
-                                  )
+                                  ),
+                                  Text(
+                                    "Acessar Produção",
+                                  ),
                                 ],
                               ),
                             ),

@@ -1,3 +1,4 @@
+import 'package:app_good_taste/app/utils/message_dialog.dart';
 import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/flavor_form.dart';
@@ -26,32 +27,12 @@ class _ProductFormPageState extends State<ProductFormPage> {
     "Açai"
   ];
 
-  final List<Map<String, dynamic>> messageDialog = [
-    {
-      "title": "Deseja sair?",
-      "content": "Você tem certeza que deseja sair sem confirmar a transação?",
-      "action": "Sair",
-      "show_button_cancel": true,
-    },
-    {
-      "title": "Deseja excluir?",
-      "content": "Você realmente tem certeza que deseja excluir?",
-      "action": "Excluir",
-      "show_button_cancel": true,
-    },
-    {
-      "title": "Mensagem",
-      "content": "Adicione pelo menos um sabor",
-      "action": "OK",
-      "show_button_cancel": false,
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        final confirmExit = await showExitDialog(context, messageDialog[0]);
+        final confirmExit =
+            await showExitDialog(context, ListMessageDialog.messageDialog[0]);
         return confirmExit ?? false;
       },
       child: Scaffold(
@@ -65,7 +46,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
               if (flavors.isNotEmpty ||
                   _nameController.text.isNotEmpty ||
                   _priceController.text.isNotEmpty) {
-                showExitDialog(context, messageDialog[0]).then(
+                showExitDialog(context, ListMessageDialog.messageDialog[0])
+                    .then(
                   (confirmExit) {
                     if (confirmExit!) {
                       Navigator.of(context).pop();
@@ -86,15 +68,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
               margin: const EdgeInsets.only(right: 10),
               child: IconButton(
                 onPressed: () {
-                  if(_key.currentState!.validate() && flavors.isEmpty)
-                  {
-                     showExitDialog(context, messageDialog[2]).then(
-                  (confirmExit) {
-                    // if (confirmExit!) {
-                    //   Navigator.of(context).pop();
-                    // }
-                  },
-                );
+                  if (_key.currentState!.validate() && flavors.isEmpty) {
+                    showExitDialog(context, ListMessageDialog.messageDialog[2])
+                        .then(
+                      (confirmExit) {
+                        // if (confirmExit!) {
+                        //   Navigator.of(context).pop();
+                        // }
+                      },
+                    );
                   }
 
                   if (_key.currentState!.validate() && flavors.isNotEmpty) {
@@ -236,8 +218,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                           ),
                                           IconButton(
                                             onPressed: () => showExitDialog(
-                                                    context, messageDialog[1])
-                                                .then((message) {
+                                              context,
+                                              ListMessageDialog
+                                                  .messageDialog[1],
+                                            ).then((message) {
                                               if (message!) {
                                                 flavors.removeAt(index);
                                                 setState(
