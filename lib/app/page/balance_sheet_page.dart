@@ -114,7 +114,7 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
-                              "Adicione a matéria prima",
+                              "Matéria prima",
                               style: TextStyle(fontSize: 18),
                             ),
                             IconButton(
@@ -137,7 +137,7 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
                             ? const Flexible(
                                 child: Center(
                                 child: Text(
-                                  "Não há matéria adicionada.",
+                                  "Não há matéria prima adicionada.",
                                   style: TextStyle(fontSize: 18),
                                 ),
                               ))

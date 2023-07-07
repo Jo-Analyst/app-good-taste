@@ -189,7 +189,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                               children: [
                                 Center(
                                   child: Text(
-                                    "Não há sabores adicionados",
+                                    "Não há sabores adicionados.",
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 ),
@@ -221,14 +221,16 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                               context,
                                               ListMessageDialog
                                                   .messageDialog[1],
-                                            ).then((message) {
-                                              if (message!) {
-                                                flavors.removeAt(index);
-                                                setState(
-                                                  () {},
-                                                );
-                                              }
-                                            }),
+                                            ).then(
+                                              (message) {
+                                                if (message!) {
+                                                  flavors.removeAt(index);
+                                                  setState(
+                                                    () {},
+                                                  );
+                                                }
+                                              },
+                                            ),
                                             icon: const Icon(
                                               Icons.delete,
                                               color: Colors.red,
