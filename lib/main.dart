@@ -20,6 +20,11 @@ class AppGoodTaste extends StatelessWidget {
         scaffoldBackgroundColor: const Color.fromARGB(179, 246, 245, 245),
         primarySwatch: Colors.pink,
         primaryColor: Colors.pink[500],
+        popupMenuTheme: const PopupMenuThemeData(
+          textStyle: TextStyle(color: Colors.white),
+          color: Color.fromRGBO(233, 30, 98, 0.877)
+        ),
+        // iconTheme: const IconThemeData(color: Colors.white),
         textTheme: const TextTheme(
           displayLarge: TextStyle(
             fontSize: 18,

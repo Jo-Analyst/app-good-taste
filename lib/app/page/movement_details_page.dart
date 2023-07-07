@@ -1,4 +1,4 @@
-import 'package:app_good_taste/app/template/balance_sheet_page.dart';
+import 'package:app_good_taste/app/page/balance_sheet_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/movement_details_template.dart';
 
@@ -34,31 +34,9 @@ class MovementDetailsPage extends StatelessWidget {
                   height: 150,
                   width: double.infinity,
                   color: Theme.of(context).primaryColor,
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Container(
-                        //   margin: const EdgeInsets.only(left: 20),
-                        //   child: const Text(
-                        //     'Bom Paladar',
-                        //     style: TextStyle(
-                        //       fontSize: 25,
-                        //       color: Colors.white,
-                        //       fontWeight: FontWeight.w900,
-                        //     ),
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  ),
                 ),
                 const SizedBox(height: 28),
                 const SlideMonth(),
-
-                // const SizedBox(height: 5),
-                // const SizedBox(height: 20),
                 const Column(
                   children: [
                     MovementDetailsTemplate(price: 150, description: "Entrada"),
@@ -97,30 +75,68 @@ class MovementDetailsPage extends StatelessWidget {
                           ),
                         ),
                         PopupMenuButton(
-                          // color: Colors.white,
+                          // color: const Color.fromRGBO(233, 30, 98, 0.877),
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: Colors.pink.shade500,
+                          ),
                           iconSize: 30,
                           itemBuilder: (BuildContext context) =>
                               <PopupMenuEntry<String>>[
                             const PopupMenuItem(
-                              value: "add",
-                              child: Text("Adicionar"),
+                              padding: EdgeInsets.zero,
+                              value: "balance-of-the-day",
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      ),
+                                      Text("Lançar balanço do dia"),
+                                    ],
+                                  ),
+                                  Divider(
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ),
                             ),
                             const PopupMenuItem(
-                              value: "remove",
-                              child: Text("Remover"),
+                              value: "all-balance-sheets",
+                              padding: EdgeInsets.zero,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.balance,
+                                        color: Colors.white,
+                                      ),
+                                      Text(
+                                        "Todas os balancetes",
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ),
                             ),
                           ],
                           onSelected: (value) {
-                            if (value == "add") {
+                            if (value == "balance-of-the-day") {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => const BalanceteSheetPage(),
                                 ),
                               );
-                            } else if (value == "remove") {
-                              print("remove");
-                            }
+                            } else if (value == "all-balance-sheets") {}
                           },
                         ),
                       ],
