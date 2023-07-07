@@ -1,6 +1,7 @@
 import 'package:app_good_taste/app/utils/drop_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class BalanceteSheetPage extends StatefulWidget {
   const BalanceteSheetPage({super.key});
@@ -18,9 +19,22 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
       "Uva",
       "Baunilha com limão"
     ];
-    final List<String> feedstocks = [
-      "Leite",
-      "Suco de morango",
+    final List<Map<String, dynamic>> feedstocks = [
+      {
+        "name": "leite",
+        "price": 4,
+        "brand": "ML",
+      },
+      {
+        "name": "Suco de Maracujá",
+        "price": 1.35,
+        "brand": "TANG",
+      },
+      {
+        "name": "Açucar",
+        "price": 18.75,
+        "brand": "",
+      },
     ];
 
     return Scaffold(
@@ -112,11 +126,62 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
                           ],
                         ),
                         Container(
-                          margin: const EdgeInsets.only(top: 5),
+                          margin: const EdgeInsets.symmetric(vertical: 5),
                           width: double.infinity,
                           height: 2,
                           color: const Color.fromARGB(255, 228, 108, 148),
-                        )
+                        ),
+                        Flexible(
+                          child: ListView.builder(
+                            itemCount: feedstocks.length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                      "${feedstocks[index]['name']}",
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                    subtitle: Text(
+                                      "${feedstocks[index]['brand']}",
+                                      style: const TextStyle(fontSize: 14),
+                                    ),
+                                    leading: CircleAvatar(
+                                      radius: 30,
+                                      child: Text(
+                                        NumberFormat("R\$ #0.00", "PT-BR")
+                                            .format(feedstocks[index]["price"]),
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    ),
+                                    trailing: SizedBox(
+                                      width: 100,
+                                      child: Row(
+                                        children: [
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                              Icons.edit,
+                                              color: Colors.blue,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const Divider()
+                                ],
+                              );
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),
