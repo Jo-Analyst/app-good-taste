@@ -1,4 +1,3 @@
-// ignore_for_file: avoid_print
 
 import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/feedstock_form.dart';
@@ -55,7 +54,7 @@ class FeedstockList extends StatelessWidget {
               onPressed: () {
                 showExitDialog(context, ListMessageDialog.messageDialog[1]).then((message) {
                   if (message!) {
-                    print("Matéria prima excluido");
+                   
                   }
                 });
               },

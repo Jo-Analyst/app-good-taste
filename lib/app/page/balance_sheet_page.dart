@@ -1,3 +1,4 @@
+import 'package:app_good_taste/app/page/raw_material_list.dart';
 import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/utils/drop_down.dart';
 import 'package:app_good_taste/app/utils/message_dialog.dart';
@@ -118,7 +119,12 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
                               style: TextStyle(fontSize: 18),
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const RawMaterialList(),
+                                ),
+                              ),
                               icon: Icon(
                                 Icons.add,
                                 size: 30,
