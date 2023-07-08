@@ -1,7 +1,5 @@
 import 'package:app_good_taste/app/page/raw_material_list.dart';
-import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/utils/drop_down.dart';
-import 'package:app_good_taste/app/utils/message_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -174,37 +172,14 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
                                                   const TextStyle(fontSize: 12),
                                             ),
                                           ),
-                                          trailing: SizedBox(
-                                            width: 100,
-                                            child: Row(
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {},
-                                                  icon: const Icon(
-                                                    Icons.edit,
-                                                    color: Colors.blue,
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  onPressed: () {
-                                                    showExitDialog(
-                                                            context,
-                                                            ListMessageDialog
-                                                                .messageDialog[1])
-                                                        .then((dialogResult) {
-                                                      if (dialogResult!) {
-                                                        feedstocks
-                                                            .removeAt(index);
-                                                        setState(() {});
-                                                      }
-                                                    });
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.delete,
-                                                    color: Colors.red,
-                                                  ),
-                                                ),
-                                              ],
+                                          trailing: IconButton(
+                                            onPressed: () {
+                                              feedstocks.removeAt(index);
+                                              setState(() {});
+                                            },
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
                                             ),
                                           ),
                                         ),

@@ -89,6 +89,30 @@ class _RawMaterialListState extends State<RawMaterialList> {
     },
   ];
 
+  late List<Map<String, dynamic>> feedstocksFiltered;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    feedstocksFiltered = feedstocks;
+  }
+
+  void searchForRawMaterial(String value) {
+    if (value.trim().isEmpty) {
+      setState(() {
+        feedstocksFiltered = feedstocks;
+      });
+      return;
+    }
+    feedstocksFiltered = [];
+    for (var fedstock in feedstocks) {
+      if (fedstock["name"].toString().toLowerCase().trim().contains(value)) {
+        
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,6 +164,7 @@ class _RawMaterialListState extends State<RawMaterialList> {
                   suffixIcon: Icon(Icons.search),
                   border: OutlineInputBorder(),
                 ),
+                onChanged: searchForRawMaterial,
               ),
               const Divider(),
               Expanded(
@@ -163,9 +188,9 @@ class _RawMaterialListState extends State<RawMaterialList> {
                             scale: 1.5,
                             child: Checkbox(
                               value: feedstocks[index]["isChecked"] ?? false,
-                              onChanged: (bool? value) {
+                              onChanged: (bool? checked) {
                                 setState(() {
-                                  feedstocks[index]["isChecked"] = value!;
+                                  feedstocks[index]["isChecked"] = checked!;
                                 });
                               },
                             ),

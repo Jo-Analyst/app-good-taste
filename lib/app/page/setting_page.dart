@@ -42,7 +42,7 @@ class _SettingPageState extends State<SettingPage> {
             children: [
               ListTile(
                 title: const Text("Personalize o seu app"),
-                subtitle: Text(darkTheme ? "Tema Escuro" : "Thema Claro"),
+                subtitle: Text(darkTheme ? "Tema Escuro" : "Tema Claro"),
                 leading: const Icon(
                   Icons.brightness_6_sharp,
                   color: Colors.black87,
