@@ -89,28 +89,25 @@ class _RawMaterialListState extends State<RawMaterialList> {
     },
   ];
 
-  late List<Map<String, dynamic>> feedstocksFiltered;
+  List<Map<String, dynamic>> filteredFeedstocks = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    feedstocksFiltered = feedstocks;
+    filteredFeedstocks = List.from(feedstocks);
   }
 
-  void searchForRawMaterial(String value) {
-    if (value.trim().isEmpty) {
-      setState(() {
-        feedstocksFiltered = feedstocks;
-      });
-      return;
-    }
-    feedstocksFiltered = [];
-    for (var fedstock in feedstocks) {
-      if (fedstock["name"].toString().toLowerCase().trim().contains(value)) {
-        
+  void searchForRawMaterial(String searchText) {
+    setState(() {
+      if (searchText.isEmpty) {
+        filteredFeedstocks = List.from(feedstocks);
+      } else {
+        filteredFeedstocks = feedstocks
+            .where((item) =>
+                item['name'].toString().trim().toLowerCase().contains(searchText.trim().toLowerCase()))
+            .toList();
       }
-    }
+    });
   }
 
   @override
@@ -169,28 +166,30 @@ class _RawMaterialListState extends State<RawMaterialList> {
               const Divider(),
               Expanded(
                 child: ListView.builder(
-                  itemCount: feedstocks.length,
+                  itemCount: filteredFeedstocks.length,
                   itemBuilder: (ctx, index) {
                     return Column(
                       children: [
                         ListTile(
-                          title: Text(feedstocks[index]["name"]),
-                          subtitle: Text(feedstocks[index]["brand"]),
+                          title: Text(filteredFeedstocks[index]["name"]),
+                          subtitle: Text(filteredFeedstocks[index]["brand"]),
                           leading: CircleAvatar(
                             maxRadius: 30,
                             child: Text(
                               NumberFormat("R\$ #0.00", "Pt-BR")
-                                  .format(feedstocks[index]["price"]),
+                                  .format(filteredFeedstocks[index]["price"]),
                               style: const TextStyle(fontSize: 12),
                             ),
                           ),
                           trailing: Transform.scale(
                             scale: 1.5,
                             child: Checkbox(
-                              value: feedstocks[index]["isChecked"] ?? false,
+                              value: filteredFeedstocks[index]["isChecked"] ??
+                                  false,
                               onChanged: (bool? checked) {
                                 setState(() {
-                                  feedstocks[index]["isChecked"] = checked!;
+                                  filteredFeedstocks[index]["isChecked"] =
+                                      checked!;
                                 });
                               },
                             ),
