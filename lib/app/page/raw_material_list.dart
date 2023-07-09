@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class RawMaterialList extends StatefulWidget {
-  const RawMaterialList({super.key});
+  final List<Map<String, dynamic>> listOfSelectedRawMaterials;
+  const RawMaterialList(this.listOfSelectedRawMaterials, {super.key});
 
   @override
   State<RawMaterialList> createState() => _RawMaterialListState();
@@ -94,7 +95,29 @@ class _RawMaterialListState extends State<RawMaterialList> {
   @override
   void initState() {
     super.initState();
+    changeIsCheckedAttribute();
     filteredFeedstocks = List.from(feedstocks);
+  }
+
+  void changeIsCheckedAttribute() {
+    if (widget.listOfSelectedRawMaterials.isEmpty) return;
+
+    for (var feedstock in feedstocks) {
+      for (var list in widget.listOfSelectedRawMaterials) {
+        if (list["id"] == feedstock["id"]) {
+          feedstock["isChecked"] = true;
+          haveSelectedRawMaterial = true;
+        }
+      }
+    }
+  }
+
+  void addRawMaterial() {
+    List<Map<String, dynamic>> valuesOfSelectedRawMaterial = filteredFeedstocks
+        .where((feedstock) => feedstock["isChecked"] == true)
+        .toList();
+
+    Navigator.pop(context, valuesOfSelectedRawMaterial);
   }
 
   void searchForRawMaterial(String searchText) {
@@ -137,13 +160,7 @@ class _RawMaterialListState extends State<RawMaterialList> {
               onPressed: !haveSelectedRawMaterial
                   ? null
                   : () {
-                      List<Map<String, dynamic>> valuesOfSelectedRawMaterial =
-                          filteredFeedstocks
-                              .where(
-                                  (feedstock) => feedstock["isChecked"] == true)
-                              .toList();
-
-                      Navigator.pop(context, valuesOfSelectedRawMaterial);
+                      addRawMaterial();
                     },
               icon: const Icon(
                 Icons.check,
