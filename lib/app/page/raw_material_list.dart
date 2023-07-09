@@ -103,10 +103,26 @@ class _RawMaterialListState extends State<RawMaterialList> {
         filteredFeedstocks = List.from(feedstocks);
       } else {
         filteredFeedstocks = feedstocks
-            .where((item) =>
-                item['name'].toString().trim().toLowerCase().contains(searchText.trim().toLowerCase()))
+            .where((item) => item['name']
+                .toString()
+                .trim()
+                .toLowerCase()
+                .contains(searchText.trim().toLowerCase()))
             .toList();
       }
+    });
+  }
+
+  bool haveSelectedRawMaterial = false;
+
+  void checkIfThereIsRawMaterialSelected() {
+    List<Map<String, dynamic>> filteredFeedstocks =
+        feedstocks.where((feedstock) {
+      return feedstock["isChecked"] == true;
+    }).toList();
+
+    setState(() {
+      haveSelectedRawMaterial = filteredFeedstocks.isNotEmpty;
     });
   }
 
@@ -118,7 +134,17 @@ class _RawMaterialListState extends State<RawMaterialList> {
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () {},
+              onPressed: !haveSelectedRawMaterial
+                  ? null
+                  : () {
+                      List<Map<String, dynamic>> valuesOfSelectedRawMaterial =
+                          filteredFeedstocks
+                              .where(
+                                  (feedstock) => feedstock["isChecked"] == true)
+                              .toList();
+
+                      Navigator.pop(context, valuesOfSelectedRawMaterial);
+                    },
               icon: const Icon(
                 Icons.check,
                 size: 35,
@@ -151,6 +177,7 @@ class _RawMaterialListState extends State<RawMaterialList> {
               TextFormField(
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.search,
+                textCapitalization: TextCapitalization.sentences,
                 decoration: const InputDecoration(
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 15,
@@ -190,6 +217,7 @@ class _RawMaterialListState extends State<RawMaterialList> {
                                 setState(() {
                                   filteredFeedstocks[index]["isChecked"] =
                                       checked!;
+                                  checkIfThereIsRawMaterialSelected();
                                 });
                               },
                             ),

@@ -18,23 +18,7 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
     "Uva",
     "Baunilha com limão"
   ];
-  final List<Map<String, dynamic>> feedstocks = [
-    {
-      "name": "leite",
-      "price": 4,
-      "brand": "ML",
-    },
-    {
-      "name": "Suco de Maracujá",
-      "price": 1.35,
-      "brand": "TANG",
-    },
-    {
-      "name": "Açucar",
-      "price": 18.75,
-      "brand": "",
-    },
-  ];
+  final List<Map<String, dynamic>> feedstocks = [];
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +57,7 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      DropDownUtils(flavors, "Escolha o sabor"),
+                      DropDownUtils(flavors, "Sabor"),
                       const Divider(),
                       TextFormField(
                         keyboardType: TextInputType.number,
@@ -117,12 +101,20 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
                               style: TextStyle(fontSize: 18),
                             ),
                             IconButton(
-                              onPressed: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const RawMaterialList(),
-                                ),
-                              ),
+                              onPressed: () async {
+                                dynamic selectedRawMaterials =
+                                    await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const RawMaterialList(),
+                                  ),
+                                );
+                                if (selectedRawMaterials != null) {
+                                  setState(() {
+                                    feedstocks.addAll(selectedRawMaterials);
+                                  });
+                                }
+                              },
                               icon: Icon(
                                 Icons.add,
                                 size: 30,
