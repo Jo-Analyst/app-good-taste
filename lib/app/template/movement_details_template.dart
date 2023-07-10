@@ -39,6 +39,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
     return SizedBox(
       width: 330,
       child: Card(
+        elevation: 8,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -101,18 +102,23 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
 
                             return Container(
                               width: double.infinity,
-                              color: const Color.fromARGB(255, 192, 190, 190),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 10,
+                              color: const Color.fromARGB(255, 217, 215, 215),
+                              child: Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 4,
+                                        horizontal: 10,
+                                      ),
+                                      child: Text(
+                                        "${quantity}x $name ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}",
+                                      ),
+                                    ),
                                   ),
-                                  child: Text(
-                                    "${quantity}x $name ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}",
-                                  ),
-                                ),
+                                  const Divider(),
+                                ],
                               ),
                             );
                           },
@@ -127,18 +133,23 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
 
                             return Container(
                               width: double.infinity,
-                              color: const Color.fromARGB(255, 222, 219, 219),
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 10,
+                              color:  const Color.fromARGB(255, 217, 215, 215),
+                              child: Column(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 4,
+                                        horizontal: 10,
+                                      ),
+                                      child: Text(
+                                        "${quantity}x $name ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}",
+                                      ),
+                                    ),
                                   ),
-                                  child: Text(
-                                    "${quantity}x $name ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}",
-                                  ),
-                                ),
+                                  const Divider(),
+                                ],
                               ),
                             );
                           },
