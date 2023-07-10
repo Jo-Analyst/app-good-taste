@@ -5,14 +5,14 @@ import 'package:intl/intl.dart';
 
 import '../utils/drop_down.dart';
 
-class BalanceteSheetPage extends StatefulWidget {
-  const BalanceteSheetPage({super.key});
+class ProductionPage extends StatefulWidget {
+  const ProductionPage({super.key});
 
   @override
-  State<BalanceteSheetPage> createState() => _BalanceteSheetPageState();
+  State<ProductionPage> createState() => _ProductionPageState();
 }
 
-class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
+class _ProductionPageState extends State<ProductionPage> {
   final formKey = GlobalKey<FormState>();
   final List<Map<String, dynamic>> products = [
     {"flavor": "Morango", "price": 1.5},

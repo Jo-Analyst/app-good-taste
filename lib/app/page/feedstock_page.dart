@@ -29,7 +29,7 @@ class FeedstockPage extends StatelessWidget {
         ],
         title: const Text(
           "Gerenciar M. Prima",
-          style: TextStyle(fontSize: 30),
+          style: TextStyle(fontSize: 25),
         ),
         backgroundColor: Theme.of(context).primaryColor,
         toolbarHeight: 100,

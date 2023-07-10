@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../utils/month.dart';
-
-class SlideMonth extends StatefulWidget {
-  const SlideMonth({super.key});
+class SlideYear extends StatefulWidget {
+  const SlideYear({super.key});
 
   @override
-  State<SlideMonth> createState() => _SlideMonthState();
+  State<SlideYear> createState() => _SlideYearState();
 }
 
-class _SlideMonthState extends State<SlideMonth> {
-  int numberMonth = int.parse(DateTime.now().month.toString()) - 1;
+class _SlideYearState extends State<SlideYear> {
+  int numberYear = 2023;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -19,24 +17,29 @@ class _SlideMonthState extends State<SlideMonth> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            onPressed: numberMonth == 0
+            onPressed: numberYear == 2023
                 ? null
                 : () => setState(() {
-                      if (numberMonth == 0) return;
-                      numberMonth--;
+                      if (numberYear == 2023) return;
+                      numberYear--;
                     }),
             icon: const Icon(
               Icons.keyboard_arrow_left,
               size: 30,
             ),
           ),
-          MonthPartils(numberMonth),
+          Text(
+            numberYear.toString(),
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.displayLarge?.fontSize,
+            ),
+          ),
           IconButton(
-            onPressed: numberMonth == 11
+            onPressed: numberYear == 2300
                 ? null
                 : () => setState(() {
-                      if (numberMonth == 11) return;
-                      numberMonth++;
+                      if (numberYear == 2300) return;
+                      numberYear++;
                     }),
             icon: const Icon(
               Icons.keyboard_arrow_right,

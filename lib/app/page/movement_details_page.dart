@@ -1,4 +1,5 @@
-import 'package:app_good_taste/app/page/balance_sheet_page.dart';
+import 'package:app_good_taste/app/page/all_productions_page.dart';
+import 'package:app_good_taste/app/page/production_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/movement_details_template.dart';
 
@@ -85,7 +86,7 @@ class MovementDetailsPage extends StatelessWidget {
                               <PopupMenuEntry<String>>[
                             const PopupMenuItem(
                               padding: EdgeInsets.zero,
-                              value: "balance-of-the-day",
+                              value: "production-of-the-day",
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -98,7 +99,7 @@ class MovementDetailsPage extends StatelessWidget {
                               ),
                             ),
                             const PopupMenuItem(
-                              value: "all-balance-sheets",
+                              value: "all-productions",
                               padding: EdgeInsets.zero,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -108,21 +109,24 @@ class MovementDetailsPage extends StatelessWidget {
                                     color: Colors.white,
                                   ),
                                   Text(
-                                    "Acessar Produção",
+                                    "Acessar Produções",
                                   ),
                                 ],
                               ),
                             ),
                           ],
                           onSelected: (value) {
-                            if (value == "balance-of-the-day") {
+                            if (value == "production-of-the-day") {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => const BalanceteSheetPage(),
+                                  builder: (_) => const ProductionPage(),
                                 ),
                               );
-                            } else if (value == "all-balance-sheets") {}
+                            } else if (value == "all-productions") {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => const AllProductionsPage()));
+                            }
                           },
                         ),
                       ],
