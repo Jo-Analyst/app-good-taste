@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-import '../utils/dialog.dart';
 import '../utils/drop_down.dart';
-import '../utils/message_dialog.dart';
 
 class BalanceteSheetPage extends StatefulWidget {
   const BalanceteSheetPage({super.key});
@@ -23,7 +21,10 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
     {"flavor": "Baunilha com limão", "price": 1.5},
     {"flavor": "Trufa de limão", "price": 3.0},
   ];
-  double entry = 0, leave = 0, proft = 0, quantity = 0, price = 0;
+  double entry = 0, leave = 0, proft = 0, price = 0;
+  String? flavorSelect;
+  int quantity = 0;
+
   // entrada = 0, saida = 0, lucro = 0, quantidade = 0, preço
   final List<String> flavors = [];
 
@@ -91,19 +92,14 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () {
-                if (formKey.currentState!.validate() &&
-                    listOfSelectedRawMaterials.isNotEmpty) {
-                  // salva os dados aqui no sqllite
-                  Navigator.of(context).pop();
-                } else if (formKey.currentState!.validate() &&
-                    listOfSelectedRawMaterials.isEmpty) {
-                  showExitDialog(
-                    context,
-                    ListMessageDialog.messageDialog[3],
-                  );
-                }
-              },
+              onPressed: quantity > 0 &&
+                      flavorSelect != null &&
+                      listOfSelectedRawMaterials.isNotEmpty
+                  ? () {
+                      // salva os dados aqui no sqllite
+                      Navigator.of(context).pop();
+                    }
+                  : null,
               icon: const Icon(
                 Icons.check,
                 size: 35,
@@ -130,12 +126,11 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Form(
-                key: formKey,
                 child: Column(
                   children: [
                     DropDownUtils(flavors, "Sabor",
-                        // key: dropdownKey, formKey: formKey,
                         onValueChanged: (selectedIndex) {
+                      flavorSelect = products[selectedIndex]["flavor"];
                       setState(
                         () {
                           price = products[selectedIndex]["price"] as double;
@@ -151,7 +146,7 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
                       textInputAction: TextInputAction.next,
                       onChanged: (value) {
                         setState(() {
-                          quantity = value != "" ? double.parse(value) : 0;
+                          quantity = value != "" ? int.parse(value) : 0;
                         });
                         calculateInputValue();
                         calculateProfit();
@@ -163,13 +158,6 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
                           color: Theme.of(context).primaryColor,
                         ),
                       ),
-                      validator: (quantity) {
-                        if (quantity!.isEmpty) {
-                          return "Digite a quantidade";
-                        }
-
-                        return null;
-                      },
                     ),
                   ],
                 ),

@@ -15,6 +15,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
   final _key = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
+  String? name;
+  double? price;
   List<String> flavors = [
     "Morango",
     "Abacaxi",
@@ -67,23 +69,27 @@ class _ProductFormPageState extends State<ProductFormPage> {
             Container(
               margin: const EdgeInsets.only(right: 10),
               child: IconButton(
-                onPressed: () {
-                  if (_key.currentState!.validate() && flavors.isEmpty) {
-                    showExitDialog(context, ListMessageDialog.messageDialog[2])
-                        .then(
-                      (confirmExit) {
-                        // if (confirmExit!) {
-                        //   Navigator.of(context).pop();
-                        // }
-                      },
-                    );
-                  }
+                onPressed: flavors.isEmpty || name == null || price == 0
+                    ? null
+                    : () {
+                        if (_key.currentState!.validate() && flavors.isEmpty) {
+                          showExitDialog(
+                                  context, ListMessageDialog.messageDialog[2])
+                              .then(
+                            (confirmExit) {
+                              // if (confirmExit!) {
+                              //   Navigator.of(context).pop();
+                              // }
+                            },
+                          );
+                        }
 
-                  if (_key.currentState!.validate() && flavors.isNotEmpty) {
-                    // salva os dados e fecha a tela
-                    Navigator.of(context).pop();
-                  }
-                },
+                        if (_key.currentState!.validate() &&
+                            flavors.isNotEmpty) {
+                          // salva os dados e fecha a tela
+                          Navigator.of(context).pop();
+                        }
+                      },
                 icon: const Icon(
                   Icons.check_outlined,
                   size: 35,
@@ -112,17 +118,17 @@ class _ProductFormPageState extends State<ProductFormPage> {
                           Column(
                             children: [
                               TextFormField(
+                                onChanged: (nameProduct) {
+                                  setState(
+                                    () {
+                                      name = nameProduct;
+                                    },
+                                  );
+                                },
                                 controller: _nameController,
                                 decoration:
                                     const InputDecoration(labelText: "Nome"),
                                 textInputAction: TextInputAction.next,
-                                validator: (name) {
-                                  if (name!.isEmpty) {
-                                    return "Informe o nome do produto!";
-                                  }
-
-                                  return null;
-                                },
                               ),
                               TextFormField(
                                 controller: _priceController,
@@ -133,12 +139,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                 textInputAction: TextInputAction.next,
                                 decoration:
                                     const InputDecoration(labelText: "Preço"),
-                                validator: (price) {
-                                  if (price!.isEmpty) {
-                                    return "Informe o preço do produto!";
-                                  }
-
-                                  return null;
+                                onChanged: (String? priceProduct) {
+                                  setState(() {
+                                    price = (priceProduct != null &&
+                                            priceProduct != "")
+                                        ? double.tryParse(priceProduct) ?? 0.0
+                                        : 0.0;
+                                  });
                                 },
                               ),
                             ],
@@ -155,9 +162,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
                           Text(
                             "Sabores ou tipos: ",
                             style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 25,
-                                fontWeight: FontWeight.w700),
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 25,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                           IconButton(
                             onPressed: () {
