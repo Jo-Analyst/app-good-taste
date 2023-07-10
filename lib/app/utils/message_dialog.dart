@@ -18,5 +18,11 @@ class ListMessageDialog {
       "action": "OK",
       "show_button_cancel": false,
     },
+    {
+      "title": "Mensagem",
+      "content": "Informa a matéria prima utilizada na produção",
+      "action": "OK",
+      "show_button_cancel": false,
+    },
   ];
 }

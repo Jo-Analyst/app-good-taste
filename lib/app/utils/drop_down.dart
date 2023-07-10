@@ -32,6 +32,13 @@ class _DropDownUtilsState extends State<DropDownUtils> {
       valueListenable: valueNotifier,
       builder: (BuildContext context, String valueDrop, _) {
         return DropdownButtonFormField<String>(
+          validator: (option) {
+            if (option == null || option.isEmpty) {
+              return "Selecione o sabor";
+            }
+
+            return null;
+          },
           isExpanded: true,
           decoration: InputDecoration(
             labelText: widget.hint,

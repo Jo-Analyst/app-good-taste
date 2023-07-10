@@ -1,8 +1,11 @@
 import 'package:app_good_taste/app/page/raw_material_list.dart';
-import 'package:app_good_taste/app/utils/drop_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+
+import '../utils/dialog.dart';
+import '../utils/drop_down.dart';
+import '../utils/message_dialog.dart';
 
 class BalanceteSheetPage extends StatefulWidget {
   const BalanceteSheetPage({super.key});
@@ -12,6 +15,7 @@ class BalanceteSheetPage extends StatefulWidget {
 }
 
 class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
+  final formKey = GlobalKey<FormState>();
   final List<Map<String, dynamic>> products = [
     {"flavor": "Morango", "price": 1.5},
     {"flavor": "Maracujá", "price": 1.5},
@@ -22,6 +26,14 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
   double entry = 0, leave = 0, proft = 0, quantity = 0, price = 0;
   // entrada = 0, saida = 0, lucro = 0, quantidade = 0, preço
   final List<String> flavors = [];
+
+  final valueNotifier = ValueNotifier("");
+
+  @override
+  void dispose() {
+    valueNotifier.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -57,7 +69,13 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
 
   void decreaseOutputWhenExcludingRawMaterial(int index) {
     setState(() {
-      leave -= listOfSelectedRawMaterials[index]["price"];
+      double price =
+          double.parse(listOfSelectedRawMaterials[index]["price"].toString());
+      if (leave >= price) {
+        leave -= price;
+      } else {
+        leave = 0;
+      }
     });
   }
 
@@ -73,7 +91,19 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                if (formKey.currentState!.validate() &&
+                    listOfSelectedRawMaterials.isNotEmpty) {
+                  // salva os dados aqui no sqllite
+                  Navigator.of(context).pop();
+                } else if (formKey.currentState!.validate() &&
+                    listOfSelectedRawMaterials.isEmpty) {
+                  showExitDialog(
+                    context,
+                    ListMessageDialog.messageDialog[3],
+                  );
+                }
+              },
               icon: const Icon(
                 Icons.check,
                 size: 35,
@@ -99,37 +129,50 @@ class _BalanceteSheetPageState extends State<BalanceteSheetPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Column(
-                children: [
-                  DropDownUtils(flavors, "Sabor",
-                      onValueChanged: (selectedIndex) {
-                    setState(() {
-                      price = products[selectedIndex]["price"] as double;
-                    });
-                    calculateInputValue();
-                    calculateProfit();
-                  }),
-                  const Divider(),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    textInputAction: TextInputAction.next,
-                    onChanged: (value) {
-                      setState(() {
-                        quantity = value != "" ? double.parse(value) : 0;
-                      });
+              Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    DropDownUtils(flavors, "Sabor",
+                        // key: dropdownKey, formKey: formKey,
+                        onValueChanged: (selectedIndex) {
+                      setState(
+                        () {
+                          price = products[selectedIndex]["price"] as double;
+                        },
+                      );
                       calculateInputValue();
                       calculateProfit();
-                    },
-                    decoration: InputDecoration(
-                      labelText: "Quantidade",
-                      labelStyle: const TextStyle(fontSize: 18),
-                      floatingLabelStyle: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                    }),
+                    const Divider(),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      textInputAction: TextInputAction.next,
+                      onChanged: (value) {
+                        setState(() {
+                          quantity = value != "" ? double.parse(value) : 0;
+                        });
+                        calculateInputValue();
+                        calculateProfit();
+                      },
+                      decoration: InputDecoration(
+                        labelText: "Quantidade",
+                        labelStyle: const TextStyle(fontSize: 18),
+                        floatingLabelStyle: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
+                      validator: (quantity) {
+                        if (quantity!.isEmpty) {
+                          return "Digite a quantidade";
+                        }
+
+                        return null;
+                      },
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
               const Divider(
