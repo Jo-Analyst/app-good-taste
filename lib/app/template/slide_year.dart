@@ -8,11 +8,11 @@ class SlideYear extends StatefulWidget {
 }
 
 class _SlideYearState extends State<SlideYear> {
-  int numberYear = 2023;
+  int numberYear = DateTime.now().year;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 330,
+      width: 290,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
