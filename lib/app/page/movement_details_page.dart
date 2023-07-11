@@ -38,11 +38,14 @@ class MovementDetailsPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 28),
                 const SlideMonth(),
-                const Column(
-                  children: [
-                    MovementDetailsTemplate(price: 150, description: "Entrada"),
-                    MovementDetailsTemplate(price: 50, description: "Saida"),
-                  ],
+                const Padding(
+                  padding:  EdgeInsets.all(10.0),
+                  child:  Column(
+                    children: [
+                      MovementDetailsTemplate(price: 150, description: "Entrada"),
+                      MovementDetailsTemplate(price: 50, description: "Saida"),
+                    ],
+                  ),
                 )
               ],
             ),

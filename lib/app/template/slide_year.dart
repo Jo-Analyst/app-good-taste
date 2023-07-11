@@ -12,7 +12,7 @@ class _SlideYearState extends State<SlideYear> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 290,
+      width: MediaQuery.of(context).size.width -70,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

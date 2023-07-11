@@ -1,3 +1,4 @@
+import 'package:app_good_taste/app/page/production_details.dart';
 import 'package:app_good_taste/app/template/slide_year.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,16 @@ class AllProductionsPage extends StatelessWidget {
     ];
     return Scaffold(
       appBar: AppBar(
+        leading: Container(
+          margin: const EdgeInsets.only(right: 5),
+          child: IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(
+              Icons.close,
+              size: 35,
+            ),
+          ),
+        ),
         title: const Text(
           "Todas as produções",
           style: TextStyle(fontSize: 25),
@@ -39,7 +50,7 @@ class AllProductionsPage extends StatelessWidget {
             child: Column(
               children: [
                 const Text(
-                  "Escolha o mês:",
+                  "Escolha o ano e o mês:",
                   style: TextStyle(fontSize: 18),
                 ),
                 const SizedBox(height: 5),
@@ -71,7 +82,11 @@ class AllProductionsPage extends StatelessWidget {
                     date.length,
                     (index) {
                       return InkWell(
-                        onTap: () => print(date[index]),
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const ProductionDetails(),
+                          ),
+                        ),
                         child: Card(
                           elevation: 8,
                           child: Container(

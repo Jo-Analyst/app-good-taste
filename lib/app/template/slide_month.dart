@@ -13,38 +13,35 @@ class _SlideMonthState extends State<SlideMonth> {
   int numberMonth = int.parse(DateTime.now().month.toString()) - 1;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 330,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: numberMonth == 0
-                ? null
-                : () => setState(() {
-                      if (numberMonth == 0) return;
-                      numberMonth--;
-                    }),
-            icon: const Icon(
-              Icons.keyboard_arrow_left,
-              size: 30,
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          onPressed: numberMonth == 0
+              ? null
+              : () => setState(() {
+                    if (numberMonth == 0) return;
+                    numberMonth--;
+                  }),
+          icon: const Icon(
+            Icons.keyboard_arrow_left,
+            size: 30,
           ),
-          MonthPartils(numberMonth),
-          IconButton(
-            onPressed: numberMonth == 11
-                ? null
-                : () => setState(() {
-                      if (numberMonth == 11) return;
-                      numberMonth++;
-                    }),
-            icon: const Icon(
-              Icons.keyboard_arrow_right,
-              size: 30,
-            ),
+        ),
+        MonthPartils(numberMonth),
+        IconButton(
+          onPressed: numberMonth == 11
+              ? null
+              : () => setState(() {
+                    if (numberMonth == 11) return;
+                    numberMonth++;
+                  }),
+          icon: const Icon(
+            Icons.keyboard_arrow_right,
+            size: 30,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -37,7 +37,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 330,
+      // width: 330,
       child: Card(
         elevation: 8,
         child: SingleChildScrollView(
