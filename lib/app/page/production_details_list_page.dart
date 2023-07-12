@@ -23,7 +23,11 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
     {"date": "17/07/2023", "value-entry": 60, "value-leave": 30, "profit": 30},
     {"date": "12/07/2023", "value-entry": 30, "value-leave": 10, "profit": 20},
     {"date": "16/07/2023", "value-entry": 50, "value-leave": 25, "profit": 25},
-    {"date": "17/07/2023", "value-entry": 60, "value-leave": 30, "profit": 30},
+    {"date": "18/07/2023", "value-entry": 70, "value-leave": 30, "profit": 30},
+    {"date": "19/07/2023", "value-entry": 80, "value-leave": 30, "profit": 30},
+    {"date": "21/07/2023", "value-entry": 90, "value-leave": 30, "profit": 30},
+    {"date": "22/07/2023", "value-entry": 100, "value-leave": 30, "profit": 30},
+    {"date": "25/07/2023", "value-entry": 110, "value-leave": 30, "profit": 30},
   ];
 
   bool _sortAscending = true;
