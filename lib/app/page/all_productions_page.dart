@@ -1,4 +1,4 @@
-import 'package:app_good_taste/app/page/production_details.dart';
+import 'package:app_good_taste/app/page/production_details_list_page.dart';
 import 'package:app_good_taste/app/template/slide_year.dart';
 import 'package:flutter/material.dart';
 
@@ -84,7 +84,7 @@ class AllProductionsPage extends StatelessWidget {
                       return InkWell(
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => const ProductionDetails(),
+                            builder: (_) => const ProductionDetailsListPage(),
                           ),
                         ),
                         child: Card(
