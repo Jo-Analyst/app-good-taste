@@ -1,18 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ProductionDetailsPage extends StatelessWidget {
+class ProductionDetailsPage extends StatefulWidget {
   const ProductionDetailsPage({super.key});
 
   @override
+  State<ProductionDetailsPage> createState() => _ProductionDetailsPageState();
+}
+
+class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
+  @override
   Widget build(BuildContext context) {
     final List<Map<String, dynamic>> production = [
-      {"id": 1, "flavor": "Morango", "quantity": 12, "price": 18},
-      {"id": 2, "flavor": "Uva", "quantity": 13, "price": 19.5},
-      {"id": 3, "flavor": "Baunilha com limão", "quantity": 12, "price": 18},
-      {"id": 4, "flavor": "Azul", "quantity": 13, "price": 19.5},
-      {"id": 4, "flavor": "Chocolate", "quantity": 12, "price": 18},
-      {"id": 4, "flavor": "Leite consensado", "quantity": 10, "price": 15},
+      {
+        "id": 1,
+        "flavor": "Morango",
+        "quantity": 12,
+        "subtotal": 18,
+        "price": 1.35
+      },
+      {
+        "id": 2,
+        "flavor": "Uva",
+        "quantity": 13,
+        "subtotal": 19.5,
+        "price": 1.35
+      },
+      {
+        "id": 3,
+        "flavor": "Baunilha com limão",
+        "quantity": 12,
+        "subtotal": 18,
+        "price": 1.35
+      },
+      {
+        "id": 4,
+        "flavor": "Azul",
+        "quantity": 13,
+        "subtotal": 19.5,
+        "price": 1.35
+      },
+      {
+        "id": 4,
+        "flavor": "Chocolate",
+        "quantity": 12,
+        "subtotal": 18,
+        "price": 1.35
+      },
+      {
+        "id": 4,
+        "flavor": "Leite consensado",
+        "quantity": 10,
+        "subtotal": 15,
+        "price": 1.35
+      },
+    ];
+    final List<Map<String, dynamic>> feedstock = [
+      {"id": 1, "name": "Açucar", "brand": "", "price": 19.5},
+      {"id": 2, "name": "suco de Uva", "brand": "TANG", "price": 1.35},
+      {"id": 3, "name": "Baunilha com limão", "brand": "MID", "price": 1.25},
+      {"id": 4, "name": "Suco de Azul", "brand": "", "price": 10.0},
+      {"id": 4, "name": "Chocolate", "brand": "Nestle", "price": 8},
+      {"id": 4, "name": "Leite consensado", "brand": "", "price": 4.75},
     ];
     return Scaffold(
       appBar: AppBar(
@@ -28,13 +77,14 @@ class ProductionDetailsPage extends StatelessWidget {
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        actions: [Container(margin: const EdgeInsets.only(right: 5), child: IconButton(onPressed: () {}, icon: const Icon(Icons.edit_outlined, size: 25,)))],
       ),
       body: Container(
         color: Colors.white,
         margin: const EdgeInsets.all(10),
         padding: const EdgeInsets.all(10),
         child: DefaultTextStyle(
-          style: const TextStyle(fontSize: 18, color: Colors.black),
+          style: const TextStyle(fontSize: 16, color: Colors.black),
           child: Column(
             children: [
               Divider(
@@ -57,13 +107,13 @@ class ProductionDetailsPage extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 2 - 135,
+                height: MediaQuery.of(context).size.height / 2 - 170,
                 width: double.infinity,
                 child: Card(
                   elevation: 8,
                   child: DefaultTextStyle(
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       color: Colors.black,
                     ),
                     child: Padding(
@@ -77,30 +127,44 @@ class ProductionDetailsPage extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 final rowColor = index % 2 > 0
                                     ? Colors.white
-                                    : const Color.fromARGB(255, 191, 190, 190);
-                                return Container(
-                                  color: rowColor,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 15),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(production[index]["flavor"]),
-                                      Row(
-                                        children: [
-                                          Text(
-                                              "${production[index]["quantity"]}x"),
-                                          const SizedBox(width: 5),
-                                          Text(
-                                            NumberFormat("R\$ #0.00", "PT-BR")
-                                                .format(
-                                              production[index]["price"],
+                                    : Colors.grey.shade200;
+                                return InkWell(
+                                    onLongPress: () => print("Pressionado!"),
+                                  child: Container(
+                                    color: rowColor,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 15),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(production[index]["flavor"]),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "${production[index]["quantity"]} x",
+                                              style:
+                                                  const TextStyle(fontSize: 16),
                                             ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                            const SizedBox(width: 5),
+                                            Text(
+                                              NumberFormat("#0.00", "PT-BR")
+                                                  .format(
+                                                production[index]["price"],
+                                              ),
+                                              style: const TextStyle(fontSize: 16),
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Text(
+                                              NumberFormat("R\$ #0.00", "PT-BR")
+                                                  .format(
+                                                production[index]["subtotal"],
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 );
                               },
@@ -112,12 +176,75 @@ class ProductionDetailsPage extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
+              const Align(
+                alignment: Alignment.topLeft,
+                child: Text("Gastos:"),
+              ),
+              const SizedBox(height: 10),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 2 - 135,
+                height: MediaQuery.of(context).size.height / 2 - 170,
                 width: double.infinity,
-                child: const Card(
+                child: Card(
                   elevation: 8,
-                  child: Text(""),
+                  child: DefaultTextStyle(
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 10),
+                          Flexible(
+                            child: ListView.builder(
+                              itemCount: production.length,
+                              itemBuilder: (context, index) {
+                                final rowColor = index % 2 > 0
+                                    ? Colors.white
+                                    : Colors.grey.shade200;
+                                return Container(
+                                  color: rowColor,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 15),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(feedstock[index]["name"]),
+                                      SizedBox(
+                                        width: 120,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              feedstock[index]["brand"],
+                                              style:
+                                                  const TextStyle(fontSize: 18),
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Text(
+                                              NumberFormat("R\$ #0.00", "PT-BR")
+                                                  .format(
+                                                feedstock[index]["price"],
+                                              ),
+                                              style:
+                                                  const TextStyle(fontSize: 16),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
