@@ -27,7 +27,7 @@ class _ProductionPageState extends State<ProductionPage> {
   // entrada = 0, saida = 0, lucro = 0, quantidade = 0, preço
   double entry = 0, leave = 0, proft = 0, price = 0;
 
-  String? flavorSelect, flavor;
+  String? flavorSelect, flavorEditing;
   int quantity = 0;
 
   final List<String> flavors = [];
@@ -49,6 +49,7 @@ class _ProductionPageState extends State<ProductionPage> {
     if (widget.production.isEmpty) return;
     quantityController.text = widget.production["quantity"].toString();
     entry = widget.production["subtotal"];
+    flavorEditing = widget.production["flavor"];
     calculateProfit();
   }
 
@@ -136,7 +137,7 @@ class _ProductionPageState extends State<ProductionPage> {
               Form(
                 child: Column(
                   children: [
-                    DropDownUtils(flavors, "Sabor",
+                    DropDownUtils(flavors, "Sabor", flavorEditing: flavorEditing,
                         onValueChanged: (selectedIndex) {
                       flavorSelect = products[selectedIndex]["flavor"];
                       setState(

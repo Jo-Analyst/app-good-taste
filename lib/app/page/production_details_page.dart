@@ -180,7 +180,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                     : index % 2 > 0
                                         ? Colors.white
                                         : Colors.grey.shade200;
-
+          
                                 return InkWell(
                                   onLongPress: () {
                                     setState(() {
