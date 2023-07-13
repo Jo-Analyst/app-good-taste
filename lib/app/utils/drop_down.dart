@@ -20,6 +20,12 @@ class _DropDownUtilsState extends State<DropDownUtils> {
   final textController = TextEditingController();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   void dispose() {
     valueNotifier.dispose();
     textController.dispose();

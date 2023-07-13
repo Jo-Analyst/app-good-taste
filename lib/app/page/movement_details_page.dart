@@ -39,10 +39,11 @@ class MovementDetailsPage extends StatelessWidget {
                 const SizedBox(height: 28),
                 const SlideMonth(),
                 const Padding(
-                  padding:  EdgeInsets.all(10.0),
-                  child:  Column(
+                  padding: EdgeInsets.all(10.0),
+                  child: Column(
                     children: [
-                      MovementDetailsTemplate(price: 150, description: "Entrada"),
+                      MovementDetailsTemplate(
+                          price: 150, description: "Entrada"),
                       MovementDetailsTemplate(price: 50, description: "Saida"),
                     ],
                   ),
@@ -123,7 +124,9 @@ class MovementDetailsPage extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) => const ProductionPage(),
+                                  builder: (_) => const ProductionPage(
+                                    production: {},
+                                  ),
                                 ),
                               );
                             } else if (value == "all-productions") {

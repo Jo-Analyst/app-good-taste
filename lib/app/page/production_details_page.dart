@@ -17,7 +17,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
       "id": 1,
       "flavor": "Morango",
       "quantity": 12,
-      "subtotal": 18,
+      "subtotal": 18.0,
       "price": 1.35
     },
     {"id": 2, "flavor": "Uva", "quantity": 13, "subtotal": 19.5, "price": 1.35},
@@ -25,7 +25,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
       "id": 3,
       "flavor": "Baunilha com limão",
       "quantity": 12,
-      "subtotal": 18,
+      "subtotal": 18.0,
       "price": 1.35
     },
     {
@@ -39,14 +39,14 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
       "id": 5,
       "flavor": "Chocolate",
       "quantity": 12,
-      "subtotal": 18,
+      "subtotal": 18.0,
       "price": 1.35
     },
     {
       "id": 6,
       "flavor": "Leite condensado",
       "quantity": 10,
-      "subtotal": 15,
+      "subtotal": 15.0,
       "price": 1.35
     },
   ];
@@ -111,7 +111,9 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                   : () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => const ProductionPage(),
+                          builder: (_) => ProductionPage(
+                            production: productions[selectedLine],
+                          ),
                         ),
                       );
                     },

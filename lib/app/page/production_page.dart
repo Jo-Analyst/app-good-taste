@@ -6,7 +6,8 @@ import 'package:intl/intl.dart';
 import '../utils/drop_down.dart';
 
 class ProductionPage extends StatefulWidget {
-  const ProductionPage({super.key});
+  final Map<String, dynamic> production;
+  const ProductionPage({required this.production, super.key});
 
   @override
   State<ProductionPage> createState() => _ProductionPageState();
@@ -14,6 +15,7 @@ class ProductionPage extends StatefulWidget {
 
 class _ProductionPageState extends State<ProductionPage> {
   final formKey = GlobalKey<FormState>();
+  final quantityController = TextEditingController();
   final List<Map<String, dynamic>> products = [
     {"flavor": "Morango", "price": 1.5},
     {"flavor": "Maracujá", "price": 1.5},
@@ -21,11 +23,13 @@ class _ProductionPageState extends State<ProductionPage> {
     {"flavor": "Baunilha com limão", "price": 1.5},
     {"flavor": "Trufa de limão", "price": 3.0},
   ];
-  double entry = 0, leave = 0, proft = 0, price = 0;
-  String? flavorSelect;
-  int quantity = 0;
 
   // entrada = 0, saida = 0, lucro = 0, quantidade = 0, preço
+  double entry = 0, leave = 0, proft = 0, price = 0;
+
+  String? flavorSelect, flavor;
+  int quantity = 0;
+
   final List<String> flavors = [];
 
   final valueNotifier = ValueNotifier("");
@@ -42,6 +46,10 @@ class _ProductionPageState extends State<ProductionPage> {
     for (var product in products) {
       flavors.add(product["flavor"]);
     }
+    if (widget.production.isEmpty) return;
+    quantityController.text = widget.production["quantity"].toString();
+    entry = widget.production["subtotal"];
+    calculateProfit();
   }
 
   final List<Map<String, dynamic>> listOfSelectedRawMaterials = [];
@@ -141,6 +149,7 @@ class _ProductionPageState extends State<ProductionPage> {
                     }),
                     const Divider(),
                     TextFormField(
+                      controller: quantityController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       textInputAction: TextInputAction.next,
