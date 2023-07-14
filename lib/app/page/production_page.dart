@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
+import '../utils/dialog.dart';
 import '../utils/drop_down.dart';
+import '../utils/message_dialog.dart';
 
 class ProductionPage extends StatefulWidget {
   final Map<String, dynamic> production;
@@ -31,7 +33,7 @@ class _ProductionPageState extends State<ProductionPage> {
   double entry = 0, leave = 0, proft = 0, price = 0;
 
   String? flavorSelect, flavorEditing = '';
-  int quantity = 0;
+  int quantity = 0, id = 0;
 
   final List<String> flavors = [];
 
@@ -59,6 +61,7 @@ class _ProductionPageState extends State<ProductionPage> {
     flavorEditing = widget.production["flavor"];
     flavorSelect = flavors[getIndexListFlavors(flavorEditing!)];
     price = widget.production["price"];
+    id = widget.production["id"];
     calculateProfit();
   }
 
@@ -136,7 +139,22 @@ class _ProductionPageState extends State<ProductionPage> {
           ),
         ],
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            if (id == 0 &&
+                flavorSelect != null &&
+                quantity >= 0 &&
+                listOfSelectedRawMaterials.isNotEmpty) {
+              showExitDialog(context, ListMessageDialog.messageDialog[0]).then(
+                (confirmExit) {
+                  if (confirmExit!) {
+                    Navigator.of(context).pop();
+                  }
+                },
+              );
+            } else {
+              Navigator.of(context).pop();
+            }
+          },
           icon: const Icon(
             Icons.close,
             size: 35,
