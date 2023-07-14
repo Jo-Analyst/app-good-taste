@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 class DropDownUtils extends StatefulWidget {
   final List<String> flavors;
-  final String? flavorEditing;
+  final int? indexFlavorEditing;
   final String hint;
   final Function(int) onValueChanged;
 
   const DropDownUtils(
     this.flavors,
-    this.hint, {
+    this.hint,
+    this.indexFlavorEditing, {
     Key? key,
     required this.onValueChanged,
-    this.flavorEditing,
   }) : super(key: key);
 
   @override
@@ -24,9 +24,6 @@ class _DropDownUtilsState extends State<DropDownUtils> {
   @override
   void initState() {
     super.initState();
-    if (widget.flavorEditing != null) {
-      valueNotifier.value = widget.flavors[widget.flavors.length - 1];
-    }
   }
 
   @override
@@ -37,30 +34,35 @@ class _DropDownUtilsState extends State<DropDownUtils> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: valueNotifier,
-      builder: (BuildContext context, String? valueDrop, _) {
-        return DropdownButtonFormField<String>(
-          isExpanded: true,
-          decoration: InputDecoration(
-            labelText: widget.hint,
-            labelStyle: const TextStyle(fontSize: 18),
-          ),
-          value: valueDrop,
-          onChanged: (option) {
-            valueNotifier.value = option!;
-            widget.onValueChanged(widget.flavors.indexOf(option));
-          },
-          items: widget.flavors
-              .map(
-                (flavor) => DropdownMenuItem(
-                  value: flavor,
-                  child: Text(flavor),
-                ),
-              )
-              .toList(),
-        );
+    var seen = <String>{};
+    List<String> flavorslist =
+        widget.flavors.where((flavor) => seen.add(flavor)).toList();
+
+    return DropdownButtonFormField<String>(
+      isExpanded: true,
+      decoration: InputDecoration(
+        labelText: widget.hint,
+        labelStyle: const TextStyle(fontSize: 18),
+        floatingLabelStyle: TextStyle(
+          color: Theme.of(context).primaryColor,
+        ),
+      ),
+      value: widget.indexFlavorEditing! >= 0 &&
+              widget.indexFlavorEditing! < widget.flavors.length
+          ? flavorslist[widget.indexFlavorEditing!]
+          : flavorslist[0],
+      onChanged: (option) {
+        valueNotifier.value = option!;
+        widget.onValueChanged(widget.flavors.indexOf(option));
       },
+      items: widget.flavors
+          .map(
+            (flavor) => DropdownMenuItem(
+              value: flavor,
+              child: Text(flavor),
+            ),
+          )
+          .toList(),
     );
   }
 }

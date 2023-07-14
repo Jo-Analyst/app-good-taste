@@ -21,13 +21,16 @@ class _ProductionPageState extends State<ProductionPage> {
     {"flavor": "Maracujá", "price": 1.5},
     {"flavor": "Uva", "price": 1.5},
     {"flavor": "Baunilha com limão", "price": 1.5},
+    {"flavor": "Azul", "price": 1.5},
+    {"flavor": "Leite condensado", "price": 1.5},
+    {"flavor": "Chocolate", "price": 1.5},
     {"flavor": "Trufa de limão", "price": 3.0},
   ];
 
   // entrada = 0, saida = 0, lucro = 0, quantidade = 0, preço
   double entry = 0, leave = 0, proft = 0, price = 0;
 
-  String? flavorSelect, flavorEditing;
+  String? flavorSelect, flavorEditing = '';
   int quantity = 0;
 
   final List<String> flavors = [];
@@ -46,14 +49,32 @@ class _ProductionPageState extends State<ProductionPage> {
     for (var product in products) {
       flavors.add(product["flavor"]);
     }
-    if (widget.production.isEmpty) return;
-    quantityController.text = widget.production["quantity"].toString();
+
+    if (widget.production.isEmpty) {
+      flavorSelect = flavors[0];
+      return;
+    }
+
+    quantity = widget.production["quantity"];
+    quantityController.text = quantity.toString();
+
     entry = widget.production["subtotal"];
     flavorEditing = widget.production["flavor"];
+    flavorSelect = flavors[getIndexListFlavors(flavorEditing!)];
     calculateProfit();
   }
 
   final List<Map<String, dynamic>> listOfSelectedRawMaterials = [];
+
+  int getIndexListFlavors(String flavorEditing) {
+    int index = -1;
+    for (int i = 0; i < flavors.length; i++) {
+      if (flavorEditing.toLowerCase() == flavors[i].toLowerCase()) {
+        index = i;
+      }
+    }
+    return index;
+  }
 
   void calculateInputValue() {
     setState(() {
@@ -137,7 +158,8 @@ class _ProductionPageState extends State<ProductionPage> {
               Form(
                 child: Column(
                   children: [
-                    DropDownUtils(flavors, "Sabor", flavorEditing: flavorEditing,
+                    DropDownUtils(
+                        flavors, "Sabor", getIndexListFlavors(flavorEditing!),
                         onValueChanged: (selectedIndex) {
                       flavorSelect = products[selectedIndex]["flavor"];
                       setState(
@@ -268,51 +290,54 @@ class _ProductionPageState extends State<ProductionPage> {
                         },
                       ),
                     ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text(
-                    "E:",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "E:",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                  Chip(
-                      backgroundColor: Colors.blue,
+                    Chip(
+                        backgroundColor: Colors.blue,
+                        label: Text(
+                          NumberFormat("R\$ #0.00", "PT-BR").format(entry),
+                          style: const TextStyle(fontSize: 16),
+                        )),
+                    const Text(
+                      "S:",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Chip(
+                      backgroundColor: Colors.red,
                       label: Text(
-                        NumberFormat("R\$ #0.00", "PT-BR").format(entry),
+                        NumberFormat("R\$ #0.00", "PT-BR").format(leave),
                         style: const TextStyle(fontSize: 16),
-                      )),
-                  const Text(
-                    "S:",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                  Chip(
-                    backgroundColor: Colors.red,
-                    label: Text(
-                      NumberFormat("R\$ #0.00", "PT-BR").format(leave),
-                      style: const TextStyle(fontSize: 16),
+                    const Text(
+                      "L:",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                  const Text(
-                    "L:",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
+                    Chip(
+                      backgroundColor: Colors.green,
+                      label: Text(
+                        NumberFormat("R\$ #0.00", "PT-BR").format(proft),
+                        style: const TextStyle(fontSize: 16),
+                      ),
                     ),
-                  ),
-                  Chip(
-                    backgroundColor: Colors.green,
-                    label: Text(
-                      NumberFormat("R\$ #0.00", "PT-BR").format(proft),
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               )
             ],
           ),
