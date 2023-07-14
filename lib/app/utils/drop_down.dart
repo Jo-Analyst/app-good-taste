@@ -9,7 +9,8 @@ class DropDownUtils extends StatefulWidget {
   const DropDownUtils(
     this.flavors,
     this.hint,
-    this.indexFlavorEditing, {
+    {
+    this.indexFlavorEditing, 
     Key? key,
     required this.onValueChanged,
   }) : super(key: key);
@@ -50,7 +51,7 @@ class _DropDownUtilsState extends State<DropDownUtils> {
       value: widget.indexFlavorEditing! >= 0 &&
               widget.indexFlavorEditing! < widget.flavors.length
           ? flavorslist[widget.indexFlavorEditing!]
-          : flavorslist[0],
+          : null,
       onChanged: (option) {
         valueNotifier.value = option!;
         widget.onValueChanged(widget.flavors.indexOf(option));

@@ -70,6 +70,13 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
     }
   }
 
+// limpa o item selecionado
+  void clearSelection() {
+    for (var row in rowsPressed) {
+      row["isPressed"] = false;
+    }
+  }
+
   void toggleRowsPressed(int index) {
     for (int i = 0; i < rowsPressed.length; i++) {
       if (i != index) {
@@ -105,22 +112,41 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 5),
-            child: IconButton(
-              onPressed: !lineWasPressed
-                  ? null
-                  : () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => ProductionPage(
-                            production: productions[selectedLine],
-                          ),
-                        ),
-                      );
-                    },
-              icon: Icon(
-                lineWasPressed ? Icons.edit_outlined : Icons.edit,
-                size: 25,
-              ),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: !lineWasPressed
+                      ? null
+                      : () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => ProductionPage(
+                                production: productions[selectedLine],
+                              ),
+                            ),
+                          );
+                        },
+                  icon: Icon(
+                    lineWasPressed ? Icons.edit_outlined : Icons.edit,
+                    size: 25,
+                  ),
+                ),
+                IconButton(
+                  onPressed: !lineWasPressed
+                      ? null
+                      : () {
+                          setState(() {
+                            productions.removeAt(selectedLine);
+                            lineWasPressed = false;
+                            clearSelection();
+                          });
+                        },
+                  icon: const Icon(
+                    Icons.delete,
+                    size: 25,
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -156,7 +182,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 2 - 170,
+                height: MediaQuery.of(context).size.height / 2 - 180,
                 width: double.infinity,
                 child: Card(
                   elevation: 8,
@@ -180,7 +206,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                     : index % 2 > 0
                                         ? Colors.white
                                         : Colors.grey.shade200;
-          
+
                                 return InkWell(
                                   onLongPress: () {
                                     setState(() {
@@ -274,7 +300,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
               ),
               const SizedBox(height: 10),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 2 - 170,
+                height: MediaQuery.of(context).size.height / 2 - 180,
                 width: double.infinity,
                 child: Card(
                   elevation: 8,
@@ -290,7 +316,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                           const SizedBox(height: 10),
                           Flexible(
                             child: ListView.builder(
-                              itemCount: productions.length,
+                              itemCount: feedstocks.length,
                               itemBuilder: (context, index) {
                                 final rowColor = index % 2 > 0
                                     ? Colors.white
@@ -339,6 +365,62 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       ),
                     ),
                   ),
+                ),
+              ),
+              const SizedBox(height: 5),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "E:",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Flexible(
+                      child: Chip(
+                        backgroundColor: Colors.blue,
+                        label: Text(
+                          NumberFormat("R\$ #0.00", "PT-BR").format(100),
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    const Text(
+                      "S:",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Flexible(
+                      child: Chip(
+                        backgroundColor: Colors.red,
+                        label: Text(
+                          NumberFormat("R\$ #0.00", "PT-BR").format(40),
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    const Text(
+                      "L:",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Flexible(
+                      child: Chip(
+                        backgroundColor: Colors.green,
+                        label: Text(
+                          NumberFormat("R\$ #0.00", "PT-BR").format(60),
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

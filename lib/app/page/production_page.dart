@@ -50,10 +50,7 @@ class _ProductionPageState extends State<ProductionPage> {
       flavors.add(product["flavor"]);
     }
 
-    if (widget.production.isEmpty) {
-      flavorSelect = flavors[0];
-      return;
-    }
+    if (widget.production.isEmpty) return;
 
     quantity = widget.production["quantity"];
     quantityController.text = quantity.toString();
@@ -61,6 +58,7 @@ class _ProductionPageState extends State<ProductionPage> {
     entry = widget.production["subtotal"];
     flavorEditing = widget.production["flavor"];
     flavorSelect = flavors[getIndexListFlavors(flavorEditing!)];
+    price = widget.production["price"];
     calculateProfit();
   }
 
@@ -158,8 +156,8 @@ class _ProductionPageState extends State<ProductionPage> {
               Form(
                 child: Column(
                   children: [
-                    DropDownUtils(
-                        flavors, "Sabor", getIndexListFlavors(flavorEditing!),
+                    DropDownUtils(flavors, "Sabor",
+                        indexFlavorEditing: getIndexListFlavors(flavorEditing!),
                         onValueChanged: (selectedIndex) {
                       flavorSelect = products[selectedIndex]["flavor"];
                       setState(
@@ -290,55 +288,59 @@ class _ProductionPageState extends State<ProductionPage> {
                         },
                       ),
                     ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "E:",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "E:",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Flexible(
+                    child: Chip(
+                      backgroundColor: Colors.blue,
+                      label: Text(
+                        NumberFormat("R\$ #0.00", "PT-BR").format(entry),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ),
-                    Chip(
-                        backgroundColor: Colors.blue,
-                        label: Text(
-                          NumberFormat("R\$ #0.00", "PT-BR").format(entry),
-                          style: const TextStyle(fontSize: 16),
-                        )),
-                    const Text(
-                      "S:",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
+                  ),
+                  const Text(
+                    "S:",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                     ),
-                    Chip(
+                  ),
+                  Flexible(
+                    child: Chip(
                       backgroundColor: Colors.red,
                       label: Text(
                         NumberFormat("R\$ #0.00", "PT-BR").format(leave),
                         style: const TextStyle(fontSize: 16),
                       ),
                     ),
-                    const Text(
-                      "L:",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
+                  ),
+                  const Text(
+                    "L:",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                     ),
-                    Chip(
+                  ),
+                  Flexible(
+                    child: Chip(
                       backgroundColor: Colors.green,
                       label: Text(
                         NumberFormat("R\$ #0.00", "PT-BR").format(proft),
                         style: const TextStyle(fontSize: 16),
                       ),
                     ),
-                  ],
-                ),
-              )
+                  ),
+                ],
+              ),
             ],
           ),
         ),
