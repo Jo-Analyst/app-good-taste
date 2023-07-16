@@ -1,4 +1,5 @@
 import 'package:app_good_taste/app/controller/flavor_controller.dart';
+import 'package:app_good_taste/app/model/flavor_model.dart';
 import 'package:app_good_taste/app/utils/message_dialog.dart';
 import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/flavor_form.dart';
@@ -19,7 +20,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
   String name = "";
   double price = 0;
   List<Map<String, dynamic>> flavors = [];
+  List<FlavorModel> flavorsClass = [];
   List<Map<String, dynamic>> flavorsRemoved = [];
+  // List<FlavorModel> flavorsRemoved = [];
 
   @override
   void initState() {
@@ -37,13 +40,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
     // flavorProvider.add(flavorText);
     setState(() {
       // flavors = flavorProvider.items;
-      flavors.add({"id": 0, "type": flavorText});
+      // flavors.add({"id": 0, "type": flavorText});
+      flavorsClass.add(FlavorModel(type: flavorText, id: 0));
     });
   }
 
   void updateFlavor(int index, String flavorText) {
     setState(() {
-      flavors[index].update("type", (_) => flavorText);
+      // flavors[index].update("type", (_) => flavorText);
+      flavorsClass[index].type = flavorText;
     });
   }
 
@@ -52,7 +57,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
     //     Provider.of<FlavorController>(context, listen: false);
     // flavorProvider.removeAt(index);
     setState(() {
-      flavorsRemoved.add(flavors.removeAt(index));
+      final flavorModelDelete = flavorsClass.removeAt(index);
+      if (flavorModelDelete.id != null) {
+        flavorsRemoved.add({"id": flavorModelDelete.id});
+      }
       // flavors.removeAt(index);
       // flavors = flavorProvider.items;
     });
@@ -88,9 +96,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           ),
           leading: IconButton(
             onPressed: () {
-              final flavors =
-                  Provider.of<FlavorController>(context, listen: false).items;
-              if (flavors.isNotEmpty ||
+                  if (flavorsClass.isNotEmpty ||
                   _nameController.text.isNotEmpty ||
                   _priceController.text.isNotEmpty) {
                 showExitDialog(context, ListMessageDialog.messageDialog[0])
@@ -131,7 +137,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                           });
                         }
                         if (_key.currentState!.validate() &&
-                            flavors.isNotEmpty) {
+                            flavorsClass.isNotEmpty) {
                           // salva os dados e fecha a tela
                           Navigator.of(context).pop();
                         }
@@ -254,12 +260,12 @@ class _ProductFormPageState extends State<ProductFormPage> {
                         : ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: flavors.length,
+                            itemCount: flavorsClass.length,
                             itemBuilder: (context, index) {
                               return Column(
                                 children: [
                                   ListTile(
-                                    title: Text(flavors[index]["type"]),
+                                    title: Text(flavorsClass[index].type),
                                     trailing: SizedBox(
                                       width: 100,
                                       child: Row(
@@ -269,7 +275,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                               final flavorOrType =
                                                   await showModalFlavorForm(
                                                       context,
-                                                      flavors[index]["type"]);
+                                                      flavorsClass[index].type);
                                               if (flavorOrType!.isNotEmpty) {
                                                 updateFlavor(
                                                     index, flavorOrType);

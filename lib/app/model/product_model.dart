@@ -3,9 +3,9 @@ import 'package:app_good_taste/app/model/flavor_model.dart';
 import '../config/db.dart';
 
 class ProductModel {
-  final int? id;
-  final String name;
-  final double price;
+ late int? id;
+  late final String name;
+  late final double price;
 
   ProductModel({
     this.id,

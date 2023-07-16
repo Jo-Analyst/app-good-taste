@@ -3,9 +3,9 @@ import 'package:sqflite/sqflite.dart';
 import '../config/db.dart';
 
 class FlavorModel {
-  final int? id;
-  final String type;
-  late int? productId;
+  int? id;
+  String type;
+  int? productId;
 
   FlavorModel({
     this.id,
