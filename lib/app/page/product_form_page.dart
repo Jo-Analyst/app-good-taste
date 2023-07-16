@@ -23,15 +23,11 @@ class _ProductFormPageState extends State<ProductFormPage> {
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
     final flavorProvider =
         Provider.of<FlavorController>(context, listen: false);
-    flavorProvider.loadFlavors();
+    // flavorProvider.loadFlavors();
     flavors = flavorProvider.items;
+    print(flavors);
   }
 
   void addFlavor(String flavor) {
@@ -50,6 +46,17 @@ class _ProductFormPageState extends State<ProductFormPage> {
     setState(() {
       flavors = flavorProvider.items;
     });
+  }
+
+  Future<String?> showModalFlavorForm(BuildContext context) async {
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      builder: (_) {
+        return const FlavorForm();
+      },
+    );
+
+    return result ?? '';
   }
 
   @override
@@ -196,7 +203,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                             onPressed: () async {
                               final typeOrFlavor =
                                   await showModalFlavorForm(context);
-                              if (typeOrFlavor != null) {
+                              if (typeOrFlavor!.isNotEmpty) {
                                 addFlavor(typeOrFlavor);
                               }
                             },
