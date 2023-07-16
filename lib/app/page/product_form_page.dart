@@ -1,8 +1,10 @@
+import 'package:app_good_taste/app/controller/flavor_controller.dart';
 import 'package:app_good_taste/app/utils/message_dialog.dart';
 import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/flavor_form.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
@@ -17,17 +19,25 @@ class _ProductFormPageState extends State<ProductFormPage> {
   final _priceController = TextEditingController();
   String? name;
   double? price;
-  List<String> flavors = [
-    "Morango",
-    "Abacaxi",
-    "Maracujá",
-    "Uva",
-    "Baunilha com limão",
-    "Iorgute de morango",
-    "Iorgute de maracujá",
-    "Chocolate",
-    "Açai"
-  ];
+  List<Map<String, dynamic>> flavors = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    loadFlavors();
+  }
+
+  void loadFlavors() async {
+    final provider = Provider.of<FlavorController>(context);
+    await provider.loadFlavors();
+    flavors = provider.items;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -212,13 +222,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
                               return Column(
                                 children: [
                                   ListTile(
-                                    title: Text(flavors[index]),
+                                    title: Text(flavors[index]["type"]),
                                     trailing: SizedBox(
                                       width: 100,
                                       child: Row(
                                         children: [
                                           IconButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              print(flavors[index]);
+                                            },
                                             icon: const Icon(
                                               Icons.edit,
                                               color: Colors.blue,
