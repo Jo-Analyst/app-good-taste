@@ -19,6 +19,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
   String name = "";
   double price = 0;
   List<Map<String, dynamic>> flavors = [];
+  List<Map<String, dynamic>> flavorsRemoved = [];
 
   @override
   void initState() {
@@ -36,7 +37,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     // flavorProvider.add(flavorText);
     setState(() {
       // flavors = flavorProvider.items;
-      flavors.add({"id": null, "type": flavorText});
+      flavors.add({"id": 0, "type": flavorText});
     });
   }
 
@@ -51,7 +52,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
     //     Provider.of<FlavorController>(context, listen: false);
     // flavorProvider.removeAt(index);
     setState(() {
-      flavors.removeAt(index);
+      flavorsRemoved.add(flavors.removeAt(index));
+      // flavors.removeAt(index);
       // flavors = flavorProvider.items;
     });
   }
