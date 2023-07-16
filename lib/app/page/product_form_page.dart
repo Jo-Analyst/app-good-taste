@@ -1,6 +1,5 @@
 import 'package:app_good_taste/app/controller/flavor_controller.dart';
 import 'package:app_good_taste/app/utils/message_dialog.dart';
-import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/flavor_form.dart';
 import 'package:flutter/material.dart';
@@ -27,16 +26,30 @@ class _ProductFormPageState extends State<ProductFormPage> {
   }
 
   @override
-  void didChangeDependencies() async {
+  void didChangeDependencies() {
     super.didChangeDependencies();
-    loadFlavors();
+    final flavorProvider =
+        Provider.of<FlavorController>(context, listen: false);
+    flavorProvider.loadFlavors();
+    flavors = flavorProvider.items;
   }
 
-  void loadFlavors() async {
-    final provider = Provider.of<FlavorController>(context);
-    await provider.loadFlavors();
-    flavors = provider.items;
-    setState(() {});
+  void addFlavor(String flavor) {
+    final flavorProvider =
+        Provider.of<FlavorController>(context, listen: false);
+    flavorProvider.add(flavor);
+    setState(() {
+      flavors = flavorProvider.items;
+    });
+  }
+
+  void removeFlavor(int index) {
+    final flavorProvider =
+        Provider.of<FlavorController>(context, listen: false);
+    flavorProvider.removeAt(index);
+    setState(() {
+      flavors = flavorProvider.items;
+    });
   }
 
   @override
@@ -55,6 +68,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
           ),
           leading: IconButton(
             onPressed: () {
+              final flavors =
+                  Provider.of<FlavorController>(context, listen: false).items;
               if (flavors.isNotEmpty ||
                   _nameController.text.isNotEmpty ||
                   _priceController.text.isNotEmpty) {
@@ -79,27 +94,28 @@ class _ProductFormPageState extends State<ProductFormPage> {
             Container(
               margin: const EdgeInsets.only(right: 10),
               child: IconButton(
-                onPressed: flavors.isEmpty || name == null || price == 0
-                    ? null
-                    : () {
-                        if (_key.currentState!.validate() && flavors.isEmpty) {
-                          showExitDialog(
-                                  context, ListMessageDialog.messageDialog[2])
-                              .then(
-                            (confirmExit) {
-                              // if (confirmExit!) {
-                              //   Navigator.of(context).pop();
-                              // }
-                            },
-                          );
-                        }
-
-                        if (_key.currentState!.validate() &&
-                            flavors.isNotEmpty) {
-                          // salva os dados e fecha a tela
-                          Navigator.of(context).pop();
-                        }
-                      },
+                onPressed: () {
+                  final flavors =
+                      Provider.of<FlavorController>(context, listen: false)
+                          .items;
+                  if (flavors.isEmpty || name == null || price == 0) {
+                    return;
+                  }
+                  if (_key.currentState!.validate() && flavors.isEmpty) {
+                    showExitDialog(
+                      context,
+                      ListMessageDialog.messageDialog[2],
+                    ).then((confirmExit) {
+                      // if (confirmExit!) {
+                      //   Navigator.of(context).pop();
+                      // }
+                    });
+                  }
+                  if (_key.currentState!.validate() && flavors.isNotEmpty) {
+                    // salva os dados e fecha a tela
+                    Navigator.of(context).pop();
+                  }
+                },
                 icon: const Icon(
                   Icons.check_outlined,
                   size: 35,
@@ -144,8 +160,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                 controller: _priceController,
                                 keyboardType:
                                     const TextInputType.numberWithOptions(
-                                  decimal: true,
-                                ),
+                                        decimal: true),
                                 textInputAction: TextInputAction.next,
                                 decoration:
                                     const InputDecoration(labelText: "Preço"),
@@ -178,11 +193,12 @@ class _ProductFormPageState extends State<ProductFormPage> {
                             ),
                           ),
                           IconButton(
-                            onPressed: () {
-                              showModal(
-                                context,
-                                const FlavorForm(),
-                              );
+                            onPressed: () async {
+                              final typeOrFlavor =
+                                  await showModalFlavorForm(context);
+                              if (typeOrFlavor != null) {
+                                addFlavor(typeOrFlavor);
+                              }
                             },
                             icon: Icon(
                               Icons.add_circle_outline,
@@ -244,10 +260,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                             ).then(
                                               (message) {
                                                 if (message!) {
-                                                  flavors.removeAt(index);
-                                                  setState(
-                                                    () {},
-                                                  );
+                                                  removeFlavor(index);
                                                 }
                                               },
                                             ),
@@ -275,34 +288,3 @@ class _ProductFormPageState extends State<ProductFormPage> {
     );
   }
 }
-// Widget build(BuildContext context) {
-    // return WillPopScope(
-    //   onWillPop: () async {
-    //     bool confirmExit = await showDialog(
-    //       context: context,
-    //       builder: (BuildContext context) {
-    //         return AlertDialog(
-    //           title: const Text('Deseja sair?'),
-    //           content: const Text(
-    //               'Você tem certeza que deseja sair sem confirmar a transação?'),
-    //           actions: [
-    //             TextButton(
-    //               child: const Text('Cancelar'),
-    //               onPressed: () {
-    //                 Navigator.of(context).pop(false);
-    //               },
-    //             ),
-    //             TextButton(
-    //               child: const Text('Sair'),
-    //               onPressed: () {
-    //                 Navigator.of(context).pop(true);
-    //               },
-    //             ),
-    //           ],
-    //         );
-    //       },
-    //     );
-
-    //     return confirmExit;
-    //   },
-// }

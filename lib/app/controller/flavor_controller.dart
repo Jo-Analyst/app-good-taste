@@ -1,14 +1,26 @@
 import 'package:app_good_taste/app/model/flavor_model.dart';
 import 'package:flutter/material.dart';
 
-class FlavorController with ChangeNotifier {
+class FlavorController extends ChangeNotifier {
   List<Map<String, dynamic>> _items = [];
 
   List<Map<String, dynamic>> get items {
-    return [..._items];
+    return List<Map<String, dynamic>>.from(_items);
   }
 
   Future<void> loadFlavors() async {
-    _items = await FlavorModel.getData();
+    final flavors = await FlavorModel.getData();
+    _items = List<Map<String, dynamic>>.from(flavors);
+    notifyListeners();
+  }
+
+  void add(String type) {
+    _items.add({"id": null, "type": type});
+    notifyListeners();
+  }
+
+  void removeAt(int index) {
+    _items.removeAt(index);
+    notifyListeners();
   }
 }
