@@ -16,43 +16,54 @@ class _ProductFormPageState extends State<ProductFormPage> {
   final _key = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
-  String? name;
-  double? price;
+  String name = "";
+  double price = 0;
   List<Map<String, dynamic>> flavors = [];
 
   @override
   void initState() {
     super.initState();
-    final flavorProvider =
-        Provider.of<FlavorController>(context, listen: false);
-    // flavorProvider.loadFlavors();
-    flavors = flavorProvider.items;
-    print(flavors);
   }
 
-  void addFlavor(String flavor) {
-    final flavorProvider =
-        Provider.of<FlavorController>(context, listen: false);
-    flavorProvider.add(flavor);
+  void exitScreen() {
+    Provider.of<FlavorController>(context, listen: false).clear();
+    Navigator.of(context).pop();
+  }
+
+  void addFlavor(String flavorText) {
+    // final flavorProvider =
+    //     Provider.of<FlavorController>(context, listen: false);
+    // flavorProvider.add(flavorText);
     setState(() {
-      flavors = flavorProvider.items;
+      // flavors = flavorProvider.items;
+      flavors.add({"id": null, "type": flavorText});
+    });
+  }
+
+  void updateFlavor(int index, String flavorText) {
+    setState(() {
+      flavors[index].update("type", (_) => flavorText);
     });
   }
 
   void removeFlavor(int index) {
-    final flavorProvider =
-        Provider.of<FlavorController>(context, listen: false);
-    flavorProvider.removeAt(index);
+    // final flavorProvider =
+    //     Provider.of<FlavorController>(context, listen: false);
+    // flavorProvider.removeAt(index);
     setState(() {
-      flavors = flavorProvider.items;
+      flavors.removeAt(index);
+      // flavors = flavorProvider.items;
     });
   }
 
-  Future<String?> showModalFlavorForm(BuildContext context) async {
+  Future<String?> showModalFlavorForm(
+      BuildContext context, String? type) async {
     final result = await showModalBottomSheet<String>(
       context: context,
       builder: (_) {
-        return const FlavorForm();
+        return FlavorForm(
+          type: type,
+        );
       },
     );
 
@@ -84,7 +95,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     .then(
                   (confirmExit) {
                     if (confirmExit!) {
-                      Navigator.of(context).pop();
+                      exitScreen();
                     }
                   },
                 );
@@ -101,28 +112,29 @@ class _ProductFormPageState extends State<ProductFormPage> {
             Container(
               margin: const EdgeInsets.only(right: 10),
               child: IconButton(
-                onPressed: () {
-                  final flavors =
-                      Provider.of<FlavorController>(context, listen: false)
-                          .items;
-                  if (flavors.isEmpty || name == null || price == 0) {
-                    return;
-                  }
-                  if (_key.currentState!.validate() && flavors.isEmpty) {
-                    showExitDialog(
-                      context,
-                      ListMessageDialog.messageDialog[2],
-                    ).then((confirmExit) {
-                      // if (confirmExit!) {
-                      //   Navigator.of(context).pop();
-                      // }
-                    });
-                  }
-                  if (_key.currentState!.validate() && flavors.isNotEmpty) {
-                    // salva os dados e fecha a tela
-                    Navigator.of(context).pop();
-                  }
-                },
+                onPressed: flavors.isNotEmpty && name.isNotEmpty && price > 0
+                    ? () {
+                        final flavors = Provider.of<FlavorController>(context,
+                                listen: false)
+                            .items;
+
+                        if (_key.currentState!.validate() && flavors.isEmpty) {
+                          showExitDialog(
+                            context,
+                            ListMessageDialog.messageDialog[2],
+                          ).then((confirmExit) {
+                            // if (confirmExit!) {
+                            //   Navigator.of(context).pop();
+                            // }
+                          });
+                        }
+                        if (_key.currentState!.validate() &&
+                            flavors.isNotEmpty) {
+                          // salva os dados e fecha a tela
+                          Navigator.of(context).pop();
+                        }
+                      }
+                    : null,
                 icon: const Icon(
                   Icons.check_outlined,
                   size: 35,
@@ -202,7 +214,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                           IconButton(
                             onPressed: () async {
                               final typeOrFlavor =
-                                  await showModalFlavorForm(context);
+                                  await showModalFlavorForm(context, null);
                               if (typeOrFlavor!.isNotEmpty) {
                                 addFlavor(typeOrFlavor);
                               }
@@ -251,8 +263,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                       child: Row(
                                         children: [
                                           IconButton(
-                                            onPressed: () {
-                                              print(flavors[index]);
+                                            onPressed: () async {
+                                              final flavorOrType =
+                                                  await showModalFlavorForm(
+                                                      context,
+                                                      flavors[index]["type"]);
+                                              if (flavorOrType!.isNotEmpty) {
+                                                updateFlavor(
+                                                    index, flavorOrType);
+                                              }
                                             },
                                             icon: const Icon(
                                               Icons.edit,

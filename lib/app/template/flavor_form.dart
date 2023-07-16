@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
 import '../utils/scroll_button_modal.dart';
 
-class FlavorForm extends StatelessWidget {
-  const FlavorForm({super.key});
+class FlavorForm extends StatefulWidget {
+  final String? type;
+  const FlavorForm({this.type, super.key});
+
+  @override
+  State<FlavorForm> createState() => _FlavorFormState();
+}
+
+class _FlavorFormState extends State<FlavorForm> {
+  final globalKey = GlobalKey<FormState>();
+  final textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.type == null) return;
+
+    textController.text = widget.type!;
+  }
+
+  void addFlavor() {
+    if (globalKey.currentState!.validate()) {
+      Navigator.pop(context, textController.text.trim());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final globalKey = GlobalKey<FormState>();
-    final textController = TextEditingController();
-
-    void addFlavor() {
-      if (globalKey.currentState!.validate()) {
-        Navigator.pop(context, textController.text);
-      }
-    }
-
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Column(
@@ -25,8 +39,9 @@ class FlavorForm extends StatelessWidget {
             child: Column(
               children: [
                 TextFormField(
+                  textCapitalization: TextCapitalization.sentences,
                   controller: textController,
-                  autofocus: true,
+                  // autofocus: true,
                   decoration: const InputDecoration(
                     labelText: "Sabor ou tipo",
                   ),

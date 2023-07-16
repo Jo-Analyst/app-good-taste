@@ -19,6 +19,11 @@ class FlavorController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clear() {
+    _items.clear();
+    notifyListeners();
+  }
+
   void removeAt(int index) {
     _items.removeAt(index);
     notifyListeners();
