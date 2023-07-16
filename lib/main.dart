@@ -1,5 +1,7 @@
+import 'package:app_good_taste/app/config/db.dart';
 import 'package:app_good_taste/app/controller/flavor_controller.dart';
 import 'package:app_good_taste/app/controller/product_controller.dart';
+import 'package:app_good_taste/app/model/product_model.dart';
 import 'package:flutter/material.dart';
 
 import 'app/page/good_taste_page.dart';
@@ -8,6 +10,19 @@ import 'package:provider/provider.dart';
 
 void main() async {
   runApp(const AppGoodTaste());
+  //     await DB.save("products", {"name": "chup-chup  super cremoso", "price": 3.0});
+  // await DB.save("flavors", {"type": "Morango", "product_id": 1});
+  // await DB.save("flavors", {"type": "Limão", "product_id": 1});
+  // await DB.save("flavors", {"type": "Maracujá", "product_id": 1});
+  // await DB.save("flavors", {"type": "BIS", "product_id": 1});
+  // await DB.save("flavors", {"type": "Lata", "product_id": 1});
+
+  // final products = await DB.getData("products");
+  // final flavors = await DB.getData("flavors");
+  // final productAndFlavor = await ProductModel.getData("");
+  // print(products);
+  // print(flavors);
+  // print(productAndFlavor);
 }
 
 class AppGoodTaste extends StatelessWidget {

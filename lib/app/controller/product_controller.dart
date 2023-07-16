@@ -9,6 +9,10 @@ class ProductController extends ChangeNotifier {
     return [..._products];
   }
 
+  Future<void> loadProducts() async {
+    
+  }
+
   Future<void> save(
       int? id, String name, double price, List<FlavorModel> flavors) async {
     if (id == null) {
