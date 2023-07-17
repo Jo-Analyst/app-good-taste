@@ -73,8 +73,6 @@ class _ProductFormPageState extends State<ProductFormPage> {
     setListFlavorModel(); // Adiciona na lista flavorModel a classe antes da confirmação
     productProvider.save(productId, name, price, flavorModel);
     productProvider.loadProducts();
-    // print(productProvider.items.length);
-    // print(productProvider.items);
   }
 
   void setListFlavorModel() {
@@ -117,7 +115,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   },
                 );
               } else {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(false);
               }
             },
             icon: const Icon(
@@ -132,7 +130,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 onPressed: flavors.isNotEmpty && name.isNotEmpty && price > 0
                     ? () {
                         confirmProduct();
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(true);
                       }
                     : null,
                 icon: const Icon(

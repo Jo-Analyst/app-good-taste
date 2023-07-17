@@ -8,7 +8,7 @@ class FlavorModel {
   int productId;
 
   FlavorModel({
-   required this.id,
+    required this.id,
     required this.type,
     required this.productId,
   });
@@ -27,6 +27,12 @@ class FlavorModel {
     } catch (ex) {
       //
     }
+  }
+
+  static Future<List<Map<String, dynamic>>> findByProductId(
+      int productId) async {
+    final db = await DB.database();
+    return db.query("flavors", where: "product_id = ?", whereArgs: [productId]);
   }
 
   static Future<List<Map<String, dynamic>>> getData() async {

@@ -4,13 +4,26 @@ import 'package:intl/intl.dart';
 
 import '../utils/dialog.dart';
 
-class ProductList extends StatelessWidget {
+class ProductList extends StatefulWidget {
   final Map<String, dynamic> productItem;
   const ProductList(this.productItem, {super.key});
 
   @override
+  State<ProductList> createState() => _ProductListState();
+}
+
+class _ProductListState extends State<ProductList> {
+  bool extendCard = false;
+
+  void toggleCard() {
+    setState(() {
+      extendCard = !extendCard;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-       return ListTile(
+    return ListTile(
       leading: CircleAvatar(
         radius: 30,
         backgroundColor: Theme.of(context).primaryColor,
@@ -18,22 +31,22 @@ class ProductList extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: Text(
             NumberFormat("R\$ #0.00", "PT-BR").format(
-              productItem["price"],
+              widget.productItem["price"],
             ),
             style: const TextStyle(fontSize: 12),
           ),
         ),
       ),
       title: Text(
-        productItem["type"],
+        widget.productItem["name"],
         style: const TextStyle(fontSize: 18),
       ),
-      subtitle: Text(
-        productItem["name"],
-        style: const TextStyle(fontSize: 14),
-      ),
+      // subtitle: Text(
+      //   productItem["name"],
+      //   style: const TextStyle(fontSize: 14),
+      // ),
       trailing: SizedBox(
-        width: 100,
+        width: 145,
         child: Row(
           children: [
             IconButton(
@@ -44,17 +57,25 @@ class ProductList extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: () => showExitDialog(context, ListMessageDialog.messageDialog[1]).then(
+              onPressed: () =>
+                  showExitDialog(context, ListMessageDialog.messageDialog[1])
+                      .then(
                 (message) {
-                  if (message!) {
-                 
-                  }
+                  if (message!) {}
                 },
               ),
               icon: Icon(
                 Icons.delete,
                 color: Theme.of(context).colorScheme.error,
               ),
+            ),
+            IconButton(
+              onPressed: () {
+                toggleCard();
+              },
+              icon: Icon(extendCard
+                  ? Icons.keyboard_arrow_right
+                  : Icons.keyboard_arrow_down),
             ),
           ],
         ),

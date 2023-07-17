@@ -1,103 +1,65 @@
+import 'package:app_good_taste/app/controller/flavor_controller.dart';
+import 'package:app_good_taste/app/controller/product_controller.dart';
 import 'package:app_good_taste/app/page/product_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/product_list.dart';
+import 'package:provider/provider.dart';
 
-class ProductPage extends StatelessWidget {
+class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> products = [
-      {
-        "product_id": 0,
-        "name": "Chup-Chup Goumert",
-        "price": 3,
-        "type": "Trufa de Morango",
-        "flavor_id": 0
-      },
-      {
-        "product_id": 1,
-        "name": "Chup-Chup Goumert",
-        "price": 3,
-        "type": "Trufa de Maracujá",
-        "flavor_id": 1
-      },
-      {
-        "product_id": 2,
-        "name": "Chup-Chup Goumert",
-        "price": 3,
-        "type": "Trufa de limão",
-        "flavor_id": 2
-      },
-      {
-        "product_id": 3,
-        "name": "Chup-Chup Goumert",
-        "price": 3,
-        "type": "BIS",
-        "flavor_id": 3
-      },
-      {
-        "product_id": 4,
-        "name": "Chup-Chup cremoso",
-        "price": 1.50,
-        "type": "Morango",
-        "flavor_id": 4
-      },
-      {
-        "product_id": 5,
-        "name": "Chup-Chup cremoso",
-        "price": 1.50,
-        "type": "Maracujá",
-        "flavor_id": 5
-      },
-      {
-        "product_id": 6,
-        "name": "Chup-Chup cremoso",
-        "price": 1.50,
-        "type": "Baunilha com limão",
-        "flavor_id": 6
-      },
-      {
-        "product_id": 7,
-        "name": "Chup-Chup cremoso",
-        "price": 1.50,
-        "type": "Abacaxi",
-        "flavor_id": 7
-      },
-      {
-        "product_id": 8,
-        "name": "Chup-Chup cremoso",
-        "price": 1.50,
-        "type": "Chocolate",
-        "flavor_id": 8
-      },
-      {
-        "product_id": 9,
-        "name": "Chup-Chup cremoso",
-        "price": 1.50,
-        "type": "Uva",
-        "flavor_id": 9
-      },
-      {
-        "product_id": 10,
-        "name": "Chup-Chup cremoso",
-        "price": 1.50,
-        "type": "Iorgute de morango",
-        "flavor_id": 10
-      },
-    ];
+  State<ProductPage> createState() => _ProductPageState();
+}
 
+class _ProductPageState extends State<ProductPage> {
+  List<Map<String, dynamic>> products = [];
+  List<Map<String, dynamic>> flavors = [];
+  @override
+  void initState() {
+    super.initState();
+    loadProducts();
+    loadFlavors();
+  }
+
+  Future<void> loadProducts() async {
+    final productProvider =
+        Provider.of<ProductController>(context, listen: false);
+    await productProvider.loadProducts();
+    setState(() {
+      products = productProvider.items;
+    });
+  }
+
+  Future<void> loadFlavors() async {
+    final flavorsProvider =
+        Provider.of<FlavorController>(context, listen: false);
+    await flavorsProvider.loadFlavors();
+    setState(() {
+      flavors = flavorsProvider.items;
+      print(flavors);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                final isSaved = await Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ProductFormPage()),
+                  MaterialPageRoute(
+                    builder: (context) => const ProductFormPage(),
+                  ),
                 );
+
+                if (isSaved == true) {
+                  await loadProducts();
+                }
               },
               icon: const Icon(
                 Icons.add,
@@ -123,8 +85,42 @@ class ProductPage extends StatelessWidget {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
-                      return Card(
-                        child: ProductList(products[index]),
+                      return Column(
+                        children: [
+                          Card(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Column(
+                                children: [
+                                  ProductList(products[index]),
+                                  const SizedBox(height: 5),
+                                  Container(
+                                    color: const Color.fromARGB(
+                                        179, 246, 245, 245),
+                                    child: Column(
+                                      children: flavors
+                                          .where((e) =>
+                                              e["product_id"] ==
+                                              products[index]["id"])
+                                          .map((flavor) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(flavor['type'].toString()),
+                                            ],
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       );
                     },
                   ),
