@@ -38,7 +38,7 @@ class _FlavorListState extends State<FlavorList> {
                   title: Text(
                     flavor['type'].toString(),
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
                 ),

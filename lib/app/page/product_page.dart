@@ -18,10 +18,9 @@ class _ProductPageState extends State<ProductPage> {
   List<bool> cardTriggeredList = [];
   List<Map<String, dynamic>> flavors = [];
   int triggeredCardIndex = -1; // indíce do carro acionado
-  bool expandeCard = false;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     loadProducts();
     loadFlavors();
@@ -35,9 +34,9 @@ class _ProductPageState extends State<ProductPage> {
     }
   }
 
-  void updateListCardTriggered(int index) {
+  void updateListCardTriggered(int index, bool expanded) {
     setState(() {
-      cardTriggeredList[index] = expandeCard;
+      cardTriggeredList[index] = expanded;
     });
   }
 
@@ -77,7 +76,8 @@ class _ProductPageState extends State<ProductPage> {
                 );
 
                 if (isSaved == true) {
-                  await loadProducts();
+                  loadProducts();
+                  loadFlavors();
                 }
               },
               icon: const Icon(
@@ -108,15 +108,12 @@ class _ProductPageState extends State<ProductPage> {
                         children: [
                           Card(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              padding: const EdgeInsets.only(top: 10),
                               child: Column(
                                 children: [
                                   ProductList(products[index],
                                       toggleCard: (expanded) {
-                                    setState(() {
-                                      expandeCard = expanded;
-                                      updateListCardTriggered(index);
-                                    });
+                                    updateListCardTriggered(index, expanded);
                                   }),
                                   const SizedBox(height: 5),
                                   FlavorList(

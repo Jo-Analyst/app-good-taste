@@ -172,6 +172,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                 decoration:
                                     const InputDecoration(labelText: "Nome"),
                                 textInputAction: TextInputAction.next,
+                                textCapitalization: TextCapitalization.words,
                               ),
                               TextFormField(
                                 controller: _priceController,
