@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class RawMaterialList extends StatefulWidget {
+class RawMaterialPage extends StatefulWidget {
   final List<Map<String, dynamic>> listOfSelectedRawMaterials;
-  const RawMaterialList(this.listOfSelectedRawMaterials, {super.key});
+  const RawMaterialPage(this.listOfSelectedRawMaterials, {super.key});
 
   @override
-  State<RawMaterialList> createState() => _RawMaterialListState();
+  State<RawMaterialPage> createState() => _RawMaterialPageState();
 }
 
-class _RawMaterialListState extends State<RawMaterialList> {
+class _RawMaterialPageState extends State<RawMaterialPage> {
   final List<Map<String, dynamic>> feedstocks = [
     {
       "id": 0,

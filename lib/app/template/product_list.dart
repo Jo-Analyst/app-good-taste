@@ -6,47 +6,78 @@ import '../utils/dialog.dart';
 
 class ProductList extends StatefulWidget {
   final Map<String, dynamic> productItem;
-  const ProductList(this.productItem, {super.key});
+  final Function(bool) toggleCard;
+  const ProductList(
+    this.productItem, {
+    required this.toggleCard,
+    super.key,
+  });
 
   @override
   State<ProductList> createState() => _ProductListState();
 }
 
 class _ProductListState extends State<ProductList> {
-  bool extendCard = false;
+  bool expanded = false;
 
   void toggleCard() {
     setState(() {
-      extendCard = !extendCard;
+      expanded = !expanded;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        radius: 30,
-        backgroundColor: Theme.of(context).primaryColor,
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            NumberFormat("R\$ #0.00", "PT-BR").format(
-              widget.productItem["price"],
+      title: Container(
+        child: Row(
+          children: [
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    toggleCard();
+                    widget.toggleCard(expanded);
+                  },
+                  icon: Icon(
+                    expanded
+                        ? Icons.keyboard_arrow_down
+                        : Icons.keyboard_arrow_right,
+                  ),
+                ),
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      NumberFormat("R\$ #0.00", "PT-BR").format(
+                        widget.productItem["price"],
+                      ),
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            style: const TextStyle(fontSize: 12),
-          ),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                widget.productItem["name"],
+                style: const TextStyle(fontSize: 18),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
         ),
       ),
-      title: Text(
-        widget.productItem["name"],
-        style: const TextStyle(fontSize: 18),
-      ),
+
       // subtitle: Text(
       //   productItem["name"],
       //   style: const TextStyle(fontSize: 14),
       // ),
       trailing: SizedBox(
-        width: 145,
+        width: 100,
         child: Row(
           children: [
             IconButton(
@@ -68,14 +99,6 @@ class _ProductListState extends State<ProductList> {
                 Icons.delete,
                 color: Theme.of(context).colorScheme.error,
               ),
-            ),
-            IconButton(
-              onPressed: () {
-                toggleCard();
-              },
-              icon: Icon(extendCard
-                  ? Icons.keyboard_arrow_right
-                  : Icons.keyboard_arrow_down),
             ),
           ],
         ),

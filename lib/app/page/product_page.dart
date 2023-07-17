@@ -1,6 +1,7 @@
 import 'package:app_good_taste/app/controller/flavor_controller.dart';
 import 'package:app_good_taste/app/controller/product_controller.dart';
 import 'package:app_good_taste/app/page/product_form_page.dart';
+import 'package:app_good_taste/app/template/flavor_list.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/product_list.dart';
 import 'package:provider/provider.dart';
@@ -14,12 +15,30 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   List<Map<String, dynamic>> products = [];
+  List<bool> cardTriggeredList = [];
   List<Map<String, dynamic>> flavors = [];
+  int triggeredCardIndex = -1; // indíce do carro acionado
+  bool expandeCard = false;
+
   @override
   void initState() {
     super.initState();
     loadProducts();
     loadFlavors();
+  }
+
+  void setListCardTriggered() {
+    for (int i = 0; i < products.length; i++) {
+      setState(() {
+        cardTriggeredList.add(false);
+      });
+    }
+  }
+
+  void updateListCardTriggered(int index) {
+    setState(() {
+      cardTriggeredList[index] = expandeCard;
+    });
   }
 
   Future<void> loadProducts() async {
@@ -28,6 +47,7 @@ class _ProductPageState extends State<ProductPage> {
     await productProvider.loadProducts();
     setState(() {
       products = productProvider.items;
+      setListCardTriggered();
     });
   }
 
@@ -37,7 +57,6 @@ class _ProductPageState extends State<ProductPage> {
     await flavorsProvider.loadFlavors();
     setState(() {
       flavors = flavorsProvider.items;
-      print(flavors);
     });
   }
 
@@ -92,29 +111,18 @@ class _ProductPageState extends State<ProductPage> {
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Column(
                                 children: [
-                                  ProductList(products[index]),
+                                  ProductList(products[index],
+                                      toggleCard: (expanded) {
+                                    setState(() {
+                                      expandeCard = expanded;
+                                      updateListCardTriggered(index);
+                                    });
+                                  }),
                                   const SizedBox(height: 5),
-                                  Container(
-                                    color: const Color.fromARGB(
-                                        179, 246, 245, 245),
-                                    child: Column(
-                                      children: flavors
-                                          .where((e) =>
-                                              e["product_id"] ==
-                                              products[index]["id"])
-                                          .map((flavor) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Text(flavor['type'].toString()),
-                                            ],
-                                          ),
-                                        );
-                                      }).toList(),
-                                    ),
+                                  FlavorList(
+                                    flavors: flavors,
+                                    product: products[index],
+                                    isExpanded: cardTriggeredList[index],
                                   )
                                 ],
                               ),
