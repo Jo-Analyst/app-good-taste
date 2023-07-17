@@ -1,4 +1,5 @@
 import 'package:app_good_taste/app/controller/flavor_controller.dart';
+import 'package:app_good_taste/app/controller/product_controller.dart';
 import 'package:app_good_taste/app/model/flavor_model.dart';
 import 'package:app_good_taste/app/utils/message_dialog.dart';
 import 'package:app_good_taste/app/utils/dialog.dart';
@@ -19,10 +20,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
   final _priceController = TextEditingController();
   String name = "";
   double price = 0;
+  int productId = 0;
   List<Map<String, dynamic>> flavors = [];
-  List<FlavorModel> flavorsClass = [];
   List<Map<String, dynamic>> flavorsRemoved = [];
-  // List<FlavorModel> flavorsRemoved = [];
+  List<FlavorModel> flavorModel = [];
 
   @override
   void initState() {
@@ -35,34 +36,20 @@ class _ProductFormPageState extends State<ProductFormPage> {
   }
 
   void addFlavor(String flavorText) {
-    // final flavorProvider =
-    //     Provider.of<FlavorController>(context, listen: false);
-    // flavorProvider.add(flavorText);
     setState(() {
-      // flavors = flavorProvider.items;
-      // flavors.add({"id": 0, "type": flavorText});
-      flavorsClass.add(FlavorModel(type: flavorText, id: 0));
+      flavors.add({"id": 0, "type": flavorText, "product_id": 0});
     });
   }
 
   void updateFlavor(int index, String flavorText) {
     setState(() {
-      // flavors[index].update("type", (_) => flavorText);
-      flavorsClass[index].type = flavorText;
+      flavors[index].update("type", (_) => flavorText);
     });
   }
 
   void removeFlavor(int index) {
-    // final flavorProvider =
-    //     Provider.of<FlavorController>(context, listen: false);
-    // flavorProvider.removeAt(index);
     setState(() {
-      final flavorModelDelete = flavorsClass.removeAt(index);
-      if (flavorModelDelete.id != null) {
-        flavorsRemoved.add({"id": flavorModelDelete.id});
-      }
-      // flavors.removeAt(index);
-      // flavors = flavorProvider.items;
+      flavorsRemoved.add(flavors.removeAt(index));
     });
   }
 
@@ -78,6 +65,28 @@ class _ProductFormPageState extends State<ProductFormPage> {
     );
 
     return result ?? '';
+  }
+
+  void confirmProduct() {
+    final productProvider =
+        Provider.of<ProductController>(context, listen: false);
+    setListFlavorModel(); // Adiciona na lista flavorModel a classe antes da confirmação
+    productProvider.save(productId, name, price, flavorModel);
+    productProvider.loadProducts();
+    // print(productProvider.items.length);
+    // print(productProvider.items);
+  }
+
+  void setListFlavorModel() {
+    for (var flavor in flavors) {
+      flavorModel.add(
+        FlavorModel(
+          id: flavor["id"],
+          type: flavor["type"],
+          productId: flavor["product_id"],
+        ),
+      );
+    }
   }
 
   @override
@@ -96,7 +105,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
           ),
           leading: IconButton(
             onPressed: () {
-                  if (flavorsClass.isNotEmpty ||
+              if (flavors.isNotEmpty ||
                   _nameController.text.isNotEmpty ||
                   _priceController.text.isNotEmpty) {
                 showExitDialog(context, ListMessageDialog.messageDialog[0])
@@ -122,25 +131,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
               child: IconButton(
                 onPressed: flavors.isNotEmpty && name.isNotEmpty && price > 0
                     ? () {
-                        final flavors = Provider.of<FlavorController>(context,
-                                listen: false)
-                            .items;
-
-                        if (_key.currentState!.validate() && flavors.isEmpty) {
-                          showExitDialog(
-                            context,
-                            ListMessageDialog.messageDialog[2],
-                          ).then((confirmExit) {
-                            // if (confirmExit!) {
-                            //   Navigator.of(context).pop();
-                            // }
-                          });
-                        }
-                        if (_key.currentState!.validate() &&
-                            flavorsClass.isNotEmpty) {
-                          // salva os dados e fecha a tela
-                          Navigator.of(context).pop();
-                        }
+                        confirmProduct();
+                        Navigator.of(context).pop();
                       }
                     : null,
                 icon: const Icon(
@@ -260,12 +252,12 @@ class _ProductFormPageState extends State<ProductFormPage> {
                         : ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: flavorsClass.length,
+                            itemCount: flavors.length,
                             itemBuilder: (context, index) {
                               return Column(
                                 children: [
                                   ListTile(
-                                    title: Text(flavorsClass[index].type),
+                                    title: Text(flavors[index]["type"]),
                                     trailing: SizedBox(
                                       width: 100,
                                       child: Row(
@@ -275,7 +267,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                               final flavorOrType =
                                                   await showModalFlavorForm(
                                                       context,
-                                                      flavorsClass[index].type);
+                                                      flavors[index]["type"]);
                                               if (flavorOrType!.isNotEmpty) {
                                                 updateFlavor(
                                                     index, flavorOrType);

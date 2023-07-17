@@ -3,26 +3,26 @@ import 'package:sqflite/sqflite.dart';
 import '../config/db.dart';
 
 class FlavorModel {
-  int? id;
+  int id;
   String type;
-  int? productId;
+  int productId;
 
   FlavorModel({
-    this.id,
+   required this.id,
     required this.type,
-    this.productId,
+    required this.productId,
   });
 
   void save(Transaction txn) async {
     try {
-      if (id == null) {
+      if (id == 0) {
         await txn.insert("flavors", {
           "type": type,
           "product_id": productId,
         });
       } else {
         await txn.update("flavors", {"type": type, "product_id": productId},
-            where: "id = ?", whereArgs: [id!]);
+            where: "id = ?", whereArgs: [id]);
       }
     } catch (ex) {
       //
