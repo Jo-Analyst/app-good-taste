@@ -25,20 +25,24 @@ class ProductModel {
     return db.query("products");
   }
 
-  Future<void> delete() async {
+  static Future<void> delete(int id) async {
     final db = await DB.database();
     try {
       await db.transaction((txn) async {
         txn.delete("products", where: "id = ?", whereArgs: [id]);
-        FlavorModel(productId: id, id: 0, type: "").deleteByProductId(txn);
+        FlavorModel.deleteByProductId(txn, id);
       });
     } catch (e) {
       //
     }
   }
 
-  Future<void> save(List<FlavorModel> flavorModel) async {
+  static Future<void> save(
+      List<FlavorModel> flavorModel, Map<String, dynamic> data) async {
     final db = await DB.database();
+    final id = data["id"];
+    final name = data["name"];
+    final price = data["price"];
     try {
       await db.transaction(
         (txn) async {
@@ -50,7 +54,7 @@ class ProductModel {
 
             for (var model in flavorModel) {
               model.productId = lastInsertRowId;
-             await model.save(txn);
+              await model.save(txn);
             }
           } else {
             await txn.update("products", {"name": name, "price": price},
@@ -58,7 +62,7 @@ class ProductModel {
 
             for (var model in flavorModel) {
               model.productId = id;
-               await model.save(txn);
+              await model.save(txn);
             }
           }
         },

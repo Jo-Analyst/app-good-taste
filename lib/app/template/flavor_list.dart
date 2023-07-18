@@ -1,4 +1,6 @@
 import 'package:app_good_taste/app/controller/flavor_controller.dart';
+import 'package:app_good_taste/app/template/flavor_form.dart';
+import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +28,13 @@ class _FlavorListState extends State<FlavorList> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void save(Map<String, dynamic> data) async {
+    final flavorProvider =
+        Provider.of<FlavorController>(context, listen: false);
+    await flavorProvider.update(data);
+    widget.confirmAction(true);
   }
 
   @override
@@ -115,7 +124,7 @@ class _FlavorListState extends State<FlavorList> {
                         ),
                       ),
                     ],
-                    onSelected: (option) {
+                    onSelected: (option) async {
                       if (option == "delete") {
                         showExitDialog(
                                 context, ListMessageDialog.messageDialog[1])
@@ -128,9 +137,16 @@ class _FlavorListState extends State<FlavorList> {
                             widget.confirmAction(true);
                           }
                         });
-                      }
-                      else if(option == "edit"){
-                        
+                      } else if (option == "edit") {
+                        final type = await showModal(
+                          context,
+                          FlavorForm(
+                            type: flavor["type"],
+                          ),
+                        );
+
+                        final data = {"id": flavor["id"], "type": type, "product_id": flavor["product_id"]};
+                        save(data);
                       }
                     },
                   ),

@@ -16,7 +16,7 @@ class ProductController extends ChangeNotifier {
   }
 
   Future<void> delete(int id) async {
-    await ProductModel(id: id).delete();
+    await ProductModel.delete(id);
     notifyListeners();
   }
 
@@ -32,11 +32,11 @@ class ProductController extends ChangeNotifier {
 
       // _items.add(newProduct);
 
-      await ProductModel(
-        name: name,
-        id: id,
-        price: price,
-      ).save(flavors);
+      await ProductModel.save(flavors, {
+        "name": name,
+        "id": id,
+        "price": price,
+      });
     }
 
     notifyListeners();

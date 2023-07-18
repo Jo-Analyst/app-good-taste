@@ -66,9 +66,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
     for (var flavor in flavors) {
       flavorModel.add(
         FlavorModel(
-          id: flavor["id"],
-          type: flavor["type"],
-          productId: flavor["product_id"],
+          flavor["id"],
+          flavor["type"],
+          flavor["product_id"],
         ),
       );
     }
@@ -80,9 +80,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
         FlavorForm(
           type: type,
         ));
-    if (typeOrFlavor.isNotEmpty && type!.isEmpty) {
+    if (typeOrFlavor.isNotEmpty && type.isEmpty) {
       addFlavor(typeOrFlavor);
-    } else if (typeOrFlavor.isNotEmpty && type!.isNotEmpty) {
+    } else if (typeOrFlavor.isNotEmpty && type.isNotEmpty) {
       updateFlavor(index!, typeOrFlavor);
     }
   }
