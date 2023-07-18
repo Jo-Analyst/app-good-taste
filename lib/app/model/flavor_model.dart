@@ -13,7 +13,17 @@ class FlavorModel {
     required this.productId,
   });
 
-  void save(Transaction txn) async {
+  Future<void> update() async {
+    try {
+      final db = await DB.database();
+      await db.update("flavors", {"type": type},
+          where: "id = ? ", whereArgs: [id]);
+    } catch (e) {
+      //
+    }
+  }
+
+  Future<void> save(Transaction txn) async {
     try {
       if (id == 0) {
         await txn.insert("flavors", {

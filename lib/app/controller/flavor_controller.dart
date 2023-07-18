@@ -20,6 +20,10 @@ class FlavorController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> update(Map<String, dynamic> data) async {
+    await FlavorModel(id: data["id"], type: data["type"], productId: data["product_id"]).update();
+  }
+
   Future<void> delete(int id) async {
     await FlavorModel(id: id, productId: 0, type: "").delete();
     notifyListeners();

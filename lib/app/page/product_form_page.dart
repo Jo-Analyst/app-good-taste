@@ -98,9 +98,17 @@ class _ProductFormPageState extends State<ProductFormPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        final confirmExit =
-            await showExitDialog(context, ListMessageDialog.messageDialog[0]);
-        return confirmExit ?? false;
+        bool? confirmExit = false;
+        if (flavors.isNotEmpty ||
+            _nameController.text.isNotEmpty ||
+            _priceController.text.isNotEmpty) {
+          confirmExit =
+              await showExitDialog(context, ListMessageDialog.messageDialog[0]);
+          return confirmExit ?? false;
+        } else {
+          Navigator.pop(context);
+          return false;
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -185,7 +193,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                 controller: _priceController,
                                 keyboardType:
                                     const TextInputType.numberWithOptions(
-                                        decimal: true),
+                                  decimal: true,
+                                ),
                                 textInputAction: TextInputAction.next,
                                 decoration:
                                     const InputDecoration(labelText: "Preço"),

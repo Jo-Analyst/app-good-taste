@@ -1,6 +1,5 @@
 import 'package:app_good_taste/app/controller/flavor_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/dialog.dart';
@@ -116,60 +115,25 @@ class _FlavorListState extends State<FlavorList> {
                         ),
                       ),
                     ],
-                    onSelected: (_) {
-                      showExitDialog(
-                              context, ListMessageDialog.messageDialog[1])
-                          .then((message) async {
-                        if (message!) {
-                          final flavorProvider = Provider.of<FlavorController>(
-                              context,
-                              listen: false);
-                          await flavorProvider.delete(flavor["id"]);
-                          widget.confirmAction(true);
-                        }
-                      });
+                    onSelected: (option) {
+                      if (option == "delete") {
+                        showExitDialog(
+                                context, ListMessageDialog.messageDialog[1])
+                            .then((message) async {
+                          if (message!) {
+                            final flavorProvider =
+                                Provider.of<FlavorController>(context,
+                                    listen: false);
+                            await flavorProvider.delete(flavor["id"]);
+                            widget.confirmAction(true);
+                          }
+                        });
+                      }
+                      else if(option == "edit"){
+                        
+                      }
                     },
                   ),
-                  // trailing: SizedBox(
-                  //   width: 150,
-                  //   child: Row(
-                  //     children: [
-                  //       IconButton(
-                  //         onPressed: () {},
-                  //         icon: const Icon(
-                  //           Icons.add,
-                  //           color: Colors.black,
-                  //         ),
-                  //       ),
-                  //       IconButton(
-                  //         onPressed: () {},
-                  //         icon: const Icon(
-                  //           Icons.edit,
-                  //           color: Colors.blue,
-                  //         ),
-                  //       ),
-                  //       IconButton(
-                  //         onPressed: () {
-                  //           showExitDialog(
-                  //                   context, ListMessageDialog.messageDialog[1])
-                  //               .then((message) async {
-                  //             if (message!) {
-                  //               final flavorProvider =
-                  //                   Provider.of<FlavorController>(context,
-                  //                       listen: false);
-                  //               await flavorProvider.delete(flavor["id"]);
-                  //               widget.confirmAction(true);
-                  //             }
-                  //           });
-                  //         },
-                  //         icon: const Icon(
-                  //           Icons.delete,
-                  //           color: Colors.red,
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                 ),
                 const Divider()
               ],

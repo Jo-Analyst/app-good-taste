@@ -50,7 +50,7 @@ class ProductModel {
 
             for (var model in flavorModel) {
               model.productId = lastInsertRowId;
-              model.save(txn);
+             await model.save(txn);
             }
           } else {
             await txn.update("products", {"name": name, "price": price},
@@ -58,7 +58,7 @@ class ProductModel {
 
             for (var model in flavorModel) {
               model.productId = id;
-              model.save(txn);
+               await model.save(txn);
             }
           }
         },
