@@ -18,13 +18,12 @@ class ProductFormPage extends StatefulWidget {
 
 class _ProductFormPageState extends State<ProductFormPage> {
   final _key = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _priceController = TextEditingController();
+  final _nameController = TextEditingController(),
+      _priceController = TextEditingController();
   String name = "";
   double price = 0;
   int productId = 0;
-  List<Map<String, dynamic>> flavors = [];
-  List<Map<String, dynamic>> flavorsRemoved = [];
+  List<Map<String, dynamic>> flavors = [], flavorsRemoved = [];
   List<FlavorModel> flavorModel = [];
 
   @override
@@ -55,20 +54,6 @@ class _ProductFormPageState extends State<ProductFormPage> {
     });
   }
 
-  // Future<String?> showModalFlavorForm(
-  //     BuildContext context, String? type) async {
-  //   final result = await showModalBottomSheet<String>(
-  //     context: context,
-  //     builder: (_) {
-  //       return FlavorForm(
-  //         type: type,
-  //       );
-  //     },
-  //   );
-
-  //   return result ?? '';
-  // }
-
   void confirmProduct() {
     final productProvider =
         Provider.of<ProductController>(context, listen: false);
@@ -89,10 +74,16 @@ class _ProductFormPageState extends State<ProductFormPage> {
     }
   }
 
-  void showModalForm() async {
-    final typeOrFlavor = await showModal(context, const FlavorForm(type: "",));
-    if (typeOrFlavor.isNotEmpty) {
+  void showModalForm(String type, int? index) async {
+    final typeOrFlavor = await showModal(
+        context,
+        FlavorForm(
+          type: type,
+        ));
+    if (typeOrFlavor.isNotEmpty && type!.isEmpty) {
       addFlavor(typeOrFlavor);
+    } else if (typeOrFlavor.isNotEmpty && type!.isNotEmpty) {
+      updateFlavor(index!, typeOrFlavor);
     }
   }
 
@@ -208,7 +199,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                         : 0.0;
                                   });
                                 },
-                                onFieldSubmitted: (_) => showModalForm(),
+                                onFieldSubmitted: (_) =>
+                                    showModalForm("", null),
                               ),
                             ],
                           ),
@@ -231,7 +223,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                           ),
                           IconButton(
                             onPressed: () async {
-                              showModalForm();
+                              showModalForm("", null);
                             },
                             icon: Icon(
                               Icons.add_circle_outline,
@@ -278,14 +270,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                         children: [
                                           IconButton(
                                             onPressed: () async {
-                                              final flavorOrType =
-                                                  await showModal(
-                                                      context,
-                                                      FlavorForm(type: flavors[index]["type"],));
-                                              if (flavorOrType.isNotEmpty) {
-                                                updateFlavor(
-                                                    index, flavorOrType);
-                                              }
+                                              showModalForm(
+                                                  flavors[index]["type"],
+                                                  index);
                                             },
                                             icon: const Icon(
                                               Icons.edit,
