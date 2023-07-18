@@ -33,7 +33,11 @@ class _FlavorListState extends State<FlavorList> {
   void save(Map<String, dynamic> data) async {
     final flavorProvider =
         Provider.of<FlavorController>(context, listen: false);
-    await flavorProvider.update(data);
+    if (data["id"] != null) {
+      await flavorProvider.update(data);
+    } else {
+      await flavorProvider.add(data);
+    }
     widget.confirmAction(true);
   }
 
@@ -145,8 +149,27 @@ class _FlavorListState extends State<FlavorList> {
                           ),
                         );
 
-                        final data = {"id": flavor["id"], "type": type, "product_id": flavor["product_id"]};
-                        save(data);
+                        if (type.isEmpty) return;
+
+                        save({
+                          "id": flavor["id"],
+                          "type": type,
+                          "product_id": flavor["product_id"]
+                        });
+                      } else if (option == "new") {
+                        final type = await showModal(
+                          context,
+                          const FlavorForm(),
+                        );
+
+                        if (type.isEmpty) return;
+
+                        save(
+                          {
+                            "type": type,
+                            "product_id": flavor["product_id"],
+                          },
+                        );
                       }
                     },
                   ),
