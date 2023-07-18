@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-showModal(BuildContext context, dynamic screenForm) {
-  showModalBottomSheet(
+Future<String> showModal(BuildContext context, dynamic screenForm) async {
+  final result = await showModalBottomSheet(
     context: context,
     builder: (_) {
       return screenForm;
     },
   );
+
+  return result ?? "";
 }

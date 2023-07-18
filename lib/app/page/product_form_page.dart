@@ -7,6 +7,8 @@ import 'package:app_good_taste/app/template/flavor_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/modal.dart';
+
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
 
@@ -53,19 +55,19 @@ class _ProductFormPageState extends State<ProductFormPage> {
     });
   }
 
-  Future<String?> showModalFlavorForm(
-      BuildContext context, String? type) async {
-    final result = await showModalBottomSheet<String>(
-      context: context,
-      builder: (_) {
-        return FlavorForm(
-          type: type,
-        );
-      },
-    );
+  // Future<String?> showModalFlavorForm(
+  //     BuildContext context, String? type) async {
+  //   final result = await showModalBottomSheet<String>(
+  //     context: context,
+  //     builder: (_) {
+  //       return FlavorForm(
+  //         type: type,
+  //       );
+  //     },
+  //   );
 
-    return result ?? '';
-  }
+  //   return result ?? '';
+  // }
 
   void confirmProduct() {
     final productProvider =
@@ -88,8 +90,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
   }
 
   void showModalForm() async {
-    final typeOrFlavor = await showModalFlavorForm(context, null);
-    if (typeOrFlavor!.isNotEmpty) {
+    final typeOrFlavor = await showModal(context, const FlavorForm(type: "",));
+    if (typeOrFlavor.isNotEmpty) {
       addFlavor(typeOrFlavor);
     }
   }
@@ -277,10 +279,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                           IconButton(
                                             onPressed: () async {
                                               final flavorOrType =
-                                                  await showModalFlavorForm(
+                                                  await showModal(
                                                       context,
-                                                      flavors[index]["type"]);
-                                              if (flavorOrType!.isNotEmpty) {
+                                                      FlavorForm(type: flavors[index]["type"],));
+                                              if (flavorOrType.isNotEmpty) {
                                                 updateFlavor(
                                                     index, flavorOrType);
                                               }
