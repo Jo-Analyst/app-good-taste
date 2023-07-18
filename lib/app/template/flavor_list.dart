@@ -1,14 +1,22 @@
+import 'package:app_good_taste/app/controller/flavor_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+
+import '../utils/dialog.dart';
+import '../utils/message_dialog.dart';
 
 class FlavorList extends StatefulWidget {
   final List<Map<String, dynamic>> flavors;
   final Map<String, dynamic> product;
   final bool isExpanded;
+  final Function(bool) confirmAction;
 
   const FlavorList(
       {required this.flavors,
       required this.isExpanded,
       required this.product,
+      required this.confirmAction,
       super.key});
 
   @override
@@ -34,13 +42,134 @@ class _FlavorListState extends State<FlavorList> {
             child: Column(
               children: [
                 ListTile(
-                  leading:  Icon(Icons.shopify_rounded, size: 40, color: Theme.of(context).primaryColor,),
+                  leading: const Icon(
+                    Icons.shopify_rounded,
+                    size: 40,
+                    color: Colors.black,
+                  ),
                   title: Text(
                     flavor['type'].toString(),
                     style: const TextStyle(
                       fontSize: 16,
                     ),
                   ),
+                  trailing: PopupMenuButton(
+                    color: const Color.fromARGB(192, 233, 30, 98),
+                    icon: const Icon(
+                      Icons.more_vert,
+                      color: Color.fromARGB(183, 13, 13, 13),
+                    ),
+                    iconSize: 30,
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<String>>[
+                      PopupMenuItem(
+                        padding: EdgeInsets.zero,
+                        value: "new",
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              child: const Text("Novo"),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        padding: EdgeInsets.zero,
+                        value: "edit",
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              child: const Text("Editar"),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: "delete",
+                        padding: EdgeInsets.zero,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              child: const Text(
+                                "Excluir",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                    onSelected: (_) {
+                      showExitDialog(
+                              context, ListMessageDialog.messageDialog[1])
+                          .then((message) async {
+                        if (message!) {
+                          final flavorProvider = Provider.of<FlavorController>(
+                              context,
+                              listen: false);
+                          await flavorProvider.delete(flavor["id"]);
+                          widget.confirmAction(true);
+                        }
+                      });
+                    },
+                  ),
+                  // trailing: SizedBox(
+                  //   width: 150,
+                  //   child: Row(
+                  //     children: [
+                  //       IconButton(
+                  //         onPressed: () {},
+                  //         icon: const Icon(
+                  //           Icons.add,
+                  //           color: Colors.black,
+                  //         ),
+                  //       ),
+                  //       IconButton(
+                  //         onPressed: () {},
+                  //         icon: const Icon(
+                  //           Icons.edit,
+                  //           color: Colors.blue,
+                  //         ),
+                  //       ),
+                  //       IconButton(
+                  //         onPressed: () {
+                  //           showExitDialog(
+                  //                   context, ListMessageDialog.messageDialog[1])
+                  //               .then((message) async {
+                  //             if (message!) {
+                  //               final flavorProvider =
+                  //                   Provider.of<FlavorController>(context,
+                  //                       listen: false);
+                  //               await flavorProvider.delete(flavor["id"]);
+                  //               widget.confirmAction(true);
+                  //             }
+                  //           });
+                  //         },
+                  //         icon: const Icon(
+                  //           Icons.delete,
+                  //           color: Colors.red,
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                 ),
                 const Divider()
               ],

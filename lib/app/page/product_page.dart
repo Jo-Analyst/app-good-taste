@@ -20,10 +20,9 @@ class _ProductPageState extends State<ProductPage> {
   int triggeredCardIndex = -1; // indíce do carro acionado
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     loadProducts();
-    loadFlavors();
   }
 
   void setListCardTriggered() {
@@ -47,6 +46,7 @@ class _ProductPageState extends State<ProductPage> {
     setState(() {
       products = productProvider.items;
       setListCardTriggered();
+      loadFlavors();
     });
   }
 
@@ -111,15 +111,25 @@ class _ProductPageState extends State<ProductPage> {
                               padding: const EdgeInsets.only(top: 10),
                               child: Column(
                                 children: [
-                                  ProductList(products[index],
-                                      toggleCard: (expanded) {
-                                    updateListCardTriggered(index, expanded);
-                                  }),
+                                  ProductList(
+                                    products[index],
+                                    toggleCard: (expanded) {
+                                      updateListCardTriggered(index, expanded);
+                                    },
+                                    confirmAction: (confirm) {
+                                      if (confirm) loadProducts();
+                                    },
+                                  ),
                                   const SizedBox(height: 5),
                                   FlavorList(
                                     flavors: flavors,
                                     product: products[index],
                                     isExpanded: cardTriggeredList[index],
+                                    confirmAction: (confirm) {
+                                      if (confirm) {
+                                        loadFlavors();
+                                      }
+                                    },
                                   )
                                 ],
                               ),

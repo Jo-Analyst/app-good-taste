@@ -18,7 +18,7 @@ class DB {
           'CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT NOT NULL, price REAL)',
         );
         db.execute(
-          'CREATE TABLE flavors (id INTEGER PRIMARY KEY, type TEXT NOT NULL, product_id INTEGER, FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL)',
+          'CREATE TABLE flavors (id INTEGER PRIMARY KEY, type TEXT NOT NULL, product_id INTEGER, FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE)',
         );
 
         db.execute(

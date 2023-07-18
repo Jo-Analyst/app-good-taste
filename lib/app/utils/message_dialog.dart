@@ -23,6 +23,11 @@ class ListMessageDialog {
       "content": "Informa a matéria prima utilizada na produção",
       "action": "OK",
       "show_button_cancel": false,
+    },{
+      "title": "Deseja excluir?",
+      "content": "Ao excluir você também removerá os items relacionadas a ela. Você realmente tem certeza que deseja excluir?",
+      "action": "Excluir",
+      "show_button_cancel": true,
     },
   ];
 }

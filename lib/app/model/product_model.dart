@@ -4,13 +4,13 @@ import '../config/db.dart';
 
 class ProductModel {
   late int id;
-  late final String name;
-  late final double price;
+  final String? name;
+  final double? price;
 
   ProductModel({
     required this.id,
-    required this.name,
-    required this.price,
+    this.name,
+    this.price,
   });
 
   // static Future<List<Map<String, dynamic>>> getData() async {
@@ -20,9 +20,21 @@ class ProductModel {
   //   return db.rawQuery(query);
   // }
 
-   static Future<List<Map<String, dynamic>>> getData() async {
+  static Future<List<Map<String, dynamic>>> getData() async {
     final db = await DB.database();
     return db.query("products");
+  }
+
+  Future<void> delete() async {
+    final db = await DB.database();
+    try {
+      await db.transaction((txn) async {
+        txn.delete("products", where: "id = ?", whereArgs: [id]);
+        FlavorModel(productId: id, id: 0, type: "").deleteByProductId(txn);
+      });
+    } catch (e) {
+      //
+    }
   }
 
   Future<void> save(List<FlavorModel> flavorModel) async {

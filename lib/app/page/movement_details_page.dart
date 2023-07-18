@@ -119,8 +119,8 @@ class MovementDetailsPage extends StatelessWidget {
                               ),
                             ),
                           ],
-                          onSelected: (value) {
-                            if (value == "production-of-the-day") {
+                          onSelected: (option) {
+                            if (option == "production-of-the-day") {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -129,7 +129,7 @@ class MovementDetailsPage extends StatelessWidget {
                                   ),
                                 ),
                               );
-                            } else if (value == "all-productions") {
+                            } else if (option == "all-productions") {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (_) => const AllProductionsPage()));
                             }

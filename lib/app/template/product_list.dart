@@ -1,12 +1,19 @@
+import 'package:app_good_taste/app/controller/product_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../utils/dialog.dart';
+import '../utils/message_dialog.dart';
 
 class ProductList extends StatefulWidget {
   final Map<String, dynamic> productItem;
   final Function(bool) toggleCard;
+  final Function(bool) confirmAction;
   const ProductList(
     this.productItem, {
     required this.toggleCard,
+    required this.confirmAction,
     super.key,
   });
 
@@ -26,19 +33,6 @@ class _ProductListState extends State<ProductList> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      // leading: CircleAvatar(
-      //   radius: 30,
-      //   backgroundColor: Theme.of(context).primaryColor,
-      //   child: FittedBox(
-      //     fit: BoxFit.scaleDown,
-      //     child: Text(
-      //       NumberFormat("R\$ #0.00", "PT-BR").format(
-      //         widget.productItem["price"],
-      //       ),
-      //       style: const TextStyle(fontSize: 12),
-      //     ),
-      //   ),
-      // ),
       leading: IconButton(
         onPressed: () {
           toggleCard();
@@ -107,45 +101,20 @@ class _ProductListState extends State<ProductList> {
             ),
           ),
         ],
+        onSelected: (option) {
+          if (option.toLowerCase() == "delete") {
+            showExitDialog(context, ListMessageDialog.messageDialog[4])
+                .then((message) async {
+              if (message!) {
+                final productProvider =
+                    Provider.of<ProductController>(context, listen: false);
+                await productProvider.delete(widget.productItem["id"]);
+                widget.confirmAction(true);
+              }
+            });
+          }
+        },
       ),
-      // trailing: SizedBox(
-      //   width: 145,
-      //   child: Row(
-      //     children: [
-      //       IconButton(
-      //         onPressed: () {},
-      //         icon: const Icon(
-      //           Icons.edit_sharp,
-      //           color: Colors.blue,
-      //         ),
-      //       ),
-      //       IconButton(
-      //         onPressed: () =>
-      //             showExitDialog(context, ListMessageDialog.messageDialog[1])
-      //                 .then(
-      //           (message) {
-      //             if (message!) {}
-      //           },
-      //         ),
-      //         icon: Icon(
-      //           Icons.delete,
-      //           color: Theme.of(context).colorScheme.error,
-      //         ),
-      //       ),
-      //       IconButton(
-      //         onPressed: () {
-      //           toggleCard();
-      //           widget.toggleCard(expanded);
-      //         },
-      //         icon: Icon(
-      //           expanded
-      //               ? Icons.keyboard_arrow_down
-      //               : Icons.keyboard_arrow_right,
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

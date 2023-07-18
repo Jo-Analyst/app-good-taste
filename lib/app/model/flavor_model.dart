@@ -39,4 +39,22 @@ class FlavorModel {
     final db = await DB.database();
     return db.query("flavors");
   }
+
+  Future<void> delete() async {
+    final db = await DB.database();
+    try {
+      await db.delete("flavors", where: "id = ?", whereArgs: [id]);
+    } catch (e) {
+      //
+    }
+  }
+
+  Future<void> deleteByProductId(Transaction txn) async {
+    try {
+      await txn
+          .delete("flavors", where: "product_id = ?", whereArgs: [productId]);
+    } catch (e) {
+      //
+    }
+  }
 }

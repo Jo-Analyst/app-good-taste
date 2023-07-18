@@ -13,10 +13,15 @@ class FlavorController extends ChangeNotifier {
     _items = List<Map<String, dynamic>>.from(flavors);
     notifyListeners();
   }
- 
+
   Future<void> findByProductId(int productId) async {
     final flavors = await FlavorModel.findByProductId(productId);
     _items = List<Map<String, dynamic>>.from(flavors);
+    notifyListeners();
+  }
+
+  Future<void> delete(int id) async {
+    await FlavorModel(id: id, productId: 0, type: "").delete();
     notifyListeners();
   }
 

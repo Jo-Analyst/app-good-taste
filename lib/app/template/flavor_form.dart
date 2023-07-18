@@ -41,7 +41,7 @@ class _FlavorFormState extends State<FlavorForm> {
                 TextFormField(
                   textCapitalization: TextCapitalization.sentences,
                   controller: textController,
-                  // autofocus: true,
+                  autofocus: true,
                   decoration: const InputDecoration(
                     labelText: "Sabor ou tipo",
                   ),

@@ -87,6 +87,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
     }
   }
 
+  void showModalForm() async {
+    final typeOrFlavor = await showModalFlavorForm(context, null);
+    if (typeOrFlavor!.isNotEmpty) {
+      addFlavor(typeOrFlavor);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -164,7 +171,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                 onChanged: (nameProduct) {
                                   setState(
                                     () {
-                                      name = nameProduct;
+                                      name = nameProduct.trim();
                                     },
                                   );
                                 },
@@ -190,6 +197,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                         : 0.0;
                                   });
                                 },
+                                onFieldSubmitted: (_) => showModalForm(),
                               ),
                             ],
                           ),
@@ -212,11 +220,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                           ),
                           IconButton(
                             onPressed: () async {
-                              final typeOrFlavor =
-                                  await showModalFlavorForm(context, null);
-                              if (typeOrFlavor!.isNotEmpty) {
-                                addFlavor(typeOrFlavor);
-                              }
+                              showModalForm();
                             },
                             icon: Icon(
                               Icons.add_circle_outline,

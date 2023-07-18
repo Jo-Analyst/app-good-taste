@@ -15,6 +15,11 @@ class ProductController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> delete(int id) async {
+    await ProductModel(id: id).delete();
+    notifyListeners();
+  }
+
   Future<void> save(
       int id, String name, double price, List<FlavorModel> flavors) async {
     if (id == 0) {
