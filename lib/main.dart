@@ -8,18 +8,6 @@ import 'package:provider/provider.dart';
 
 void main() async {
   runApp(const AppGoodTaste());
-  final flavor = FlavorController();
-  flavor.update({"id": 3, "type": "Maracujá", "product_id": 1});
-  await flavor.loadFlavors();
-  for (var flavor in flavor.items) {
-    print(flavor);
-  }
-
-  final product = ProductController();
-  await product.loadProducts();
-  for (var product in product.items) {
-    print(product);
-  }
 }
 
 class AppGoodTaste extends StatelessWidget {

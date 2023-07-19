@@ -76,7 +76,11 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
   void updateFlavor(int index, String flavorText) {
     setState(() {
-      flavors[index].update("type", (_) => flavorText);
+       flavors[index] = {
+      "id": flavors[index]["id"],
+      "type": flavorText,
+      "product_id": flavors[index]["product_id"],
+    };
     });
   }
 
@@ -99,7 +103,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
   }
 
   void removeFlavorDB() {
-    final flavorProvider = Provider.of<FlavorController>(context, listen: false);
+    final flavorProvider =
+        Provider.of<FlavorController>(context, listen: false);
     for (var fr in flavorsRemoved) {
       flavorProvider.delete(fr["id"]);
     }

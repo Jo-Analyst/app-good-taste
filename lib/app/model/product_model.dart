@@ -33,7 +33,7 @@ class ProductModel {
         FlavorModel.deleteByProductId(txn, id);
       });
     } catch (e) {
-      print(e);
+      //
     }
   }
 
