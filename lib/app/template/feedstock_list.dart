@@ -51,7 +51,7 @@ class FeedstockList extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                showExitDialog(context, ListMessageDialog.messageDialog("")[1])
+                showExitDialog(context, ListMessageDialog.messageDialog("")[0])
                     .then((message) {
                   if (message!) {}
                 });

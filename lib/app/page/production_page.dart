@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-import '../utils/dialog.dart';
 import '../utils/drop_down.dart';
-import '../utils/message_dialog.dart';
 
 class ProductionPage extends StatefulWidget {
   final Map<String, dynamic> production;
@@ -139,23 +137,7 @@ class _ProductionPageState extends State<ProductionPage> {
           ),
         ],
         leading: IconButton(
-          onPressed: () {
-            if (id == 0 &&
-                flavorSelect != null &&
-                quantity >= 0 &&
-                listOfSelectedRawMaterials.isNotEmpty) {
-              showExitDialog(context, ListMessageDialog.messageDialog("")[0])
-                  .then(
-                (confirmExit) {
-                  if (confirmExit!) {
-                    Navigator.of(context).pop();
-                  }
-                },
-              );
-            } else {
-              Navigator.of(context).pop();
-            }
-          },
+          onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(
             Icons.close,
             size: 35,

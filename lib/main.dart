@@ -10,6 +10,7 @@ void main() async {
   runApp(const AppGoodTaste());
 }
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 class AppGoodTaste extends StatelessWidget {
   const AppGoodTaste({super.key});
 
@@ -21,6 +22,7 @@ class AppGoodTaste extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProductController()),
       ],
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         title: "APP - Good Taste",
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

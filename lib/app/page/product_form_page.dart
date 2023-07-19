@@ -1,12 +1,14 @@
+// ignore_for_file: 
+
 import 'package:app_good_taste/app/controller/flavor_controller.dart';
 import 'package:app_good_taste/app/controller/product_controller.dart';
 import 'package:app_good_taste/app/model/flavor_model.dart';
-import 'package:app_good_taste/app/utils/message_dialog.dart';
 import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/flavor_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../main.dart';
 import '../utils/modal.dart';
 
 class ProductFormPage extends StatefulWidget {
@@ -31,10 +33,11 @@ class _ProductFormPageState extends State<ProductFormPage> {
   int productId = 0;
   List<Map<String, dynamic>> flavors = [], flavorsRemoved = [];
   List<FlavorModel> flavorModel = [];
-
+  late FlavorController flavorController;
   @override
   void initState() {
     super.initState();
+    flavorController = Provider.of<FlavorController>(context, listen: false);
     if (widget.product == null) return;
 
     name = widget.product!["name"];
@@ -48,30 +51,6 @@ class _ProductFormPageState extends State<ProductFormPage> {
     for (var flavor in widget.flavors!) {
       if (flavor["product_id"] == productId) {
         flavors.add(flavor);
-      }
-    }
-  }
-
-  void exitScreen() {
-    if (productId > 0 && flavorsRemoved.isNotEmpty) {
-      confirmBeforeLeaving();
-    } else {
-      if (productId == 0 &&
-          flavors.isNotEmpty &&
-          _nameController.text.isNotEmpty &&
-          _priceController.text.isNotEmpty) {
-        showExitDialog(context,
-                ListMessageDialog.messageDialog("")[productId == 0 ? 0 : 5])
-            .then(
-          (confirmExit) {
-            if (confirmExit!) {
-              Provider.of<FlavorController>(context, listen: false).clear();
-              Navigator.of(context).pop();
-            }
-          },
-        );
-      } else {
-        Navigator.of(context).pop(false);
       }
     }
   }
@@ -111,20 +90,36 @@ class _ProductFormPageState extends State<ProductFormPage> {
   }
 
   // Mostra um dialogo para que o usuário confirma a exclusão
-  void confirmBeforeLeaving() {
-    showExitDialog(
-            context, ListMessageDialog.messageDialog(getFlavorsRemoved())[4])
-        .then(
-      (confirmExit) {
-        if (confirmExit!) {
+  bool _shouldExit = false;
+
+  Future<bool> confirmBeforeLeaving() async {
+    if (flavorsRemoved.isNotEmpty) {
+      final confirmExit = await showExitDialog(
+        context,
+        {
+          "title": "Deseja sair?",
+          "content":
+              "Os seguintes sabores foram excluídos da lista: ${getFlavorsRemoved()}\n Você confirma esta ação?",
+          "show_button_cancel": false,
+          "show_button_YN": true,
+          "action": "Sim",
+        },
+      );
+
+      if (confirmExit != null) {
+        if (confirmExit) {
           confirmProduct();
-          Provider.of<FlavorController>(context, listen: false).clear();
-          Navigator.of(context).pop(true);
+          flavorController.clear();
+          navigatorKey.currentState?.pop(true); // Fechar a tela atual
         } else {
-          Navigator.of(context).pop();
+          _shouldExit = true;
         }
-      },
-    );
+      }
+    } else {
+      _shouldExit = true;
+    }
+
+    return _shouldExit;
   }
 
   void confirmProduct() async {
@@ -170,23 +165,17 @@ class _ProductFormPageState extends State<ProductFormPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
+    if (_shouldExit) {
+      // Fecha a tela atual
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => Navigator.of(context).pop());
+    }
+
     return WillPopScope(
-      onWillPop: () async {
-        bool? confirmExit = false;
-        if (productId == 0 &&
-          flavors.isNotEmpty &&
-          _nameController.text.isNotEmpty &&
-          _priceController.text.isNotEmpty) {
-          confirmExit = await showExitDialog(
-              context, ListMessageDialog.messageDialog("")[0]);
-          return confirmExit ?? false;
-        } else {
-          Navigator.pop(context);
-          return false;
-        }
-      },
+      onWillPop: confirmBeforeLeaving,
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -194,7 +183,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
             style: TextStyle(fontSize: 25),
           ),
           leading: IconButton(
-            onPressed: () => exitScreen(),
+            onPressed: () {
+              confirmBeforeLeaving().then((shouldExit) {
+                if (shouldExit) {
+                  Navigator.of(context).pop(); // Fechar a tela atual
+                }
+              });
+            },
             icon: const Icon(
               Icons.close,
               size: 35,
@@ -204,7 +199,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
             Container(
               margin: const EdgeInsets.only(right: 10),
               child: IconButton(
-                onPressed: flavors.isNotEmpty && name.isNotEmpty && price > 0
+                onPressed: name.isNotEmpty && price > 0
                     ? () {
                         confirmProduct();
                         Navigator.of(context).pop(true);
@@ -349,17 +344,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                             ),
                                           ),
                                           IconButton(
-                                            onPressed: () => showExitDialog(
-                                              context,
-                                              ListMessageDialog.messageDialog(
-                                                  "")[1],
-                                            ).then(
-                                              (message) {
-                                                if (message!) {
-                                                  removeFlavorList(index);
-                                                }
-                                              },
-                                            ),
+                                            onPressed: () =>
+                                                removeFlavorList(index),
                                             icon: const Icon(
                                               Icons.delete,
                                               color: Colors.red,

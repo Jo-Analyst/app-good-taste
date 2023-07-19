@@ -111,7 +111,7 @@ class _FlavorListState extends State<FlavorList> {
                     onSelected: (option) async {
                       if (option == "delete") {
                         showExitDialog(
-                                context, ListMessageDialog.messageDialog("")[1])
+                                context, ListMessageDialog.messageDialog("")[0])
                             .then((message) async {
                           if (message!) {
                             final flavorProvider =

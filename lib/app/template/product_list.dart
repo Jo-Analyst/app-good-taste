@@ -39,11 +39,9 @@ class _ProductListState extends State<ProductList> {
   @override
   void initState() {
     super.initState();
-    print(widget.flavors);
   }
 
   void save(Map<String, dynamic> data) async {
-    // print(data["id"]);
     final flavorProvider =
         Provider.of<FlavorController>(context, listen: false);
 
@@ -141,7 +139,7 @@ class _ProductListState extends State<ProductList> {
         ],
         onSelected: (option) async {
           if (option.toLowerCase() == "delete") {
-            showExitDialog(context, ListMessageDialog.messageDialog("")[2])
+            showExitDialog(context, ListMessageDialog.messageDialog("")[1])
                 .then((message) async {
               if (message!) {
                 final productProvider =
