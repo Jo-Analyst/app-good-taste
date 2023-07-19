@@ -33,7 +33,7 @@ class ProductModel {
         FlavorModel.deleteByProductId(txn, id);
       });
     } catch (e) {
-      //
+      print(e);
     }
   }
 
@@ -43,27 +43,23 @@ class ProductModel {
     final id = data["id"];
     final name = data["name"];
     final price = data["price"];
+    late int lastInsertRowId;
     try {
       await db.transaction(
         (txn) async {
           if (id == 0) {
-            final lastInsertRowId = await txn.insert("products", {
+            lastInsertRowId = await txn.insert("products", {
               "name": name,
               "price": price,
             });
-
-            for (var model in flavorModel) {
-              model.productId = lastInsertRowId;
-              await model.save(txn);
-            }
           } else {
             await txn.update("products", {"name": name, "price": price},
                 where: "id = ?", whereArgs: [id]);
+          }
 
-            for (var model in flavorModel) {
-              model.productId = id;
-              await model.save(txn);
-            }
+          for (var model in flavorModel) {
+            model.productId = id == 0 ? lastInsertRowId : id;
+            await model.save(txn);
           }
         },
       );

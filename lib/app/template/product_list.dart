@@ -1,4 +1,5 @@
 import 'package:app_good_taste/app/controller/product_controller.dart';
+import 'package:app_good_taste/app/page/product_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -8,12 +9,14 @@ import '../utils/message_dialog.dart';
 
 class ProductList extends StatefulWidget {
   final Map<String, dynamic> productItem;
+  final List<Map<String, dynamic>>? flavors;
   final Function(bool) toggleCard;
   final Function(bool) confirmAction;
   const ProductList(
     this.productItem, {
     required this.toggleCard,
     required this.confirmAction,
+    this.flavors,
     super.key,
   });
 
@@ -101,7 +104,7 @@ class _ProductListState extends State<ProductList> {
             ),
           ),
         ],
-        onSelected: (option) {
+        onSelected: (option) async {
           if (option.toLowerCase() == "delete") {
             showExitDialog(context, ListMessageDialog.messageDialog[4])
                 .then((message) async {
@@ -112,6 +115,17 @@ class _ProductListState extends State<ProductList> {
                 widget.confirmAction(true);
               }
             });
+          } else if (option.toLowerCase() == "edit") {
+            final confirmUpdate = await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => ProductFormPage(
+                    product: widget.productItem, flavors: widget.flavors),
+              ),
+            );
+
+            if (confirmUpdate == true) {
+              widget.confirmAction(true);
+            }
           }
         },
       ),

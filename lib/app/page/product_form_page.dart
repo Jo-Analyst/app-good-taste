@@ -10,7 +10,13 @@ import 'package:provider/provider.dart';
 import '../utils/modal.dart';
 
 class ProductFormPage extends StatefulWidget {
-  const ProductFormPage({super.key});
+  final Map<String, dynamic>? product;
+  final List<Map<String, dynamic>>? flavors;
+  const ProductFormPage({
+    this.product,
+    this.flavors,
+    super.key,
+  });
 
   @override
   State<ProductFormPage> createState() => _ProductFormPageState();
@@ -29,11 +35,37 @@ class _ProductFormPageState extends State<ProductFormPage> {
   @override
   void initState() {
     super.initState();
+    if (widget.product == null && widget.flavors == null) return;
+
+    name = widget.product!["name"];
+    price = widget.product!["price"];
+    productId = widget.product!["id"];
+
+    _nameController.text = name;
+    _priceController.text = price.toString();
+
+    for (var flavor in widget.flavors!) {
+      if (flavor["product_id"] == productId) {
+        flavors.add(flavor);
+      }
+    }
   }
 
   void exitScreen() {
-    Provider.of<FlavorController>(context, listen: false).clear();
-    Navigator.of(context).pop();
+    if (flavors.isNotEmpty ||
+        _nameController.text.isNotEmpty ||
+        _priceController.text.isNotEmpty) {
+      showExitDialog(context, ListMessageDialog.messageDialog[0]).then(
+        (confirmExit) {
+          if (confirmExit!) {
+            Provider.of<FlavorController>(context, listen: false).clear();
+            Navigator.of(context).pop();
+          }
+        },
+      );
+    } else {
+      Navigator.of(context).pop(false);
+    }
   }
 
   void addFlavor(String flavorText) {
@@ -48,18 +80,29 @@ class _ProductFormPageState extends State<ProductFormPage> {
     });
   }
 
-  void removeFlavor(int index) {
-    setState(() {
-      flavorsRemoved.add(flavors.removeAt(index));
-    });
+  void removeFlavorList(int index) {
+    if (productId > 0) {
+      setState(() {
+        flavorsRemoved.add(flavors.removeAt(index));
+      });
+    }
   }
 
-  void confirmProduct() {
+  void confirmProduct() async {
     final productProvider =
         Provider.of<ProductController>(context, listen: false);
     setListFlavorModel(); // Adiciona na lista flavorModel a classe antes da confirmação
-    productProvider.save(productId, name, price, flavorModel);
-    productProvider.loadProducts();
+    await productProvider.save(productId, name, price, flavorModel);
+    if (productId > 0 && flavorsRemoved.isNotEmpty) {
+      removeFlavorDB();
+    }
+  }
+
+  void removeFlavorDB() {
+    final flavorProvider = Provider.of<FlavorController>(context, listen: false);
+    for (var fr in flavorsRemoved) {
+      flavorProvider.delete(fr["id"]);
+    }
   }
 
   void setListFlavorModel() {
@@ -110,22 +153,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
             style: TextStyle(fontSize: 25),
           ),
           leading: IconButton(
-            onPressed: () {
-              if (flavors.isNotEmpty ||
-                  _nameController.text.isNotEmpty ||
-                  _priceController.text.isNotEmpty) {
-                showExitDialog(context, ListMessageDialog.messageDialog[0])
-                    .then(
-                  (confirmExit) {
-                    if (confirmExit!) {
-                      exitScreen();
-                    }
-                  },
-                );
-              } else {
-                Navigator.of(context).pop(false);
-              }
-            },
+            onPressed: () => exitScreen(),
             icon: const Icon(
               Icons.close,
               size: 35,
@@ -287,7 +315,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                             ).then(
                                               (message) {
                                                 if (message!) {
-                                                  removeFlavor(index);
+                                                  removeFlavorList(index);
                                                 }
                                               },
                                             ),

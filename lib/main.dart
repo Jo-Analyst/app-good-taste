@@ -15,11 +15,11 @@ void main() async {
     print(flavor);
   }
 
-  // final product = ProductController();
-  // await product.loadProducts();
-  // for (var product in product.items) {
-  //   print(product);
-  // }
+  final product = ProductController();
+  await product.loadProducts();
+  for (var product in product.items) {
+    print(product);
+  }
 }
 
 class AppGoodTaste extends StatelessWidget {
