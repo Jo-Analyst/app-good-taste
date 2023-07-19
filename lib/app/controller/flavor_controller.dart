@@ -21,8 +21,7 @@ class FlavorController extends ChangeNotifier {
   }
 
   Future<void> update(Map<String, dynamic> data) async {
-    await FlavorModel
-        .update(data);
+    await FlavorModel.update(data);
   }
 
   Future<void> delete(int id) async {
@@ -31,6 +30,7 @@ class FlavorController extends ChangeNotifier {
   }
 
   Future<void> add(Map<String, dynamic> data) async {
+   
     _items.add({"id": null, "type": data["type"]});
     final product = {
       "type": data["type"],

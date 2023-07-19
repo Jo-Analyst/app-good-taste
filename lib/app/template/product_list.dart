@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../controller/flavor_controller.dart';
 import '../utils/dialog.dart';
 import '../utils/message_dialog.dart';
+import '../utils/modal.dart';
+import 'flavor_form.dart';
 
 class ProductList extends StatefulWidget {
   final Map<String, dynamic> productItem;
@@ -31,6 +34,21 @@ class _ProductListState extends State<ProductList> {
     setState(() {
       expanded = !expanded;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.flavors);
+  }
+
+  void save(Map<String, dynamic> data) async {
+    // print(data["id"]);
+    final flavorProvider =
+        Provider.of<FlavorController>(context, listen: false);
+
+    await flavorProvider.add(data);
+    widget.confirmAction(true);
   }
 
   @override
@@ -67,6 +85,23 @@ class _ProductListState extends State<ProductList> {
         ),
         iconSize: 30,
         itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+          PopupMenuItem(
+            padding: EdgeInsets.zero,
+            value: "new",
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 10),
+                  child: const Text("Novo"),
+                ),
+              ],
+            ),
+          ),
           PopupMenuItem(
             padding: EdgeInsets.zero,
             value: "edit",
@@ -106,7 +141,7 @@ class _ProductListState extends State<ProductList> {
         ],
         onSelected: (option) async {
           if (option.toLowerCase() == "delete") {
-            showExitDialog(context, ListMessageDialog.messageDialog[4])
+            showExitDialog(context, ListMessageDialog.messageDialog("")[2])
                 .then((message) async {
               if (message!) {
                 final productProvider =
@@ -119,13 +154,23 @@ class _ProductListState extends State<ProductList> {
             final confirmUpdate = await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => ProductFormPage(
-                    product: widget.productItem, flavors: widget.flavors),
+                  product: widget.productItem,
+                  flavors: widget.flavors,
+                ),
               ),
             );
 
             if (confirmUpdate == true) {
               widget.confirmAction(true);
             }
+          } else if (option == "new") {
+            final type = await showModal(
+              context,
+              const FlavorForm(),
+            );
+
+            if (type.isEmpty) return;
+            save({"type": type, "product_id": widget.productItem["id"]});
           }
         },
       ),

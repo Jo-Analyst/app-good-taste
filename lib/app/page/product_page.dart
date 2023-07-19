@@ -113,10 +113,10 @@ class _ProductPageState extends State<ProductPage> {
                                 children: [
                                   ProductList(
                                     products[index],
+                                    flavors: flavors,
                                     toggleCard: (expanded) {
                                       updateListCardTriggered(index, expanded);
                                     },
-                                    flavors: flavors,
                                     confirmAction: (confirm) {
                                       if (confirm) loadProducts();
                                     },

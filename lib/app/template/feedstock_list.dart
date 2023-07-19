@@ -1,4 +1,3 @@
-
 import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/feedstock_form.dart';
 import 'package:app_good_taste/app/utils/message_dialog.dart';
@@ -12,7 +11,7 @@ class FeedstockList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return ListTile(
+    return ListTile(
       leading: CircleAvatar(
         radius: 30,
         backgroundColor: Theme.of(context).primaryColor,
@@ -52,10 +51,9 @@ class FeedstockList extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {
-                showExitDialog(context, ListMessageDialog.messageDialog[1]).then((message) {
-                  if (message!) {
-                   
-                  }
+                showExitDialog(context, ListMessageDialog.messageDialog("")[1])
+                    .then((message) {
+                  if (message!) {}
                 });
               },
               icon: Icon(

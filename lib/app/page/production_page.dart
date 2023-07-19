@@ -144,7 +144,8 @@ class _ProductionPageState extends State<ProductionPage> {
                 flavorSelect != null &&
                 quantity >= 0 &&
                 listOfSelectedRawMaterials.isNotEmpty) {
-              showExitDialog(context, ListMessageDialog.messageDialog[0]).then(
+              showExitDialog(context, ListMessageDialog.messageDialog("")[0])
+                  .then(
                 (confirmExit) {
                   if (confirmExit!) {
                     Navigator.of(context).pop();

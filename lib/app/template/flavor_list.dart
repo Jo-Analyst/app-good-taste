@@ -33,11 +33,8 @@ class _FlavorListState extends State<FlavorList> {
   void save(Map<String, dynamic> data) async {
     final flavorProvider =
         Provider.of<FlavorController>(context, listen: false);
-    if (data["id"] != null) {
-      await flavorProvider.update(data);
-    } else {
-      await flavorProvider.add(data);
-    }
+
+    await flavorProvider.update(data);
     widget.confirmAction(true);
   }
 
@@ -74,23 +71,6 @@ class _FlavorListState extends State<FlavorList> {
                     iconSize: 30,
                     itemBuilder: (BuildContext context) =>
                         <PopupMenuEntry<String>>[
-                      PopupMenuItem(
-                        padding: EdgeInsets.zero,
-                        value: "new",
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.add,
-                              color: Colors.white,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 10),
-                              child: const Text("Novo"),
-                            ),
-                          ],
-                        ),
-                      ),
                       PopupMenuItem(
                         padding: EdgeInsets.zero,
                         value: "edit",
@@ -131,7 +111,7 @@ class _FlavorListState extends State<FlavorList> {
                     onSelected: (option) async {
                       if (option == "delete") {
                         showExitDialog(
-                                context, ListMessageDialog.messageDialog[1])
+                                context, ListMessageDialog.messageDialog("")[1])
                             .then((message) async {
                           if (message!) {
                             final flavorProvider =
@@ -156,20 +136,6 @@ class _FlavorListState extends State<FlavorList> {
                           "type": type,
                           "product_id": flavor["product_id"]
                         });
-                      } else if (option == "new") {
-                        final type = await showModal(
-                          context,
-                          const FlavorForm(),
-                        );
-
-                        if (type.isEmpty) return;
-
-                        save(
-                          {
-                            "type": type,
-                            "product_id": flavor["product_id"],
-                          },
-                        );
                       }
                     },
                   ),

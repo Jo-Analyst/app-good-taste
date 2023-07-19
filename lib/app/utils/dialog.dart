@@ -10,9 +10,9 @@ Future<bool?> showExitDialog(
         content: Text(messageDialog["content"]!),
         actions: [
           Visibility(
-            visible: messageDialog["show_button_cancel"],
+            visible: messageDialog["show_button_cancel"] || messageDialog["show_button_YN"],
             child: TextButton(
-              child: const Text('Cancelar'),
+              child: Text(messageDialog["show_button_YN"] == false ? 'Cancelar' : "Não"),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },

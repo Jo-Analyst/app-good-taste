@@ -35,11 +35,12 @@ class _ProductFormPageState extends State<ProductFormPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.product == null && widget.flavors == null) return;
+    if (widget.product == null) return;
 
     name = widget.product!["name"];
     price = widget.product!["price"];
-    productId = widget.product!["id"];
+    productId =
+        widget.product!["id"] == null ? 0 : widget.product!["id"] as int;
 
     _nameController.text = name;
     _priceController.text = price.toString();
@@ -52,19 +53,26 @@ class _ProductFormPageState extends State<ProductFormPage> {
   }
 
   void exitScreen() {
-    if (flavors.isNotEmpty ||
-        _nameController.text.isNotEmpty ||
-        _priceController.text.isNotEmpty) {
-      showExitDialog(context, ListMessageDialog.messageDialog[0]).then(
-        (confirmExit) {
-          if (confirmExit!) {
-            Provider.of<FlavorController>(context, listen: false).clear();
-            Navigator.of(context).pop();
-          }
-        },
-      );
+    if (productId > 0 && flavorsRemoved.isNotEmpty) {
+      confirmBeforeLeaving();
     } else {
-      Navigator.of(context).pop(false);
+      if (productId == 0 &&
+          flavors.isNotEmpty &&
+          _nameController.text.isNotEmpty &&
+          _priceController.text.isNotEmpty) {
+        showExitDialog(context,
+                ListMessageDialog.messageDialog("")[productId == 0 ? 0 : 5])
+            .then(
+          (confirmExit) {
+            if (confirmExit!) {
+              Provider.of<FlavorController>(context, listen: false).clear();
+              Navigator.of(context).pop();
+            }
+          },
+        );
+      } else {
+        Navigator.of(context).pop(false);
+      }
     }
   }
 
@@ -76,20 +84,47 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
   void updateFlavor(int index, String flavorText) {
     setState(() {
-       flavors[index] = {
-      "id": flavors[index]["id"],
-      "type": flavorText,
-      "product_id": flavors[index]["product_id"],
-    };
+      flavors[index] = {
+        "id": flavors[index]["id"],
+        "type": flavorText,
+        "product_id": flavors[index]["product_id"],
+      };
     });
   }
 
   void removeFlavorList(int index) {
-    if (productId > 0) {
-      setState(() {
+    setState(() {
+      if (productId > 0) {
         flavorsRemoved.add(flavors.removeAt(index));
-      });
+      } else {
+        flavors.removeAt(index);
+      }
+    });
+  }
+
+  String getFlavorsRemoved() {
+    String text = "\n\n";
+    for (var flavorRemoved in flavorsRemoved) {
+      text += "\t* ${flavorRemoved["type"]}\n";
     }
+    return text;
+  }
+
+  // Mostra um dialogo para que o usuário confirma a exclusão
+  void confirmBeforeLeaving() {
+    showExitDialog(
+            context, ListMessageDialog.messageDialog(getFlavorsRemoved())[4])
+        .then(
+      (confirmExit) {
+        if (confirmExit!) {
+          confirmProduct();
+          Provider.of<FlavorController>(context, listen: false).clear();
+          Navigator.of(context).pop(true);
+        } else {
+          Navigator.of(context).pop();
+        }
+      },
+    );
   }
 
   void confirmProduct() async {
@@ -140,11 +175,12 @@ class _ProductFormPageState extends State<ProductFormPage> {
     return WillPopScope(
       onWillPop: () async {
         bool? confirmExit = false;
-        if (flavors.isNotEmpty ||
-            _nameController.text.isNotEmpty ||
-            _priceController.text.isNotEmpty) {
-          confirmExit =
-              await showExitDialog(context, ListMessageDialog.messageDialog[0]);
+        if (productId == 0 &&
+          flavors.isNotEmpty &&
+          _nameController.text.isNotEmpty &&
+          _priceController.text.isNotEmpty) {
+          confirmExit = await showExitDialog(
+              context, ListMessageDialog.messageDialog("")[0]);
           return confirmExit ?? false;
         } else {
           Navigator.pop(context);
@@ -315,8 +351,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                           IconButton(
                                             onPressed: () => showExitDialog(
                                               context,
-                                              ListMessageDialog
-                                                  .messageDialog[1],
+                                              ListMessageDialog.messageDialog(
+                                                  "")[1],
                                             ).then(
                                               (message) {
                                                 if (message!) {
