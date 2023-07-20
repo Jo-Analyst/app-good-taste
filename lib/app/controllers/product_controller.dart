@@ -10,8 +10,12 @@ class ProductController extends ChangeNotifier {
   }
 
   Future<void> loadProducts() async {
-    final products = await ProductModel.getData();
-    _items = products;
+    _items = await ProductModel.findAll();
+    notifyListeners();
+  }
+
+  Future<void> loadingProductByParts() async {
+    _items = await ProductModel.findAllByParts();
     notifyListeners();
   }
 

@@ -1,7 +1,9 @@
+import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/pages/raw_material_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../utils/drop_down.dart';
 
@@ -16,16 +18,7 @@ class ProductionPage extends StatefulWidget {
 class _ProductionPageState extends State<ProductionPage> {
   final formKey = GlobalKey<FormState>();
   final quantityController = TextEditingController();
-  final List<Map<String, dynamic>> products = [
-    {"flavor": "Morango", "price": 1.5},
-    {"flavor": "Maracujá", "price": 1.5},
-    {"flavor": "Uva", "price": 1.5},
-    {"flavor": "Baunilha com limão", "price": 1.5},
-    {"flavor": "Azul", "price": 1.5},
-    {"flavor": "Leite condensado", "price": 1.5},
-    {"flavor": "Chocolate", "price": 1.5},
-    {"flavor": "Trufa de limão", "price": 3.0},
-  ];
+  List<Map<String, dynamic>> products = [];
 
   // entrada = 0, saida = 0, lucro = 0, quantidade = 0, preço
   double entry = 0, leave = 0, proft = 0, price = 0;
@@ -46,9 +39,7 @@ class _ProductionPageState extends State<ProductionPage> {
   @override
   void initState() {
     super.initState();
-    for (var product in products) {
-      flavors.add(product["flavor"]);
-    }
+    loadProducts();
 
     if (widget.production.isEmpty) return;
 
@@ -61,6 +52,18 @@ class _ProductionPageState extends State<ProductionPage> {
     price = widget.production["price"];
     id = widget.production["id"];
     calculateProfit();
+  }
+
+  void loadProducts() async {
+    final productController =
+        Provider.of<ProductController>(context, listen: false);
+    await productController.loadingProductByParts();
+    setState(() {
+      products = productController.items;
+      for (var product in products) {
+        flavors.add(product["flavor"]);
+      }
+    });
   }
 
   final List<Map<String, dynamic>> listOfSelectedRawMaterials = [];

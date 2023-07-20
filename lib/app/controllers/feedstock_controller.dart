@@ -18,7 +18,6 @@ class FeedstockController with ChangeNotifier {
   }
 
   Future<void> save(Map<String, dynamic> data) async {
-    print(data);
     FeedstockModel(
       id: data["id"],
       name: data["name"],

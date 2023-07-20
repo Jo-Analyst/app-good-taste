@@ -9,7 +9,7 @@ class FlavorController extends ChangeNotifier {
   }
 
   Future<void> loadFlavors() async {
-    final flavors = await FlavorModel.getData();
+    final flavors = await FlavorModel.findAll();
     _items = List<Map<String, dynamic>>.from(flavors);
     notifyListeners();
   }
@@ -30,7 +30,6 @@ class FlavorController extends ChangeNotifier {
   }
 
   Future<void> add(Map<String, dynamic> data) async {
-   
     _items.add({"id": null, "type": data["type"]});
     final product = {
       "type": data["type"],

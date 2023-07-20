@@ -13,14 +13,14 @@ class ProductModel {
     this.price,
   });
 
-  // static Future<List<Map<String, dynamic>>> getData() async {
-  //   final db = await DB.database();
-  //   const String query =
-  //       "SELECT products.id as product_id, products.name, products.price, flavors.type, flavors.id as flavor_id FROM products INNER JOIN flavors ON flavors.product_id =  products.id";
-  //   return db.rawQuery(query);
-  // }
+  static Future<List<Map<String, dynamic>>> findAllByParts() async {
+    final db = await DB.database();
+    const String query =
+        "SELECT flavors.type AS flavor, products.price FROM products INNER JOIN flavors ON flavors.product_id =  products.id ORDER BY flavors.type ASC";
+    return db.rawQuery(query);
+  }
 
-  static Future<List<Map<String, dynamic>>> getData() async {
+  static Future<List<Map<String, dynamic>>> findAll() async {
     final db = await DB.database();
     return db.query("products");
   }

@@ -52,7 +52,7 @@ Future<void> save(Transaction txn) async {
     return db.query("flavors", where: "product_id = ?", whereArgs: [productId]);
   }
 
-  static Future<List<Map<String, dynamic>>> getData() async {
+  static Future<List<Map<String, dynamic>>> findAll() async {
     final db = await DB.database();
     return db.query("flavors");
   }
