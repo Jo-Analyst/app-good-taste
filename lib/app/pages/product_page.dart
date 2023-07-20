@@ -117,7 +117,7 @@ class _ProductPageState extends State<ProductPage> {
                                     toggleCard: (expanded) {
                                       updateListCardTriggered(index, expanded);
                                     },
-                                    confirmAction: (confirm) {
+                                    onConfirmAction: (confirm) {
                                       if (confirm) loadProducts();
                                     },
                                   ),
@@ -126,7 +126,7 @@ class _ProductPageState extends State<ProductPage> {
                                     flavors: flavors,
                                     product: products[index],
                                     isExpanded: cardTriggeredList[index],
-                                    confirmAction: (confirm) {
+                                    onConfirmAction: (confirm) {
                                       if (confirm) {
                                         loadFlavors();
                                       }

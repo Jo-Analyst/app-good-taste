@@ -9,14 +9,14 @@ import 'package:provider/provider.dart';
 
 void main() async {
   runApp(const AppGoodTaste());
-  final feedstock = FeedstockController();
-  await feedstock
-      // .save({"id": 0, "name": "Leite", "brand": "IVAN", "price": 3.00});
-      .save({"id": 0, "name": "Suco de morango", "brand": "TANG", "price": 1.35});
-      await feedstock.save({"id": 0, "name": "Suco de baunilha de limão", "brand": "MID", "price": 1.25});
-      await feedstock.save({"id": 0, "name": "Açucar", "brand": "Gigante", "price": 19.5});
-  await feedstock.loadFeedstock();
-  print(feedstock.items);
+  //  final feedstock = FeedstockController();
+  // await feedstock
+  //     .save({"id": 0, "name": "Leite", "brand": "IVAN", "price": 3.00});
+  // await feedstock.save({"id": 0, "name": "Suco de morango", "brand": "TANG", "price": 1.35});
+  // await feedstock.save({"id": 0, "name": "Suco de baunilha de limão", "brand": "MID", "price": 1.25});
+  // await feedstock.save({"id": 0, "name": "Açucar", "brand": "Gigante", "price": 19.5});
+  // await feedstock.loadFeedstock();
+  // print(feedstock.items);
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

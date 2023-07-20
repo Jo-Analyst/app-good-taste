@@ -1,6 +1,8 @@
+import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
 import 'package:app_good_taste/app/utils/scroll_button_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Feedstock extends StatefulWidget {
   final Map<String, dynamic> feedstockItem;
@@ -12,29 +14,35 @@ class Feedstock extends StatefulWidget {
 
 class _FeedstockState extends State<Feedstock> {
   final _key = GlobalKey<FormState>();
-  final _product = TextEditingController();
+  final _name = TextEditingController();
   final _price = TextEditingController();
   final _brand = TextEditingController();
-  late final int _productId;
+  int _id = 0;
 
   @override
   void initState() {
     super.initState();
     if (widget.feedstockItem.isEmpty) return;
 
-    _productId = widget.feedstockItem["id"];
-    _product.text = widget.feedstockItem["name"];
+    _id = widget.feedstockItem["id"];
+    _name.text = widget.feedstockItem["name"];
     _brand.text = widget.feedstockItem["brand"];
     _price.text =
         NumberFormat("#0.00", "PT-BR").format(widget.feedstockItem["price"]);
   }
 
   void save() {
+    final feedstockProvider =
+        Provider.of<FeedstockController>(context, listen: false);
     if (_key.currentState!.validate()) {
-      // método para salvar
-      // print(_product.text);
-      // print(_price.text);
-      // print(_brand.text);
+      feedstockProvider.save({
+        "id": _id,
+        "name": _name.text,
+        "brand": _brand.text,
+        "price": double.parse(_price.text),
+      });
+
+      Navigator.pop(context, "true");
     }
   }
 
@@ -50,13 +58,13 @@ class _FeedstockState extends State<Feedstock> {
         ),
         child: Column(
           children: [
-           const ScrollButtomModal(),
+            const ScrollButtomModal(),
             Form(
               key: _key,
               child: Column(
                 children: [
                   TextFormField(
-                    controller: _product,
+                    controller: _name,
                     decoration: InputDecoration(
                       labelText: "Produto",
                       floatingLabelStyle: TextStyle(
@@ -114,7 +122,9 @@ class _FeedstockState extends State<Feedstock> {
                     validator: (price) {
                       if (price!.isEmpty) {
                         return "Informe o preço do produto!";
-                      } else if (double.parse(price) <= 0) {
+                      } else if (double.parse(
+                              price.replaceAll(RegExp(r','), '.')) <=
+                          0) {
                         return "Este não um valor válido";
                       }
 

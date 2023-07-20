@@ -11,13 +11,13 @@ class FlavorList extends StatefulWidget {
   final List<Map<String, dynamic>> flavors;
   final Map<String, dynamic> product;
   final bool isExpanded;
-  final Function(bool) confirmAction;
+  final Function(bool) onConfirmAction;
 
   const FlavorList(
       {required this.flavors,
       required this.isExpanded,
       required this.product,
-      required this.confirmAction,
+      required this.onConfirmAction,
       super.key});
 
   @override
@@ -35,7 +35,7 @@ class _FlavorListState extends State<FlavorList> {
         Provider.of<FlavorController>(context, listen: false);
 
     await flavorProvider.update(data);
-    widget.confirmAction(true);
+    widget.onConfirmAction(true);
   }
 
   @override
@@ -118,7 +118,7 @@ class _FlavorListState extends State<FlavorList> {
                                 Provider.of<FlavorController>(context,
                                     listen: false);
                             await flavorProvider.delete(flavor["id"]);
-                            widget.confirmAction(true);
+                            widget.onConfirmAction(true);
                           }
                         });
                       } else if (option == "edit") {

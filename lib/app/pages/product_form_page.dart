@@ -46,7 +46,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
         widget.product!["id"] == null ? 0 : widget.product!["id"] as int;
 
     _nameController.text = name;
-    _priceController.text = price.toString();
+    _priceController.text = price.toStringAsFixed(2).replaceAll(RegExp(r'\.'), ',');
 
     for (var flavor in widget.flavors!) {
       if (flavor["product_id"] == productId) {
@@ -259,7 +259,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                   setState(() {
                                     price = (priceProduct != null &&
                                             priceProduct != "")
-                                        ? double.tryParse(priceProduct) ?? 0.0
+                                        ? double.parse(priceProduct.replaceAll(RegExp(r','), '.'))
                                         : 0.0;
                                   });
                                 },

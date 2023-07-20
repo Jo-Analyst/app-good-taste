@@ -1,16 +1,25 @@
+import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
 import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/feedstock_form.dart';
 import 'package:app_good_taste/app/utils/message_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class FeedstockList extends StatelessWidget {
   final Map<String, dynamic> feedstockItem;
-  const FeedstockList(this.feedstockItem, {super.key});
+  final Function(bool) onConfirmAction;
+  const FeedstockList(
+    this.feedstockItem, {
+    required this.onConfirmAction,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final feedstockProvider =
+        Provider.of<FeedstockController>(context, listen: false);
     return ListTile(
       leading: CircleAvatar(
         radius: 30,
@@ -52,9 +61,10 @@ class FeedstockList extends StatelessWidget {
             IconButton(
               onPressed: () {
                 showExitDialog(context, ListMessageDialog.messageDialog("")[0])
-                    .then((message) {
-                  if (message!) {
-                    // print(message);
+                    .then((confirmeExit) {
+                  if (confirmeExit!) {
+                    feedstockProvider.delete(feedstockItem["id"]);
+                    onConfirmAction(true);
                   }
                 });
               },

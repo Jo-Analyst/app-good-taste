@@ -27,7 +27,6 @@ class _FeedstockPageState extends State<FeedstockPage> {
     setState(() {
       feedstocks = feedstockProvider.items;
     });
-    print(feedstocks);
   }
 
   @override
@@ -38,10 +37,16 @@ class _FeedstockPageState extends State<FeedstockPage> {
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () => showModal(
-                context,
-                const Feedstock(feedstockItem: {}),
-              ),
+              onPressed: () async {
+                final result = await showModal(
+                  context,
+                  const Feedstock(feedstockItem: {}),
+                );
+
+                if (result == "true") {
+                  loadProducts();
+                }
+              },
               icon: const Icon(
                 Icons.add,
                 size: 40,
@@ -67,7 +72,10 @@ class _FeedstockPageState extends State<FeedstockPage> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
                       return Card(
-                        child: FeedstockList(feedstocks[index]),
+                        child: FeedstockList(feedstocks[index],
+                            onConfirmAction: (confirmAction) {
+                          loadProducts();
+                        }),
                       );
                     },
                   ),

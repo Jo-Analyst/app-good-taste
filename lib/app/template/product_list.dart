@@ -14,11 +14,11 @@ class ProductList extends StatefulWidget {
   final Map<String, dynamic> productItem;
   final List<Map<String, dynamic>>? flavors;
   final Function(bool) toggleCard;
-  final Function(bool) confirmAction;
+  final Function(bool) onConfirmAction;
   const ProductList(
     this.productItem, {
     required this.toggleCard,
-    required this.confirmAction,
+    required this.onConfirmAction,
     this.flavors,
     super.key,
   });
@@ -46,7 +46,7 @@ class _ProductListState extends State<ProductList> {
         Provider.of<FlavorController>(context, listen: false);
 
     await flavorProvider.add(data);
-    widget.confirmAction(true);
+    widget.onConfirmAction(true);
   }
 
   @override
@@ -145,7 +145,7 @@ class _ProductListState extends State<ProductList> {
                 final productProvider =
                     Provider.of<ProductController>(context, listen: false);
                 await productProvider.delete(widget.productItem["id"]);
-                widget.confirmAction(true);
+                widget.onConfirmAction(true);
               }
             });
           } else if (option.toLowerCase() == "edit") {
@@ -159,7 +159,7 @@ class _ProductListState extends State<ProductList> {
             );
 
             if (confirmUpdate == true) {
-              widget.confirmAction(true);
+              widget.onConfirmAction(true);
             }
           } else if (option == "new") {
             final type = await showModal(

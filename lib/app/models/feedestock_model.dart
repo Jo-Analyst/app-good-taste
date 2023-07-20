@@ -36,7 +36,6 @@ class FeedstockModel {
         "price": price,
       };
       if (id == 0) {
-      print(id);
         await db.insert("feedstocks", data);
       } else {
         await db.update("feedstocks", data, where: "id = ?", whereArgs: [1]);

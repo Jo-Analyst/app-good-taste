@@ -1,7 +1,7 @@
 import 'package:app_good_taste/app/models/feedestock_model.dart';
 import 'package:flutter/material.dart';
 
-class FeedstockController extends ChangeNotifier {
+class FeedstockController with ChangeNotifier {
   List<Map<String, dynamic>> _items = [];
 
   List<Map<String, dynamic>> get items {
@@ -18,7 +18,7 @@ class FeedstockController extends ChangeNotifier {
   }
 
   Future<void> save(Map<String, dynamic> data) async {
-    _items.add(data);
+    print(data);
     FeedstockModel(
       id: data["id"],
       name: data["name"],
