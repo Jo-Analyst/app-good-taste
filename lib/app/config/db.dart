@@ -12,7 +12,7 @@ class DB {
         // raw_materials - matérias-primas
 
         db.execute(
-          "CREATE TABLE raw_materials (id INTEGER PRIMARY KEY, name TEXT NOT NULL, brand TEXT NULL, price REAL NOT NULL)",
+          "CREATE TABLE feedstocks (id INTEGER PRIMARY KEY, name TEXT NOT NULL, brand TEXT NULL, price REAL NOT NULL)",
         );
         db.execute(
           'CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT NOT NULL, price REAL)',
@@ -31,16 +31,5 @@ class DB {
       },
       version: 1,
     );
-  }
-
-  static Future<void> save(String table, Map<String, Object> data) async {
-    final db = await DB.database();
-    await db.insert(table, data,
-        conflictAlgorithm: sql.ConflictAlgorithm.replace);
-  }
-
-  static Future<List<Map<String, dynamic>>> getData(String table) async {
-    final db = await DB.database();
-    return db.query(table);
   }
 }

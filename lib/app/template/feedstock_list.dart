@@ -46,14 +46,16 @@ class FeedstockList extends StatelessWidget {
               ),
               icon: const Icon(
                 Icons.edit_sharp,
-                color: Colors.blue,
+                color: Color.fromARGB(255, 22, 104, 171),
               ),
             ),
             IconButton(
               onPressed: () {
                 showExitDialog(context, ListMessageDialog.messageDialog("")[0])
                     .then((message) {
-                  if (message!) {}
+                  if (message!) {
+                    // print(message);
+                  }
                 });
               },
               icon: Icon(

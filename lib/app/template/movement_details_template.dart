@@ -26,7 +26,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
   Color changeColorByDescription() {
     switch (widget.description.toLowerCase()) {
       case "entrada":
-        return const Color.fromARGB(255, 155, 112, 48);
+        return const Color.fromARGB(255, 22, 104, 171);
       case "total":
         return Colors.green;
       default:
@@ -133,7 +133,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
 
                             return Container(
                               width: double.infinity,
-                              color:  const Color.fromARGB(255, 217, 215, 215),
+                              color: const Color.fromARGB(255, 217, 215, 215),
                               child: Column(
                                 children: [
                                   Align(

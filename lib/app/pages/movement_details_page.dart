@@ -1,5 +1,5 @@
-import 'package:app_good_taste/app/page/all_productions_page.dart';
-import 'package:app_good_taste/app/page/production_page.dart';
+import 'package:app_good_taste/app/pages/all_productions_page.dart';
+import 'package:app_good_taste/app/pages/production_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/movement_details_template.dart';
 

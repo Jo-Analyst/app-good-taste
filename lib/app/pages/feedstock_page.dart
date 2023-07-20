@@ -1,15 +1,37 @@
+import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
 import 'package:app_good_taste/app/template/feedstock_form.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:app_good_taste/app/template/feedstock_list.dart';
+import 'package:provider/provider.dart';
 
-class FeedstockPage extends StatelessWidget {
+class FeedstockPage extends StatefulWidget {
   const FeedstockPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> feedstocks = [];
+  State<FeedstockPage> createState() => _FeedstockPageState();
+}
 
+class _FeedstockPageState extends State<FeedstockPage> {
+  List<Map<String, dynamic>> feedstocks = [];
+  @override
+  void initState() {
+    super.initState();
+    loadProducts();
+  }
+
+  void loadProducts() async {
+    final feedstockProvider =
+        Provider.of<FeedstockController>(context, listen: false);
+    await feedstockProvider.loadFeedstock();
+    setState(() {
+      feedstocks = feedstockProvider.items;
+    });
+    print(feedstocks);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [

@@ -1,8 +1,8 @@
 // ignore_for_file: 
 
-import 'package:app_good_taste/app/controller/flavor_controller.dart';
-import 'package:app_good_taste/app/controller/product_controller.dart';
-import 'package:app_good_taste/app/model/flavor_model.dart';
+import 'package:app_good_taste/app/controllers/flavor_controller.dart';
+import 'package:app_good_taste/app/controllers/product_controller.dart';
+import 'package:app_good_taste/app/models/flavor_model.dart';
 import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/flavor_form.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +97,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
       final confirmExit = await showExitDialog(
         context,
         {
-          "title": "Deseja sair?",
+          "title": "Confirmação",
           "content":
               "Os seguintes sabores foram excluídos da lista: ${getFlavorsRemoved()}\n Você confirma esta ação?",
           "show_button_cancel": false,
@@ -340,7 +340,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                             },
                                             icon: const Icon(
                                               Icons.edit,
-                                              color: Colors.blue,
+                                              color: Color.fromARGB(255, 22, 104, 171),
                                             ),
                                           ),
                                           IconButton(

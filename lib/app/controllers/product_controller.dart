@@ -1,5 +1,5 @@
-import 'package:app_good_taste/app/model/flavor_model.dart';
-import 'package:app_good_taste/app/model/product_model.dart';
+import 'package:app_good_taste/app/models/flavor_model.dart';
+import 'package:app_good_taste/app/models/product_model.dart';
 import 'package:flutter/material.dart';
 
 class ProductController extends ChangeNotifier {

@@ -1,6 +1,6 @@
-import 'package:app_good_taste/app/controller/flavor_controller.dart';
-import 'package:app_good_taste/app/controller/product_controller.dart';
-import 'package:app_good_taste/app/page/product_form_page.dart';
+import 'package:app_good_taste/app/controllers/flavor_controller.dart';
+import 'package:app_good_taste/app/controllers/product_controller.dart';
+import 'package:app_good_taste/app/pages/product_form_page.dart';
 import 'package:app_good_taste/app/template/flavor_list.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/product_list.dart';

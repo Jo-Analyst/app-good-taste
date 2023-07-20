@@ -1,4 +1,4 @@
-import 'package:app_good_taste/app/model/flavor_model.dart';
+import 'package:app_good_taste/app/models/flavor_model.dart';
 
 import '../config/db.dart';
 

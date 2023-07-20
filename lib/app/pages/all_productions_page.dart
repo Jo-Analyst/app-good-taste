@@ -1,4 +1,4 @@
-import 'package:app_good_taste/app/page/production_details_list_page.dart';
+import 'package:app_good_taste/app/pages/production_details_list_page.dart';
 import 'package:app_good_taste/app/template/slide_year.dart';
 import 'package:flutter/material.dart';
 

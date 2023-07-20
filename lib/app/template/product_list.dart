@@ -1,10 +1,10 @@
-import 'package:app_good_taste/app/controller/product_controller.dart';
-import 'package:app_good_taste/app/page/product_form_page.dart';
+import 'package:app_good_taste/app/controllers/product_controller.dart';
+import 'package:app_good_taste/app/pages/product_form_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../controller/flavor_controller.dart';
+import '../controllers/flavor_controller.dart';
 import '../utils/dialog.dart';
 import '../utils/message_dialog.dart';
 import '../utils/modal.dart';

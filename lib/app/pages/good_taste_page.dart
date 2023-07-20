@@ -1,8 +1,8 @@
-import 'package:app_good_taste/app/page/setting_page.dart';
+import 'package:app_good_taste/app/pages/setting_page.dart';
 import 'package:flutter/material.dart';
-import 'package:app_good_taste/app/page/feedstock_page.dart';
-import 'package:app_good_taste/app/page/movement_details_page.dart';
-import 'package:app_good_taste/app/page/product_page.dart';
+import 'package:app_good_taste/app/pages/feedstock_page.dart';
+import 'package:app_good_taste/app/pages/movement_details_page.dart';
+import 'package:app_good_taste/app/pages/product_page.dart';
 
 import '../template/bottom_navigation_bar_item.dart';
 

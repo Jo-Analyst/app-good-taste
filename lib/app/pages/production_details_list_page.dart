@@ -1,4 +1,4 @@
-import 'package:app_good_taste/app/page/production_details_page.dart';
+import 'package:app_good_taste/app/pages/production_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
