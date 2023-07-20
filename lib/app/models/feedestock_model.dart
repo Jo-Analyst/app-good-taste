@@ -38,7 +38,7 @@ class FeedstockModel {
       if (id == 0) {
         await db.insert("feedstocks", data);
       } else {
-        await db.update("feedstocks", data, where: "id = ?", whereArgs: [1]);
+        await db.update("feedstocks", data, where: "id = ?", whereArgs: [id]);
       }
     } catch (e) {
       // print(e);

@@ -49,10 +49,16 @@ class FeedstockList extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              onPressed: () => showModal(
-                context,
-                Feedstock(feedstockItem: feedstockItem),
-              ),
+              onPressed: () async {
+                final confirmEdit = await showModal(
+                  context,
+                  Feedstock(feedstockItem: feedstockItem),
+                );
+
+                if (confirmEdit == "true") {
+                  onConfirmAction(true);
+                }
+              },
               icon: const Icon(
                 Icons.edit_sharp,
                 color: Color.fromARGB(255, 22, 104, 171),
@@ -61,8 +67,8 @@ class FeedstockList extends StatelessWidget {
             IconButton(
               onPressed: () {
                 showExitDialog(context, ListMessageDialog.messageDialog("")[0])
-                    .then((confirmeExit) {
-                  if (confirmeExit!) {
+                    .then((confirmeDelete) {
+                  if (confirmeDelete!) {
                     feedstockProvider.delete(feedstockItem["id"]);
                     onConfirmAction(true);
                   }

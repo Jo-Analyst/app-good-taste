@@ -39,7 +39,7 @@ class _FeedstockState extends State<Feedstock> {
         "id": _id,
         "name": _name.text,
         "brand": _brand.text,
-        "price": double.parse(_price.text),
+        "price": double.parse(_price.text.replaceAll(RegExp(r','), '.')),
       });
 
       Navigator.pop(context, "true");
