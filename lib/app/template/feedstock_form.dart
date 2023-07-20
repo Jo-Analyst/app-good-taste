@@ -37,8 +37,8 @@ class _FeedstockState extends State<Feedstock> {
     if (_key.currentState!.validate()) {
       feedstockProvider.save({
         "id": _id,
-        "name": _name.text,
-        "brand": _brand.text,
+        "name": _name.text.trim(),
+        "brand": _brand.text.trim(),
         "price": double.parse(_price.text.replaceAll(RegExp(r','), '.')),
       });
 
@@ -65,6 +65,7 @@ class _FeedstockState extends State<Feedstock> {
                 children: [
                   TextFormField(
                     controller: _name,
+                    textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
                       labelText: "Produto",
                       floatingLabelStyle: TextStyle(
@@ -85,6 +86,7 @@ class _FeedstockState extends State<Feedstock> {
                   ),
                   TextFormField(
                     controller: _brand,
+                    textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
                       labelText: "Marca",
                       floatingLabelStyle: TextStyle(
