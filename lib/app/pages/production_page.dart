@@ -1,4 +1,5 @@
 import 'package:app_good_taste/app/controllers/product_controller.dart';
+import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:app_good_taste/app/pages/feedstock_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,14 +18,13 @@ class ProductionPage extends StatefulWidget {
 
 class _ProductionPageState extends State<ProductionPage> {
   final formKey = GlobalKey<FormState>();
-  final quantityController = TextEditingController();
   List<Map<String, dynamic>> products = [];
 
   // entrada = 0, saida = 0, lucro = 0, quantidade = 0, preço
-  double entry = 0, leave = 0, proft = 0, price = 0;
+  double valueEntry = 0, valueLeave = 0, valueProfit = 0, price = 0;
 
   String? flavorSelect, flavorEditing = '';
-  int quantity = 0, id = 0;
+  int quantity = 0, productionId = 0;
 
   final List<String> flavors = [];
 
@@ -44,13 +44,11 @@ class _ProductionPageState extends State<ProductionPage> {
     if (widget.production.isEmpty) return;
 
     quantity = widget.production["quantity"];
-    quantityController.text = quantity.toString();
-
-    entry = widget.production["subtotal"];
+    valueEntry = widget.production["subtotal"];
     flavorEditing = widget.production["flavor"];
     flavorSelect = flavors[getIndexListFlavors(flavorEditing!)];
     price = widget.production["price"];
-    id = widget.production["id"];
+    productionId = widget.production["id"];
     calculateProfit();
   }
 
@@ -66,7 +64,33 @@ class _ProductionPageState extends State<ProductionPage> {
     });
   }
 
-  final List<Map<String, dynamic>> listOfSelectedRawMaterials = [];
+  void confirmProdution() async {
+    final productionProvider = Provider.of<ProductionController>(
+      context,
+      listen: false,
+    );
+    await productionProvider.save({
+      "id": productionId,
+      "quantity": quantity,
+      "date": DateFormat("dd/MM/yyyy").format(DateTime.now()),
+      "flavor_id": 1,
+      "price_product": price,
+      "value_entry": valueEntry,
+      "value_leave": valueLeave,
+      "value_profit": valueProfit,
+    }, getItemsProduction());
+  }
+
+  List<Map<String, dynamic>> getItemsProduction() {
+    List<Map<String, dynamic>> list = [];
+    for(var listFeedstocks in listOfSelectedFeedstocks){
+      list
+    }
+
+    return list;
+  }
+
+  final List<Map<String, dynamic>> listOfSelectedFeedstocks = [];
 
   int getIndexListFlavors(String flavorEditing) {
     int index = -1;
@@ -80,22 +104,22 @@ class _ProductionPageState extends State<ProductionPage> {
 
   void calculateInputValue() {
     setState(() {
-      entry = quantity * price;
+      valueEntry = quantity * price;
     });
   }
 
   void calculateProfit() {
     setState(() {
-      proft = entry - leave;
+      valueProfit = valueEntry - valueLeave;
     });
   }
 
   void calculateLeave() {
-    leave = 0;
+    valueLeave = 0;
 
     setState(() {
-      for (var feedstock in listOfSelectedRawMaterials) {
-        leave += feedstock["price"];
+      for (var feedstock in listOfSelectedFeedstocks) {
+        valueLeave += feedstock["price"];
       }
     });
   }
@@ -103,11 +127,11 @@ class _ProductionPageState extends State<ProductionPage> {
   void decreaseOutputWhenExcludingRawMaterial(int index) {
     setState(() {
       double price =
-          double.parse(listOfSelectedRawMaterials[index]["price"].toString());
-      if (leave >= price) {
-        leave -= price;
+          double.parse(listOfSelectedFeedstocks[index]["price"].toString());
+      if (valueLeave >= price) {
+        valueLeave -= price;
       } else {
-        leave = 0;
+        valueLeave = 0;
       }
     });
   }
@@ -126,10 +150,9 @@ class _ProductionPageState extends State<ProductionPage> {
             child: IconButton(
               onPressed: quantity > 0 &&
                       flavorSelect != null &&
-                      listOfSelectedRawMaterials.isNotEmpty
+                      listOfSelectedFeedstocks.isNotEmpty
                   ? () {
-                      // salva os dados aqui no sqllite
-                      Navigator.of(context).pop();
+                      confirmProdution();
                     }
                   : null,
               icon: const Icon(
@@ -174,7 +197,6 @@ class _ProductionPageState extends State<ProductionPage> {
                     }),
                     const Divider(),
                     TextFormField(
-                      controller: quantityController,
                       keyboardType: TextInputType.number,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       textInputAction: TextInputAction.next,
@@ -214,13 +236,13 @@ class _ProductionPageState extends State<ProductionPage> {
                         context,
                         MaterialPageRoute(
                           builder: (_) =>
-                              FeedstockListPage(listOfSelectedRawMaterials),
+                              FeedstockListPage(listOfSelectedFeedstocks),
                         ),
                       );
                       if (selectedRawMaterials != null) {
                         setState(() {
-                          listOfSelectedRawMaterials.clear();
-                          listOfSelectedRawMaterials
+                          listOfSelectedFeedstocks.clear();
+                          listOfSelectedFeedstocks
                               .addAll(selectedRawMaterials);
                         });
 
@@ -240,7 +262,7 @@ class _ProductionPageState extends State<ProductionPage> {
                 color: Color.fromARGB(255, 228, 108, 148),
                 height: 2,
               ),
-              listOfSelectedRawMaterials.isEmpty
+              listOfSelectedFeedstocks.isEmpty
                   ? const Flexible(
                       child: Center(
                       child: Text(
@@ -250,24 +272,24 @@ class _ProductionPageState extends State<ProductionPage> {
                     ))
                   : Flexible(
                       child: ListView.builder(
-                        itemCount: listOfSelectedRawMaterials.length,
+                        itemCount: listOfSelectedFeedstocks.length,
                         itemBuilder: (context, index) {
                           return Column(
                             children: [
                               ListTile(
                                 title: Text(
-                                  "${listOfSelectedRawMaterials[index]['name']}",
+                                  "${listOfSelectedFeedstocks[index]['name']}",
                                   style: const TextStyle(fontSize: 18),
                                 ),
                                 subtitle: Text(
-                                  "${listOfSelectedRawMaterials[index]['brand']}",
+                                  "${listOfSelectedFeedstocks[index]['brand']}",
                                   style: const TextStyle(fontSize: 14),
                                 ),
                                 leading: CircleAvatar(
                                   radius: 30,
                                   child: Text(
                                     NumberFormat("R\$ #0.00", "PT-BR").format(
-                                        listOfSelectedRawMaterials[index]
+                                        listOfSelectedFeedstocks[index]
                                             ["price"]),
                                     style: const TextStyle(fontSize: 12),
                                   ),
@@ -277,7 +299,7 @@ class _ProductionPageState extends State<ProductionPage> {
                                     decreaseOutputWhenExcludingRawMaterial(
                                         index);
                                     calculateProfit();
-                                    listOfSelectedRawMaterials.removeAt(index);
+                                    listOfSelectedFeedstocks.removeAt(index);
                                     setState(() {});
                                   },
                                   icon: const Icon(
@@ -306,7 +328,7 @@ class _ProductionPageState extends State<ProductionPage> {
                     child: Chip(
                       backgroundColor: Colors.blue,
                       label: Text(
-                        NumberFormat("R\$ #0.00", "PT-BR").format(entry),
+                        NumberFormat("R\$ #0.00", "PT-BR").format(valueEntry),
                         style: const TextStyle(fontSize: 16),
                       ),
                     ),
@@ -322,7 +344,7 @@ class _ProductionPageState extends State<ProductionPage> {
                     child: Chip(
                       backgroundColor: Colors.red,
                       label: Text(
-                        NumberFormat("R\$ #0.00", "PT-BR").format(leave),
+                        NumberFormat("R\$ #0.00", "PT-BR").format(valueLeave),
                         style: const TextStyle(fontSize: 16),
                       ),
                     ),
@@ -338,7 +360,7 @@ class _ProductionPageState extends State<ProductionPage> {
                     child: Chip(
                       backgroundColor: Colors.green,
                       label: Text(
-                        NumberFormat("R\$ #0.00", "PT-BR").format(proft),
+                        NumberFormat("R\$ #0.00", "PT-BR").format(valueProfit),
                         style: const TextStyle(fontSize: 16),
                       ),
                     ),

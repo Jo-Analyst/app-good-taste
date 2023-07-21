@@ -22,11 +22,11 @@ class DB {
         );
 
         db.execute(
-          'CREATE TABLE productions (id INTEGER PRIMARY KEY, quantity INTEGER NOT NULL, total_price REAL NOT NULL, date_production TEXT, flavor_id INTEGER, FOREIGN KEY (flavor_id) REFERENCES flavors(id) ON DELETE SET NULL)',
+          'CREATE TABLE productions (id INTEGER PRIMARY KEY, quantity INTEGER NOT NULL, value_entry REAL, value_leave REAL NOT NULL, value_profit REAL, price_product, date TEXT, flavor_id INTEGER, FOREIGN KEY (flavor_id) REFERENCES flavors(id) ON DELETE SET NULL)',
         );
 
         db.execute(
-          'CREATE TABLE items_productions (id INTEGER PRIMARY KEY, price REAL, feedstock_id INTEGER, production_id INTEGER, FOREIGN KEY (feedstock_id) REFERENCES feedstock(id) ON DELETE SET NULL, FOREIGN KEY (production_id) REFERENCES products(id) ON DELETE CASCADE)',
+          'CREATE TABLE items_productions (id INTEGER PRIMARY KEY, price_feedstock REAL, feedstock_id INTEGER, production_id INTEGER, FOREIGN KEY (feedstock_id) REFERENCES feedstock(id) ON DELETE SET NULL, FOREIGN KEY (production_id) REFERENCES production(id) ON DELETE CASCADE)',
         );
       },
       version: 1,

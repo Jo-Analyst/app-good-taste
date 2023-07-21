@@ -1,6 +1,8 @@
 import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
 import 'package:app_good_taste/app/controllers/flavor_controller.dart';
 import 'package:app_good_taste/app/controllers/product_controller.dart';
+import 'package:app_good_taste/app/controllers/production_controller.dart';
+import 'package:app_good_taste/app/models/items_production_model.dart';
 import 'package:flutter/material.dart';
 
 import 'app/config/db.dart';
@@ -10,20 +12,36 @@ import 'package:provider/provider.dart';
 
 void main() async {
   runApp(const AppGoodTaste());
+  final ProductionController productionController = ProductionController();
+  await productionController.save({
+    "id": 0,
+    "quantity": 10,
+    "date": "21-07-2023",
+    "flavor_id": 1,
+    "price_product": 1.5,
+    "value_entry": 15.0,
+    "value_leave": 4.35,
+    "value_profit": 10.65,
+  }, [
+    {"feedstock_id": 1, "price_feedstock": 18.9, "id": 0}
+  ]);
+
   final db = await DB.database();
-  await db.execute("DROP TABLE productions");
-  await db.execute("DROP TABLE items_productions");
+  print(await db.query("productions"));
 
-  db.execute(
-    'CREATE TABLE productions (id INTEGER PRIMARY KEY, quantity INTEGER NOT NULL, value_entry REAL, value_leave REAL NOT NULL, proft REAL, date_production TEXT, flavor_id INTEGER, FOREIGN KEY (flavor_id) REFERENCES flavors(id) ON DELETE SET NULL)',
-  );
+  // await db.execute("DROP TABLE productions");
+  // await db.execute("DROP TABLE items_productions");
 
-  db.execute(
-    'CREATE TABLE items_productions (id INTEGER PRIMARY KEY, price_feedstock REAL, price_product REAL, feedstock_id INTEGER, production_id INTEGER, FOREIGN KEY (feedstock_id) REFERENCES feedstock(id) ON DELETE SET NULL, FOREIGN KEY (production_id) REFERENCES production(id) ON DELETE CASCADE)',
-  );
-  print(await db.rawQuery("PRAGMA table_info(productions)"));
-  print("++++++++++++++++++++++++++++++++++++++++++++++++");
-  print(await db.rawQuery("PRAGMA table_info(items_productions)"));
+  // db.execute(
+  //   'CREATE TABLE productions (id INTEGER PRIMARY KEY, quantity INTEGER NOT NULL, value_entry REAL, value_leave REAL NOT NULL, value_profit REAL, price_product, date TEXT, flavor_id INTEGER, FOREIGN KEY (flavor_id) REFERENCES flavors(id) ON DELETE SET NULL)',
+  // );
+
+  // db.execute(
+  //   'CREATE TABLE items_productions (id INTEGER PRIMARY KEY, price_feedstock REAL, feedstock_id INTEGER, production_id INTEGER, FOREIGN KEY (feedstock_id) REFERENCES feedstock(id) ON DELETE SET NULL, FOREIGN KEY (production_id) REFERENCES production(id) ON DELETE CASCADE)',
+  // );
+  // print(await db.rawQuery("PRAGMA table_info(productions)"));
+  // print("++++++++++++++++++++++++++++++++++++++++++++++++");
+  // print(await db.rawQuery("PRAGMA table_info(items_productions)"));
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

@@ -26,14 +26,14 @@ class ProductController extends ChangeNotifier {
 
   Future<void> save(
       int id, String name, double price, List<FlavorModel> flavors) async {
-    final Map<String, dynamic> newProduct = {
-      "id": id,
-      "name": name,
-      "price": price,
-      "flavors": flavors,
-    };
+    // final Map<String, dynamic> newProduct = {
+    //   "id": id,
+    //   "name": name,
+    //   "price": price,
+    //   "flavors": flavors,
+    // };
 
-    _items.add(newProduct);
+    // _items.add(newProduct);
 
     await ProductModel.save(flavors, {
       "name": name,
