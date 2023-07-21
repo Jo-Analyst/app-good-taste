@@ -12,22 +12,7 @@ import 'package:provider/provider.dart';
 
 void main() async {
   runApp(const AppGoodTaste());
-  final ProductionController productionController = ProductionController();
-  await productionController.save({
-    "id": 0,
-    "quantity": 10,
-    "date": "21-07-2023",
-    "flavor_id": 1,
-    "price_product": 1.5,
-    "value_entry": 15.0,
-    "value_leave": 4.35,
-    "value_profit": 10.65,
-  }, [
-    {"feedstock_id": 1, "price_feedstock": 18.9, "id": 0}
-  ]);
-
-  final db = await DB.database();
-  print(await db.query("productions"));
+  // final db = await DB.database();
 
   // await db.execute("DROP TABLE productions");
   // await db.execute("DROP TABLE items_productions");
@@ -56,6 +41,7 @@ class AppGoodTaste extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => FlavorController()),
         ChangeNotifierProvider(create: (_) => ProductController()),
         ChangeNotifierProvider(create: (_) => FeedstockController()),
+        ChangeNotifierProvider(create: (_) => ProductionController()),
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,

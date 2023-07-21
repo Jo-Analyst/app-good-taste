@@ -83,8 +83,12 @@ class _ProductionPageState extends State<ProductionPage> {
 
   List<Map<String, dynamic>> getItemsProduction() {
     List<Map<String, dynamic>> list = [];
-    for(var listFeedstocks in listOfSelectedFeedstocks){
-      list
+    for (var listFeedstocks in listOfSelectedFeedstocks) {
+      list.add({
+        "id": listFeedstocks["id"],
+        "name": listFeedstocks["name"],
+        "price": listFeedstocks["price"]
+      });
     }
 
     return list;
@@ -153,6 +157,7 @@ class _ProductionPageState extends State<ProductionPage> {
                       listOfSelectedFeedstocks.isNotEmpty
                   ? () {
                       confirmProdution();
+                      Navigator.pop(context, true);
                     }
                   : null,
               icon: const Icon(
@@ -242,8 +247,7 @@ class _ProductionPageState extends State<ProductionPage> {
                       if (selectedRawMaterials != null) {
                         setState(() {
                           listOfSelectedFeedstocks.clear();
-                          listOfSelectedFeedstocks
-                              .addAll(selectedRawMaterials);
+                          listOfSelectedFeedstocks.addAll(selectedRawMaterials);
                         });
 
                         calculateLeave();

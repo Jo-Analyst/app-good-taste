@@ -1,12 +1,26 @@
+import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:app_good_taste/app/pages/all_productions_page.dart';
 import 'package:app_good_taste/app/pages/production_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/movement_details_template.dart';
+import 'package:provider/provider.dart';
 
 import '../template/slide_month.dart';
 
-class MovementDetailsPage extends StatelessWidget {
+class MovementDetailsPage extends StatefulWidget {
   const MovementDetailsPage({super.key});
+
+  @override
+  State<MovementDetailsPage> createState() => _MovementDetailsPageState();
+}
+
+class _MovementDetailsPageState extends State<MovementDetailsPage> {
+  loadProductions() async {
+    final productionController =
+        Provider.of<ProductionController>(context, listen: false);
+    await productionController.load();
+    print(productionController.items);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,9 +133,9 @@ class MovementDetailsPage extends StatelessWidget {
                               ),
                             ),
                           ],
-                          onSelected: (option) {
+                          onSelected: (option) async {
                             if (option == "production-of-the-day") {
-                              Navigator.push(
+                              final confirm = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => const ProductionPage(
@@ -129,6 +143,10 @@ class MovementDetailsPage extends StatelessWidget {
                                   ),
                                 ),
                               );
+
+                              if (confirm == true) {
+                                loadProductions();
+                              }
                             } else if (option == "all-productions") {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (_) => const AllProductionsPage()));

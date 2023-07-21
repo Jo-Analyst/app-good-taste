@@ -53,4 +53,9 @@ class ProductionModel {
       }
     });
   }
+
+  static Future<List<Map<String, dynamic>>> findAll() async {
+    final db = await DB.database();
+    return db.query("productions");
+  }
 }
