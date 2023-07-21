@@ -157,7 +157,7 @@ class _ProductionPageState extends State<ProductionPage> {
                       listOfSelectedFeedstocks.isNotEmpty
                   ? () {
                       confirmProdution();
-                      Navigator.pop(context, true);
+                      // Navigator.pop(context, true);
                     }
                   : null,
               icon: const Icon(

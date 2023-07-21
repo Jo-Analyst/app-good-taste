@@ -37,19 +37,19 @@ class ProductionModel {
 
     final db = await DB.database();
     await db.transaction((txn) async {
-      if (id == 0) {
-        lastInsertRowId = await txn.insert("productions", data);
-      } else {
-        await txn.update("productions", data, where: "id = ?", whereArgs: [id]);
-      }
-
+      // if (id == 0) {
+      //   lastInsertRowId = await txn.insert("productions", data);
+      // } else {
+      //   await txn.update("productions", data, where: "id = ?", whereArgs: [id]);
+      // }
       for (var itemsProduction in itemsProduction) {
+      print(itemsProduction);
         ItemsProductionModel(
-            feedstockId: itemsProduction["feedstock_id"],
-            priceFeedstock: itemsProduction["price_feedstock"],
-            id: itemsProduction["id"],
-            productionId: id == 0 ? lastInsertRowId : id);
-        ItemsProductionModel().save(txn);
+                id: itemsProduction["id"],
+                productionId: id == 0 ? lastInsertRowId : id,
+                priceFeedstock: itemsProduction["price_feedstock"],
+                feedstockId: itemsProduction["feedstock_id"])
+            .save(txn);
       }
     });
   }

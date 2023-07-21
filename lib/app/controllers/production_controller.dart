@@ -17,7 +17,7 @@ class ProductionController extends ChangeNotifier {
       priceProduct: data["price_product"],
       valueEntry: data["value_entry"],
       valueLeave: data["value_leave"],
-      valueProfit: data["value_prof"],
+      valueProfit: data["value_profit"],
     ).save(data["id"], itemsProduction);
 
     notifyListeners();

@@ -22,6 +22,7 @@ class ItemsProductionModel {
     };
     final db = await DB.database();
     await db.transaction((txn) async {
+      print(data);
       if (id == 0) {
         await txn.insert("items_productions", data);
       } else {
