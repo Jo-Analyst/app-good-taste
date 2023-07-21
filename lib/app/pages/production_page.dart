@@ -1,5 +1,5 @@
 import 'package:app_good_taste/app/controllers/product_controller.dart';
-import 'package:app_good_taste/app/pages/raw_material_page.dart';
+import 'package:app_good_taste/app/pages/feedstock_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -214,7 +214,7 @@ class _ProductionPageState extends State<ProductionPage> {
                         context,
                         MaterialPageRoute(
                           builder: (_) =>
-                              RawMaterialPage(listOfSelectedRawMaterials),
+                              FeedstockListPage(listOfSelectedRawMaterials),
                         ),
                       );
                       if (selectedRawMaterials != null) {

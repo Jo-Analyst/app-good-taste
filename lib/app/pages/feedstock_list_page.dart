@@ -1,94 +1,18 @@
+import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-class RawMaterialPage extends StatefulWidget {
+class FeedstockListPage extends StatefulWidget {
   final List<Map<String, dynamic>> listOfSelectedRawMaterials;
-  const RawMaterialPage(this.listOfSelectedRawMaterials, {super.key});
+  const FeedstockListPage(this.listOfSelectedRawMaterials, {super.key});
 
   @override
-  State<RawMaterialPage> createState() => _RawMaterialPageState();
+  State<FeedstockListPage> createState() => _FeedstockListPageState();
 }
 
-class _RawMaterialPageState extends State<RawMaterialPage> {
-  final List<Map<String, dynamic>> feedstocks = [
-    {
-      "id": 0,
-      "name": "Açucar",
-      "price": 19.50,
-      "brand": "",
-      "isChecked": false,
-    },
-    {
-      "id": 1,
-      "name": "Leite",
-      "price": 4,
-      "brand": "JV",
-      "isChecked": false,
-    },
-    {
-      "id": 2,
-      "name": "Leite",
-      "price": 4,
-      "brand": "JVC",
-      "isChecked": false,
-    },
-    {
-      "id": 3,
-      "name": "Leite",
-      "price": 3.50,
-      "brand": "ML",
-      "isChecked": false,
-    },
-    {
-      "id": 4,
-      "name": "Suco de morango",
-      "price": 1.35,
-      "brand": "TANG",
-      "isChecked": false,
-    },
-    {
-      "id": 5,
-      "name": "Suco de maracujá",
-      "price": 1.35,
-      "brand": "TANG",
-      "isChecked": false,
-    },
-    {
-      "id": 6,
-      "name": "Suco de baunilha com limão",
-      "price": 0.95,
-      "brand": "MID",
-      "isChecked": false,
-    },
-    {
-      "id": 7,
-      "name": "Suco de Abacaxi",
-      "price": 1.00,
-      "brand": "Torange",
-      "isChecked": false,
-    },
-    {
-      "id": 8,
-      "name": "Suco de Uva",
-      "price": 1.35,
-      "brand": "TANG",
-      "isChecked": false,
-    },
-    {
-      "id": 9,
-      "name": "Suco de Iorgute de Morango",
-      "price": .95,
-      "brand": "MID",
-      "isChecked": false,
-    },
-    {
-      "id": 10,
-      "name": "Suco de Iorgute de Maracujá",
-      "price": .95,
-      "brand": "MID",
-      "isChecked": false,
-    },
-  ];
+class _FeedstockListPageState extends State<FeedstockListPage> {
+  List<Map<String, dynamic>> feedstocks = [];
 
   List<Map<String, dynamic>> filteredFeedstocks = [];
 
@@ -96,7 +20,26 @@ class _RawMaterialPageState extends State<RawMaterialPage> {
   void initState() {
     super.initState();
     changeIsCheckedAttribute();
-    filteredFeedstocks = List.from(feedstocks);
+    loadFeedstock();
+  }
+
+  void loadFeedstock() async {
+    final feedstockProvider =
+        Provider.of<FeedstockController>(context, listen: false);
+    await feedstockProvider.loadFeedstock();
+    setState(() {
+      for (var item in feedstockProvider.items) {
+        feedstocks.add({
+          "id": item["id"],
+          "name": item["name"],
+          "price": item["price"],
+          "brand": item["brand"],
+          "isChecked": false,
+        });
+      }
+
+      filteredFeedstocks = List.from(feedstocks);
+    });
   }
 
   void changeIsCheckedAttribute() {
@@ -105,8 +48,8 @@ class _RawMaterialPageState extends State<RawMaterialPage> {
     for (var feedstock in feedstocks) {
       for (var list in widget.listOfSelectedRawMaterials) {
         if (list["id"] == feedstock["id"]) {
-          feedstock["isChecked"] = true;
           haveSelectedRawMaterial = true;
+          feedstock["isChecked"] = true;
         }
       }
     }

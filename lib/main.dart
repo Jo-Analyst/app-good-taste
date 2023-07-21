@@ -3,12 +3,27 @@ import 'package:app_good_taste/app/controllers/flavor_controller.dart';
 import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:flutter/material.dart';
 
+import 'app/config/db.dart';
 import 'app/pages/good_taste_page.dart';
 import 'app/route/routes.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   runApp(const AppGoodTaste());
+  final db = await DB.database();
+  await db.execute("DROP TABLE productions");
+  await db.execute("DROP TABLE items_productions");
+
+  db.execute(
+    'CREATE TABLE productions (id INTEGER PRIMARY KEY, quantity INTEGER NOT NULL, value_entry REAL, value_leave REAL NOT NULL, proft REAL, date_production TEXT, flavor_id INTEGER, FOREIGN KEY (flavor_id) REFERENCES flavors(id) ON DELETE SET NULL)',
+  );
+
+  db.execute(
+    'CREATE TABLE items_productions (id INTEGER PRIMARY KEY, price_feedstock REAL, price_product REAL, feedstock_id INTEGER, production_id INTEGER, FOREIGN KEY (feedstock_id) REFERENCES feedstock(id) ON DELETE SET NULL, FOREIGN KEY (production_id) REFERENCES production(id) ON DELETE CASCADE)',
+  );
+  print(await db.rawQuery("PRAGMA table_info(productions)"));
+  print("++++++++++++++++++++++++++++++++++++++++++++++++");
+  print(await db.rawQuery("PRAGMA table_info(items_productions)"));
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

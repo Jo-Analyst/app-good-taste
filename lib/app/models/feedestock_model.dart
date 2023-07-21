@@ -15,7 +15,7 @@ class FeedstockModel {
 
   static Future<List<Map<String, dynamic>>> findAll() async {
     final db = await DB.database();
-    return db.query("feedstocks");
+    return db.query("feedstocks", orderBy: "name asc");
   }
 
   Future<void> delete() async {
