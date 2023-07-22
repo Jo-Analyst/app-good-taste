@@ -99,7 +99,6 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
       appBar: AppBar(
         title: const Text(
           "Detalhes do dia",
-          style: TextStyle(fontSize: 25),
         ),
         toolbarHeight: 100,
         leading: IconButton(

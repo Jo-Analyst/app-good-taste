@@ -56,7 +56,6 @@ class _FeedstockPageState extends State<FeedstockPage> {
         ],
         title: const Text(
           "Gerenciar M. Prima",
-          style: TextStyle(fontSize: 25),
         ),
         backgroundColor: Theme.of(context).primaryColor,
         toolbarHeight: 100,

@@ -13,11 +13,11 @@ class ProductModel {
     this.price,
   });
 
-  static Future<List<Map<String, dynamic>>> findAllByParts() async {
+  static Future<List<Map<String, dynamic>>> findAllPartsByProductId(int productId) async {
     final db = await DB.database();
     const String query =
-        "SELECT flavors.type AS flavor, products.price FROM products INNER JOIN flavors ON flavors.product_id =  products.id ORDER BY flavors.type ASC";
-    return db.rawQuery(query);
+        "SELECT flavors.type AS flavor, products.price, flavors.id FROM products INNER JOIN flavors ON flavors.product_id =  products.id  WHERE products.id = ?  ORDER BY flavors.type ASC";
+    return db.rawQuery(query, [productId]);
   }
 
   static Future<List<Map<String, dynamic>>> findAll() async {

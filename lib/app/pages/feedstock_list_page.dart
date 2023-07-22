@@ -114,7 +114,6 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
         ],
         title: const Text(
           "Matéria Prima",
-          style: TextStyle(fontSize: 25),
         ),
         toolbarHeight: 100,
         leading: IconButton(

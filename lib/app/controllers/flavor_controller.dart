@@ -8,7 +8,7 @@ class FlavorController extends ChangeNotifier {
     return List<Map<String, dynamic>>.from(_items);
   }
 
-  Future<void> loadFlavors() async {
+  Future<void> load() async {
     final flavors = await FlavorModel.findAll();
     _items = List<Map<String, dynamic>>.from(flavors);
     notifyListeners();

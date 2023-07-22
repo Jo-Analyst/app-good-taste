@@ -30,7 +30,6 @@ class _SettingPageState extends State<SettingPage> {
       appBar: AppBar(
         title: const Text(
           "Configuração",
-          style: TextStyle(fontSize: 25),
         ),
         toolbarHeight: 100,
       ),

@@ -63,7 +63,6 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
       appBar: AppBar(
         title: const Text(
           "Detalhes das produções",
-          style: TextStyle(fontSize: 25),
         ),
         toolbarHeight: 100,
         leading: IconButton(

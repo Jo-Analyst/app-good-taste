@@ -1,12 +1,10 @@
-import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:app_good_taste/app/pages/feedstock_list_page.dart';
+import 'package:app_good_taste/app/pages/list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-import '../utils/drop_down.dart';
 
 class ProductionPage extends StatefulWidget {
   final Map<String, dynamic> production;
@@ -17,14 +15,21 @@ class ProductionPage extends StatefulWidget {
 }
 
 class _ProductionPageState extends State<ProductionPage> {
+  final productController = TextEditingController();
+  final flavorController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   List<Map<String, dynamic>> products = [];
+  bool productWasSelected = false;
 
   // entrada = 0, saida = 0, lucro = 0, quantidade = 0, preço
   double valueEntry = 0, valueLeave = 0, valueProfit = 0, price = 0;
 
   String? flavorSelect, flavorEditing = '';
-  int quantity = 0, productionId = 0, itemProductionId = 0;
+  int quantity = 0,
+      productionId = 0,
+      itemProductionId = 0,
+      productId = 0,
+      flavorId = 0;
 
   final List<String> flavors = [];
 
@@ -39,7 +44,6 @@ class _ProductionPageState extends State<ProductionPage> {
   @override
   void initState() {
     super.initState();
-    loadProducts();
 
     if (widget.production.isEmpty) return;
 
@@ -53,18 +57,6 @@ class _ProductionPageState extends State<ProductionPage> {
     calculateProfit();
   }
 
-  void loadProducts() async {
-    final productController =
-        Provider.of<ProductController>(context, listen: false);
-    await productController.loadingProductByParts();
-    setState(() {
-      products = productController.items;
-      for (var product in products) {
-        flavors.add(product["flavor"]);
-      }
-    });
-  }
-
   void confirmProdution() async {
     final productionProvider = Provider.of<ProductionController>(
       context,
@@ -74,7 +66,7 @@ class _ProductionPageState extends State<ProductionPage> {
       "id": productionId,
       "quantity": quantity,
       "date": DateFormat("dd/MM/yyyy").format(DateTime.now()),
-      "flavor_id": 1,
+      "flavor_id": flavorId,
       "price_product": price,
       "value_entry": valueEntry,
       "value_leave": valueLeave,
@@ -148,7 +140,6 @@ class _ProductionPageState extends State<ProductionPage> {
       appBar: AppBar(
         title: const Text(
           "Produção do dia",
-          style: TextStyle(fontSize: 25),
         ),
         actions: [
           Container(
@@ -190,18 +181,93 @@ class _ProductionPageState extends State<ProductionPage> {
               Form(
                 child: Column(
                   children: [
-                    DropDownUtils(flavors, "Sabor",
-                        indexFlavorEditing: getIndexListFlavors(flavorEditing!),
-                        onValueChanged: (selectedIndex) {
-                      flavorSelect = products[selectedIndex]["flavor"];
-                      setState(
-                        () {
-                          price = products[selectedIndex]["price"] as double;
-                        },
-                      );
-                      calculateInputValue();
-                      calculateProfit();
-                    }),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: productController,
+                            enabled: false,
+                            decoration: InputDecoration(
+                              labelText: "Produto",
+                              labelStyle: const TextStyle(fontSize: 18),
+                              floatingLabelStyle: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        IconButton(
+                          onPressed: () async {
+                            final data = await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const ListPage(
+                                  labelText: "Produtos",
+                                ),
+                              ),
+                            );
+
+                            if (data != null) {
+                              productId = data["id"];
+                              productController.text = data["name"];
+                              setState(() {
+                                productWasSelected = true;
+                              });
+                            }
+                          },
+                          icon: Icon(
+                            Icons.select_all_sharp,
+                            size: 40,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            controller: flavorController,
+                            enabled: false,
+                            decoration: InputDecoration(
+                              labelText: "Sabor",
+                              labelStyle: const TextStyle(fontSize: 18),
+                              floatingLabelStyle: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        IconButton(
+                          onPressed: !productWasSelected
+                              ? null
+                              : () async {
+                                  final data = await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => ListPage(
+                                        labelText: "Sabores",
+                                        productId: productId,
+                                      ),
+                                    ),
+                                  );
+
+                                  if (data != null) {
+                                    flavorId = data["id"];
+                                    flavorController.text = data["type"];
+                                    price = data["price"];
+                                  }
+                                },
+                          icon: Icon(
+                            Icons.select_all_sharp,
+                            size: 40,
+                            color: productController.text.isEmpty
+                                ? Colors.black12
+                                : Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ],
+                    ),
                     const Divider(),
                     TextFormField(
                       keyboardType: TextInputType.number,

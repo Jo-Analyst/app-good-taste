@@ -180,7 +180,6 @@ class _ProductFormPageState extends State<ProductFormPage> {
         appBar: AppBar(
           title: const Text(
             "Meu Produto",
-            style: TextStyle(fontSize: 25),
           ),
           leading: IconButton(
             onPressed: () {

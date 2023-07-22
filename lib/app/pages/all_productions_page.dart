@@ -35,7 +35,6 @@ class AllProductionsPage extends StatelessWidget {
         ),
         title: const Text(
           "Todas as produções",
-          style: TextStyle(fontSize: 25),
         ),
         toolbarHeight: 100,
       ),

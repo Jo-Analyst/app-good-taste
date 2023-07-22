@@ -42,7 +42,7 @@ class _ProductPageState extends State<ProductPage> {
   Future<void> loadProducts() async {
     final productProvider =
         Provider.of<ProductController>(context, listen: false);
-    await productProvider.loadProducts();
+    await productProvider.load();
     setState(() {
       products = productProvider.items;
       setListCardTriggered();
@@ -53,7 +53,7 @@ class _ProductPageState extends State<ProductPage> {
   Future<void> loadFlavors() async {
     final flavorsProvider =
         Provider.of<FlavorController>(context, listen: false);
-    await flavorsProvider.loadFlavors();
+    await flavorsProvider.load();
     setState(() {
       flavors = flavorsProvider.items;
     });
@@ -89,7 +89,6 @@ class _ProductPageState extends State<ProductPage> {
         ],
         title: const Text(
           "Gerenciar Produtos",
-          style: TextStyle(fontSize: 25),
         ),
         backgroundColor: Theme.of(context).primaryColor,
         toolbarHeight: 100,
