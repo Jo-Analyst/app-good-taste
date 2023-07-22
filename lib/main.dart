@@ -4,19 +4,12 @@ import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:flutter/material.dart';
 
-import 'app/config/db.dart';
 import 'app/pages/good_taste_page.dart';
 import 'app/route/routes.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   runApp(const AppGoodTaste());
-  final db = await DB.database();
-
-  
-  print(await db.query("productions"));
-  print("++++++++++++++++++++++++++++++++++++++++++++++++");
-  print(await db.query("items_productions"));
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

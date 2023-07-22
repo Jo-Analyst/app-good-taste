@@ -37,18 +37,17 @@ class ProductionModel {
 
     final db = await DB.database();
     await db.transaction((txn) async {
-      // if (id == 0) {
-      //   lastInsertRowId = await txn.insert("productions", data);
-      // } else {
-      //   await txn.update("productions", data, where: "id = ?", whereArgs: [id]);
-      // }
-      for (var itemsProduction in itemsProduction) {
-      print(itemsProduction);
-        ItemsProductionModel(
-                id: itemsProduction["id"],
+      if (id == 0) {
+        lastInsertRowId = await txn.insert("productions", data);
+      } else {
+        await txn.update("productions", data, where: "id = ?", whereArgs: [id]);
+      }
+      for (var items in itemsProduction) {
+        await ItemsProductionModel(
+                id: items["item_product_id"],
                 productionId: id == 0 ? lastInsertRowId : id,
-                priceFeedstock: itemsProduction["price_feedstock"],
-                feedstockId: itemsProduction["feedstock_id"])
+                priceFeedstock: items["price_feedstock"],
+                feedstockId: items["feedstock_id"])
             .save(txn);
       }
     });

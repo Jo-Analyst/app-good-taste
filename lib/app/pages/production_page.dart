@@ -24,7 +24,7 @@ class _ProductionPageState extends State<ProductionPage> {
   double valueEntry = 0, valueLeave = 0, valueProfit = 0, price = 0;
 
   String? flavorSelect, flavorEditing = '';
-  int quantity = 0, productionId = 0;
+  int quantity = 0, productionId = 0, itemProductionId = 0;
 
   final List<String> flavors = [];
 
@@ -49,6 +49,7 @@ class _ProductionPageState extends State<ProductionPage> {
     flavorSelect = flavors[getIndexListFlavors(flavorEditing!)];
     price = widget.production["price"];
     productionId = widget.production["id"];
+    // itemProductionId = widget.itemProductionId["id"];
     calculateProfit();
   }
 
@@ -85,9 +86,10 @@ class _ProductionPageState extends State<ProductionPage> {
     List<Map<String, dynamic>> list = [];
     for (var listFeedstocks in listOfSelectedFeedstocks) {
       list.add({
-        "id": listFeedstocks["id"],
-        "name": listFeedstocks["name"],
-        "price": listFeedstocks["price"]
+        "item_product_id": itemProductionId,
+        "feedstock_id": listFeedstocks["id"],
+        "price_feedstock": listFeedstocks["price"],
+        "production_id": productionId,
       });
     }
 

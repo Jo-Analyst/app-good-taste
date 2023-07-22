@@ -19,7 +19,6 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
     final productionController =
         Provider.of<ProductionController>(context, listen: false);
     await productionController.load();
-    print(productionController.items);
   }
 
   @override
