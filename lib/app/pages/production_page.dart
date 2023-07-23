@@ -221,6 +221,7 @@ class _ProductionPageState extends State<ProductionPage> {
                         const SizedBox(width: 5),
                         IconButton(
                           onPressed: () async {
+                            FocusScope.of(context).unfocus();
                             final data = await Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => const ListPage(
@@ -271,6 +272,7 @@ class _ProductionPageState extends State<ProductionPage> {
                           onPressed: !productWasSelected
                               ? null
                               : () async {
+                                FocusScope.of(context).unfocus();
                                   final data = await Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (_) => ListPage(
@@ -338,6 +340,7 @@ class _ProductionPageState extends State<ProductionPage> {
                   ),
                   IconButton(
                     onPressed: () async {
+                      FocusScope.of(context).unfocus();
                       dynamic selectedFeedstocks = await Navigator.push(
                         context,
                         MaterialPageRoute(

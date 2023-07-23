@@ -17,6 +17,7 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
   List<Map<String, dynamic>> data = [];
+  List<Map<String, dynamic>> filteredData = [];
   late dynamic dataSelected;
   bool dataWasSelected = false;
 
@@ -27,18 +28,18 @@ class _ListPageState extends State<ListPage> {
   }
 
   void selectData(int index) {
-    for (var data in data) {
+    for (var data in filteredData) {
       data["data_selected"] = false;
     }
     setState(() {
-      data[index]["data_selected"] = true;
+      filteredData[index]["data_selected"] = true;
       dataWasSelected = true;
       dataSelected = widget.labelText == "Produtos"
-          ? {"name": data[index]["name"], "id": data[index]["id"]}
+          ? {"name": filteredData[index]["name"], "id": filteredData[index]["id"]}
           : {
-              "type": data[index]["type"],
-              "id": data[index]["id"],
-              "price": data[index]["price"]
+              "type": filteredData[index]["type"],
+              "id": filteredData[index]["id"],
+              "price": filteredData[index]["price"]
             };
     });
   }
@@ -71,6 +72,25 @@ class _ListPageState extends State<ListPage> {
                 "data_selected": false,
               });
       }
+
+      filteredData = List.from(data);
+    });
+  }
+
+  void searchForData(String searchText) {
+    String nameColumn = widget.labelText == "Produtos" ? "name" : "type";
+    setState(() {
+      if (searchText.isEmpty) {
+        filteredData = List.from(data);
+      } else {
+        filteredData = data
+            .where((item) => item[nameColumn]
+                .toString()
+                .trim()
+                .toLowerCase()
+                .contains(searchText.trim().toLowerCase()))
+            .toList();
+      }
     });
   }
 
@@ -86,6 +106,7 @@ class _ListPageState extends State<ListPage> {
             child: IconButton(
               onPressed: dataWasSelected
                   ? () {
+                      FocusScope.of(context).unfocus();
                       Navigator.pop(context, dataSelected);
                     }
                   : null,
@@ -97,7 +118,10 @@ class _ListPageState extends State<ListPage> {
           ),
         ],
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            Navigator.of(context).pop();
+          },
           icon: const Icon(
             Icons.close,
             size: 35,
@@ -127,37 +151,37 @@ class _ListPageState extends State<ListPage> {
                   suffixIcon: const Icon(Icons.search),
                   border: const OutlineInputBorder(),
                 ),
-                // onChanged: searchForRawMaterial,
+                onChanged: searchForData,
               ),
               const Divider(),
               Expanded(
                 child: ListView.builder(
-                  itemCount: data.length,
+                  itemCount: filteredData.length,
                   itemBuilder: (ctx, index) {
                     return Column(
                       children: [
                         Container(
-                          color: data[index]["data_selected"]
+                          color: filteredData[index]["data_selected"]
                               ? Theme.of(context).primaryColor
                               : const Color.fromARGB(255, 227, 226, 226),
                           child: ListTile(
                               onTap: () => selectData(index),
                               title: Text(
                                 widget.labelText == "Produtos"
-                                    ? data[index]["name"]
-                                    : data[index]["type"],
+                                    ? filteredData[index]["name"]
+                                    : filteredData[index]["type"],
                                 style: TextStyle(
-                                  color: data[index]["data_selected"]
+                                  color: filteredData[index]["data_selected"]
                                       ? Colors.white
                                       : Colors.black,
                                 ),
                               ),
                               leading: Icon(
-                                data[index]["data_selected"]
+                                filteredData[index]["data_selected"]
                                     ? Icons.check
                                     : Icons.shopify_sharp,
                                 size: 35,
-                                color: data[index]["data_selected"]
+                                color: filteredData[index]["data_selected"]
                                     ? Colors.white
                                     : Colors.black87,
                               )),
