@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../controllers/feedstock_controller.dart';
+
 class ProductionPage extends StatefulWidget {
   final Map<String, dynamic> production;
   const ProductionPage({required this.production, super.key});
@@ -18,13 +20,14 @@ class _ProductionPageState extends State<ProductionPage> {
   final productController = TextEditingController();
   final flavorController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  List<Map<String, dynamic>> products = [];
+  List<Map<String, dynamic>> products = [], feedstocks = [];
   bool productWasSelected = false;
 
   // entrada = 0, saida = 0, lucro = 0, quantidade = 0, preço
   double valueEntry = 0, valueLeave = 0, valueProfit = 0, price = 0;
 
   String? flavorSelect, flavorEditing = '';
+  String productText = "", flavorText = "";
   int quantity = 0,
       productionId = 0,
       itemProductionId = 0,
@@ -44,6 +47,7 @@ class _ProductionPageState extends State<ProductionPage> {
   @override
   void initState() {
     super.initState();
+    loadFeedstock();
 
     if (widget.production.isEmpty) return;
 
@@ -55,6 +59,23 @@ class _ProductionPageState extends State<ProductionPage> {
     productionId = widget.production["id"];
     // itemProductionId = widget.itemProductionId["id"];
     calculateProfit();
+  }
+
+  void loadFeedstock() async {
+    final feedstockProvider =
+        Provider.of<FeedstockController>(context, listen: false);
+    await feedstockProvider.loadFeedstock();
+    setState(() {
+      for (var item in feedstockProvider.items) {
+        feedstocks.add({
+          "id": item["id"],
+          "name": item["name"],
+          "price": item["price"],
+          "brand": item["brand"],
+          "isChecked": false,
+        });
+      }
+    });
   }
 
   void confirmProdution() async {
@@ -147,7 +168,9 @@ class _ProductionPageState extends State<ProductionPage> {
             child: IconButton(
               onPressed: quantity > 0 &&
                       flavorSelect != null &&
-                      listOfSelectedFeedstocks.isNotEmpty
+                      listOfSelectedFeedstocks.isNotEmpty &&
+                      productText.isNotEmpty &&
+                      flavorText.isNotEmpty
                   ? () {
                       confirmProdution();
                       Navigator.pop(context, true);
@@ -186,7 +209,10 @@ class _ProductionPageState extends State<ProductionPage> {
                         Expanded(
                           child: TextFormField(
                             controller: productController,
-                            enabled: false,
+                            readOnly: true,
+                            onChanged: (value) => setState(() {
+                              productText = value;
+                            }),
                             decoration: InputDecoration(
                               labelText: "Produto",
                               labelStyle: const TextStyle(fontSize: 18),
@@ -210,9 +236,16 @@ class _ProductionPageState extends State<ProductionPage> {
                             if (data != null) {
                               productId = data["id"];
                               productController.text = data["name"];
+                              productText = productController.text;
                               setState(() {
                                 productWasSelected = true;
+                                price = 0;
+                                valueEntry = 0;
                               });
+                              flavorController.text = "";
+                              flavorText = "";
+                              calculateInputValue();
+                              calculateProfit();
                             }
                           },
                           icon: Icon(
@@ -228,8 +261,11 @@ class _ProductionPageState extends State<ProductionPage> {
                         Expanded(
                           child: TextFormField(
                             controller: flavorController,
-                            enabled: false,
-                            decoration: InputDecoration(
+                            readOnly: true,
+                            onChanged: (value) => setState(() {
+                              flavorText = value;
+                            }),
+                            decoration: InputDecoration(fillColor: Colors.black,
                               labelText: "Sabor",
                               labelStyle: const TextStyle(fontSize: 18),
                               floatingLabelStyle: TextStyle(
@@ -253,15 +289,20 @@ class _ProductionPageState extends State<ProductionPage> {
                                   );
 
                                   if (data != null) {
-                                    flavorId = data["id"];
-                                    flavorController.text = data["type"];
-                                    price = data["price"];
+                                    setState(() {
+                                      flavorId = data["id"];
+                                      flavorController.text = data["type"];
+                                      flavorText = data["type"];
+                                      price = data["price"];
+                                    });
+                                    calculateInputValue();
+                                    calculateProfit();
                                   }
                                 },
                           icon: Icon(
                             Icons.select_all_sharp,
                             size: 40,
-                            color: productController.text.isEmpty
+                            color: productText.isEmpty
                                 ? Colors.black12
                                 : Theme.of(context).primaryColor,
                           ),
@@ -309,7 +350,7 @@ class _ProductionPageState extends State<ProductionPage> {
                         context,
                         MaterialPageRoute(
                           builder: (_) =>
-                              FeedstockListPage(listOfSelectedFeedstocks),
+                              FeedstockListPage(listOfSelectedFeedstocks, feedstocks),
                         ),
                       );
                       if (selectedRawMaterials != null) {

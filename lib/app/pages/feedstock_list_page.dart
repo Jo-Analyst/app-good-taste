@@ -1,55 +1,36 @@
-import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class FeedstockListPage extends StatefulWidget {
   final List<Map<String, dynamic>> listOfSelectedRawMaterials;
-  const FeedstockListPage(this.listOfSelectedRawMaterials, {super.key});
+  final List<Map<String, dynamic>> feedstocks;
+  const FeedstockListPage(this.listOfSelectedRawMaterials, this.feedstocks,
+      {super.key});
 
   @override
   State<FeedstockListPage> createState() => _FeedstockListPageState();
 }
 
 class _FeedstockListPageState extends State<FeedstockListPage> {
-  List<Map<String, dynamic>> feedstocks = [];
-
   List<Map<String, dynamic>> filteredFeedstocks = [];
 
   @override
   void initState() {
     super.initState();
     changeIsCheckedAttribute();
-    loadFeedstock();
-  }
-
-  void loadFeedstock() async {
-    final feedstockProvider =
-        Provider.of<FeedstockController>(context, listen: false);
-    await feedstockProvider.loadFeedstock();
-    setState(() {
-      for (var item in feedstockProvider.items) {
-        feedstocks.add({
-          "id": item["id"],
-          "name": item["name"],
-          "price": item["price"],
-          "brand": item["brand"],
-          "isChecked": false,
-        });
-      }
-
-      filteredFeedstocks = List.from(feedstocks);
-    });
+    filteredFeedstocks = List.from(widget.feedstocks);
   }
 
   void changeIsCheckedAttribute() {
     if (widget.listOfSelectedRawMaterials.isEmpty) return;
 
-    for (var feedstock in feedstocks) {
+    for (var feedstock in widget.feedstocks) {
       for (var list in widget.listOfSelectedRawMaterials) {
         if (list["id"] == feedstock["id"]) {
-          haveSelectedRawMaterial = true;
-          feedstock["isChecked"] = true;
+          setState(() {
+            haveSelectedRawMaterial = true;
+            feedstock["isChecked"] = true;
+          });
         }
       }
     }
@@ -66,9 +47,9 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
   void searchForRawMaterial(String searchText) {
     setState(() {
       if (searchText.isEmpty) {
-        filteredFeedstocks = List.from(feedstocks);
+        filteredFeedstocks = List.from(widget.feedstocks);
       } else {
-        filteredFeedstocks = feedstocks
+        filteredFeedstocks = widget.feedstocks
             .where((item) => item['name']
                 .toString()
                 .trim()
@@ -83,7 +64,7 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
 
   void checkIfThereIsRawMaterialSelected() {
     List<Map<String, dynamic>> filteredFeedstocks =
-        feedstocks.where((feedstock) {
+        widget.feedstocks.where((feedstock) {
       return feedstock["isChecked"] == true;
     }).toList();
 
