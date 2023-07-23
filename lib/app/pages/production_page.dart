@@ -167,7 +167,6 @@ class _ProductionPageState extends State<ProductionPage> {
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
               onPressed: quantity > 0 &&
-                      flavorSelect != null &&
                       listOfSelectedFeedstocks.isNotEmpty &&
                       productText.isNotEmpty &&
                       flavorText.isNotEmpty
@@ -210,9 +209,6 @@ class _ProductionPageState extends State<ProductionPage> {
                           child: TextFormField(
                             controller: productController,
                             readOnly: true,
-                            onChanged: (value) => setState(() {
-                              productText = value;
-                            }),
                             decoration: InputDecoration(
                               labelText: "Produto",
                               labelStyle: const TextStyle(fontSize: 18),
@@ -234,18 +230,16 @@ class _ProductionPageState extends State<ProductionPage> {
                             );
 
                             if (data != null) {
-                              productId = data["id"];
                               productController.text = data["name"];
-                              productText = productController.text;
                               setState(() {
+                                productId = data["id"];
+                                productText = productController.text;
                                 productWasSelected = true;
                                 price = 0;
                                 valueEntry = 0;
                               });
                               flavorController.text = "";
                               flavorText = "";
-                              calculateInputValue();
-                              calculateProfit();
                             }
                           },
                           icon: Icon(
@@ -262,10 +256,8 @@ class _ProductionPageState extends State<ProductionPage> {
                           child: TextFormField(
                             controller: flavorController,
                             readOnly: true,
-                            onChanged: (value) => setState(() {
-                              flavorText = value;
-                            }),
-                            decoration: InputDecoration(fillColor: Colors.black,
+                            decoration: InputDecoration(
+                              fillColor: Colors.black,
                               labelText: "Sabor",
                               labelStyle: const TextStyle(fontSize: 18),
                               floatingLabelStyle: TextStyle(
@@ -346,17 +338,20 @@ class _ProductionPageState extends State<ProductionPage> {
                   ),
                   IconButton(
                     onPressed: () async {
-                      dynamic selectedRawMaterials = await Navigator.push(
+                      dynamic selectedFeedstocks = await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) =>
-                              FeedstockListPage(listOfSelectedFeedstocks, feedstocks),
+                          builder: (_) => FeedstockListPage(
+                              listOfSelectedFeedstocks, feedstocks),
                         ),
                       );
-                      if (selectedRawMaterials != null) {
+                      if (selectedFeedstocks != null) {
                         setState(() {
                           listOfSelectedFeedstocks.clear();
-                          listOfSelectedFeedstocks.addAll(selectedRawMaterials);
+                          listOfSelectedFeedstocks.addAll(selectedFeedstocks);
+                          for (var feedstock in feedstocks) {
+                            feedstock["isChecked"] = false;
+                          }
                         });
 
                         calculateLeave();
