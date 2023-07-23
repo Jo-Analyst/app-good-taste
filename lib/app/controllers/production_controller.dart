@@ -28,4 +28,33 @@ class ProductionController extends ChangeNotifier {
     _items = List<Map<String, dynamic>>.from(flavors);
     notifyListeners();
   }
+
+  static Future<List<Map<String, dynamic>>> getSumQuantityAndValueEntry(
+      String month) async {
+        // /07/
+    return await ProductionModel.getSumQuantityAndValueEntry(month);
+  }
+
+  static Future<List<Map<String, dynamic>>> getSumPriceFeedstockAndCountFeedstockAndValueLeave(
+      String month) async {
+        // /07/
+    return await ProductionModel.getSumPriceFeedstockAndCountFeedstockAndValueLeave(month);
+  }
+  static Future<List<Map<String, dynamic>>> getSumValueProfit(
+      String month) async {
+        // /07/
+    return await ProductionModel.getSumValueProfit(month);
+  }
+
+  static Future<List<Map<String, dynamic>>> getSumValueEntry(
+      String month) async {
+        // /07/
+    return await ProductionModel.getSumValueEntry(month);
+  }
+
+  static Future<List<Map<String, dynamic>>> getSumValueLeave(
+      String month) async {
+        // /07/
+    return await ProductionModel.getSumValueLeave(month);
+  }
 }
