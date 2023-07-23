@@ -56,8 +56,13 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                   child: Column(
                     children: [
                       MovementDetailsTemplate(
-                          price: 150, description: "Entrada"),
-                      MovementDetailsTemplate(price: 50, description: "Saida"),
+                        price: 150,
+                        description: "Entrada",
+                      ),
+                      MovementDetailsTemplate(
+                        price: 50,
+                        description: "Saida",
+                      ),
                     ],
                   ),
                 )

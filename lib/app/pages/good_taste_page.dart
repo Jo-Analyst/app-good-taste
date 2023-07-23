@@ -6,14 +6,14 @@ import 'package:app_good_taste/app/pages/product_page.dart';
 
 import '../template/bottom_navigation_bar_item.dart';
 
-class GoodTastPage extends StatefulWidget {
-  const GoodTastPage({super.key});
+class GoodTastePage extends StatefulWidget {
+  const GoodTastePage({super.key});
 
   @override
-  State<GoodTastPage> createState() => _GoodTastPageState();
+  State<GoodTastePage> createState() => _GoodTastPageState();
 }
 
-class _GoodTastPageState extends State<GoodTastPage> {
+class _GoodTastPageState extends State<GoodTastePage> {
   int _currentIndex = 0;
   late PageController _pageController;
 

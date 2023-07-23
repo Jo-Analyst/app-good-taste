@@ -51,7 +51,7 @@ class AppGoodTaste extends StatelessWidget {
           ),
         ),
         routes: {
-          AppRoutes.home: (ctx) => const GoodTastPage(),
+          AppRoutes.home: (ctx) => const GoodTastePage(),
         },
       ),
     );
