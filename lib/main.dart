@@ -13,20 +13,6 @@ import 'package:provider/provider.dart';
 
 void main() async {
   runApp(const AppGoodTaste());
-  // List<String> dateCurrent;
-  // initializeDateFormatting('pt_BR', null).then((_) {
-  //   DateTime date = DateTime.now();
-  //   dateCurrent = DateFormat("dd/MM/yyyy", "pt-br").format(date).split("/");
-  //   // print(dateCurrent);
-  // });
-  final db = await DB.database();
-  // await db.update("productions", {"date": "27/06/2023"}, where: "id = ?", whereArgs: [2]);
-  // print(await db.query("productions"));
-  // print(await db.rawQuery(
-  //     "SELECT SUM(productions.quantity), SUM(productions.value_entry), flavors.type FROM productions INNER JOIN flavors ON productions.flavor_id = flavors.id GROUP BY flavors.type"));
-  // print("____________");
-  print(await db.rawQuery(
-      "SELECT productions.id, productions.date, productions.quantity, productions.value_entry, feedstocks.name FROM productions INNER JOIN feedstocks ON productions.flavor_id = flavors.id "));
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
