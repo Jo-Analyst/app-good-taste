@@ -1,11 +1,8 @@
-import 'package:app_good_taste/app/config/db.dart';
 import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
 import 'package:app_good_taste/app/controllers/flavor_controller.dart';
 import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 
 import 'app/pages/good_taste_page.dart';
 import 'app/route/routes.dart';
