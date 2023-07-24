@@ -1,7 +1,7 @@
 import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
+import 'package:app_good_taste/app/template/dialog_feedstock.dart';
 import 'package:app_good_taste/app/template/feedstock_form.dart';
 import 'package:flutter/material.dart';
-import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:app_good_taste/app/template/feedstock_list.dart';
 import 'package:provider/provider.dart';
 
@@ -38,12 +38,14 @@ class _FeedstockPageState extends State<FeedstockPage> {
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
               onPressed: () async {
-                final result = await showModal(
+                final result = await showExitDialogFeedstock(
                   context,
-                  const Feedstock(feedstockItem: {}),
+                  const Feedstock(
+                    feedstockItem: {},
+                  ),
                 );
 
-                if (result == "true") {
+                if (result == true) {
                   loadProducts();
                 }
               },

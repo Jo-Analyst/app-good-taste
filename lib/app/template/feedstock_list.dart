@@ -3,9 +3,10 @@ import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/template/feedstock_form.dart';
 import 'package:app_good_taste/app/utils/message_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import 'dialog_feedstock.dart';
 
 class FeedstockList extends StatelessWidget {
   final Map<String, dynamic> feedstockItem;
@@ -50,12 +51,12 @@ class FeedstockList extends StatelessWidget {
           children: [
             IconButton(
               onPressed: () async {
-                final confirmEdit = await showModal(
+                final confirmEdit = await showExitDialogFeedstock(
                   context,
                   Feedstock(feedstockItem: feedstockItem),
                 );
 
-                if (confirmEdit == "true") {
+                if (confirmEdit == true) {
                   onConfirmAction(true);
                 }
               },
