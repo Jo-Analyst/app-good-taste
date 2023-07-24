@@ -22,6 +22,7 @@ class _ProductionPageState extends State<ProductionPage> {
   final formKey = GlobalKey<FormState>();
   List<Map<String, dynamic>> products = [], feedstocks = [];
   bool productWasSelected = false;
+  DateTime dateSelected = DateTime.now();
 
   // entrada = 0, saida = 0, lucro = 0, quantidade = 0, preço
   double valueEntry = 0, valueLeave = 0, valueProfit = 0, price = 0;
@@ -83,10 +84,13 @@ class _ProductionPageState extends State<ProductionPage> {
       context,
       listen: false,
     );
+
+    print(DateFormat("dd/MM/yyyy").format(dateSelected));
+    
     await productionProvider.save({
       "id": productionId,
       "quantity": quantity,
-      "date": DateFormat("dd/MM/yyyy").format(DateTime.now()),
+      "date": DateFormat("dd/MM/yyyy").format(dateSelected),
       "flavor_id": flavorId,
       "price_product": price,
       "value_entry": valueEntry,
@@ -155,6 +159,15 @@ class _ProductionPageState extends State<ProductionPage> {
     });
   }
 
+  showCalendarPicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2023),
+      lastDate: DateTime.now(),
+    ).then((date) => setState(() => dateSelected = date!));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,6 +218,28 @@ class _ProductionPageState extends State<ProductionPage> {
                 Form(
                   child: Column(
                     children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              DateFormat("dd 'de' MMMM yyyy", "pt-br")
+                                  .format(dateSelected),
+                              style: const TextStyle(fontSize: 19),
+                            ),
+                            IconButton(
+                              onPressed: () => showCalendarPicker(),
+                              icon: Icon(
+                                Icons.calendar_month_sharp,
+                                color: Theme.of(context).primaryColor,
+                                size: 35,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Row(
                         children: [
                           Expanded(
@@ -380,7 +415,7 @@ class _ProductionPageState extends State<ProductionPage> {
                 ),
                 listOfSelectedFeedstocks.isEmpty
                     ? const SizedBox(
-                        height: 225,
+                        height: 180,
                         child: Center(
                           child: Text(
                             "Não há matéria prima adicionada.",
@@ -388,7 +423,7 @@ class _ProductionPageState extends State<ProductionPage> {
                           ),
                         ))
                     : SizedBox(
-                        height: 225,
+                        height: 180,
                         child: ListView.builder(
                           itemCount: listOfSelectedFeedstocks.length,
                           itemBuilder: (context, index) {

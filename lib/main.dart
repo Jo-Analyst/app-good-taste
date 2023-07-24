@@ -3,12 +3,14 @@ import 'package:app_good_taste/app/controllers/flavor_controller.dart';
 import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'app/pages/good_taste_page.dart';
 import 'app/route/routes.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  initializeDateFormatting('pt_BR', null);
   runApp(const AppGoodTaste());
 }
 
