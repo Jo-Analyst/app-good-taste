@@ -85,8 +85,6 @@ class _ProductionPageState extends State<ProductionPage> {
       listen: false,
     );
 
-    print(DateFormat("dd/MM/yyyy").format(dateSelected));
-    
     await productionProvider.save({
       "id": productionId,
       "quantity": quantity,
@@ -164,8 +162,14 @@ class _ProductionPageState extends State<ProductionPage> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2023),
-      lastDate: DateTime.now(),
-    ).then((date) => setState(() => dateSelected = date!));
+      lastDate: DateTime(2023, 12, 31),
+    ).then(
+      (date) => setState(() {
+        if (date != null) {
+          dateSelected = date;
+        }
+      }),
+    );
   }
 
   @override
@@ -218,28 +222,6 @@ class _ProductionPageState extends State<ProductionPage> {
                 Form(
                   child: Column(
                     children: [
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              DateFormat("dd 'de' MMMM yyyy", "pt-br")
-                                  .format(dateSelected),
-                              style: const TextStyle(fontSize: 19),
-                            ),
-                            IconButton(
-                              onPressed: () => showCalendarPicker(),
-                              icon: Icon(
-                                Icons.calendar_month_sharp,
-                                color: Theme.of(context).primaryColor,
-                                size: 35,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                       Row(
                         children: [
                           Expanded(
@@ -342,26 +324,47 @@ class _ProductionPageState extends State<ProductionPage> {
                         ],
                       ),
                       const Divider(),
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        textInputAction: TextInputAction.next,
-                        onChanged: (value) {
-                          setState(() {
-                            quantity = value != "" ? int.parse(value) : 0;
-                          });
-                          calculateInputValue();
-                          calculateProfit();
-                        },
-                        decoration: InputDecoration(
-                          labelText: "Quantidade",
-                          labelStyle: const TextStyle(fontSize: 18),
-                          floatingLabelStyle: TextStyle(
-                            color: Theme.of(context).primaryColor,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Flexible(
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              textInputAction: TextInputAction.next,
+                              onChanged: (value) {
+                                setState(() {
+                                  quantity = value != "" ? int.parse(value) : 0;
+                                });
+                                calculateInputValue();
+                                calculateProfit();
+                              },
+                              decoration: InputDecoration(
+                                labelText: "Quantidade",
+                                labelStyle: const TextStyle(fontSize: 18),
+                                floatingLabelStyle: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                          Text(
+                            DateFormat("dd 'de' MMMM 'de' yyyy", "pt-br")
+                                .format(dateSelected),
+                            style: const TextStyle(fontSize: 19),
+                          ),
+                          IconButton(
+                            onPressed: () => showCalendarPicker(),
+                            icon: Icon(
+                              Icons.calendar_month_sharp,
+                              color: Theme.of(context).primaryColor,
+                              size: 35,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -415,7 +418,7 @@ class _ProductionPageState extends State<ProductionPage> {
                 ),
                 listOfSelectedFeedstocks.isEmpty
                     ? const SizedBox(
-                        height: 180,
+                        height: 225,
                         child: Center(
                           child: Text(
                             "Não há matéria prima adicionada.",
@@ -423,7 +426,7 @@ class _ProductionPageState extends State<ProductionPage> {
                           ),
                         ))
                     : SizedBox(
-                        height: 180,
+                        height: 225,
                         child: ListView.builder(
                           itemCount: listOfSelectedFeedstocks.length,
                           itemBuilder: (context, index) {

@@ -23,6 +23,7 @@ class FeedstockController with ChangeNotifier {
       name: data["name"],
       brand: data["brand"],
       price: data["price"],
+      unit: data["unit"],
     ).save();
     notifyListeners();
   }

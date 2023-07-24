@@ -4,6 +4,7 @@ import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'app/pages/good_taste_page.dart';
 import 'app/route/routes.dart';
@@ -29,6 +30,15 @@ class AppGoodTaste extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProductionController()),
       ],
       child: MaterialApp(
+        //    locale: const Locale('pt', 'BR'),
+        // supportedLocales: const [
+        //    Locale('pt', 'BR'),
+        //   // Outros idiomas suportados, se necessário
+        // ],
+        // localizationsDelegates: const [
+        //   GlobalMaterialLocalizations.delegate,
+        //   GlobalWidgetsLocalizations.delegate,
+        // ],
         navigatorKey: navigatorKey,
         title: "APP - Good Taste",
         debugShowCheckedModeBanner: false,

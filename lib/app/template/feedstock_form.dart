@@ -17,6 +17,7 @@ class _FeedstockState extends State<Feedstock> {
   final _name = TextEditingController();
   final _price = TextEditingController();
   final _brand = TextEditingController();
+  final _unit = TextEditingController();
   int _id = 0;
 
   @override
@@ -27,6 +28,7 @@ class _FeedstockState extends State<Feedstock> {
     _id = widget.feedstockItem["id"];
     _name.text = widget.feedstockItem["name"];
     _brand.text = widget.feedstockItem["brand"];
+    _unit.text = widget.feedstockItem["unit"].toString();
     _price.text =
         NumberFormat("#0.00", "PT-BR").format(widget.feedstockItem["price"]);
   }
@@ -39,6 +41,7 @@ class _FeedstockState extends State<Feedstock> {
         "id": _id,
         "name": _name.text.trim(),
         "brand": _brand.text.trim(),
+        "unit": _unit.text.trim().toLowerCase(),
         "price": double.parse(_price.text.replaceAll(RegExp(r','), '.')),
       });
 
@@ -128,6 +131,32 @@ class _FeedstockState extends State<Feedstock> {
                               price.replaceAll(RegExp(r','), '.')) <=
                           0) {
                         return "Este não um valor válido";
+                      }
+
+                      return null;
+                    },
+                    onFieldSubmitted: (_) => save(),
+                  ),
+                  TextFormField(
+                    keyboardType: TextInputType.text,
+                    // textCapitalization: TextCapitalization.characters,
+                    controller: _unit,
+                    decoration: InputDecoration(
+                      labelText: "Unidade/Embalagem",
+                      hoverColor: Colors.black87,
+                      floatingLabelStyle: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
+                    validator: (unidade) {
+                      if (unidade!.isEmpty) {
+                        return "Informe a Unidade/Embalagem!";
                       }
 
                       return null;

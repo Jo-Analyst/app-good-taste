@@ -139,7 +139,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                       ),
                       MovementDetailsTemplate(
                         price: valueLeave,
-                        description: "Saida",
+                        description: "Saída",
                         items: itemsLeave,
                       ),
                     ],

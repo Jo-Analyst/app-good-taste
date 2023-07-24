@@ -95,7 +95,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                             final name = widget.items[index]['name'];
                             final price = widget.items[index]['price'];
                             final quantity = widget.items[index]['quantity'];
-
+                            final unit = widget.items[index]["unit"];
                             return Container(
                               width: double.infinity,
                               color: const Color.fromARGB(255, 217, 215, 215),
@@ -109,7 +109,9 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                                         horizontal: 10,
                                       ),
                                       child: Text(
-                                        "${quantity}x $name ${NumberFormat('R\$#0.00', 'PT-BT').format(price)}",
+                                        widget.description == "Saída"
+                                            ? "$quantity $unit de $name - ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}"
+                                            : "$quantity chup-chup de $name - ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}",
                                       ),
                                     ),
                                   ),
@@ -126,6 +128,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                             final name = item['name'];
                             final price = item['price'];
                             final quantity = item['quantity'];
+                            final unit = item["unit"];
 
                             return Container(
                               width: double.infinity,
@@ -140,7 +143,9 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                                         horizontal: 10,
                                       ),
                                       child: Text(
-                                        "${quantity}x $name ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}",
+                                        widget.description == "Saída"
+                                            ? "$quantity $unit de $name - ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}"
+                                            : "$quantity chup-chup de $name - ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}",
                                       ),
                                     ),
                                   ),

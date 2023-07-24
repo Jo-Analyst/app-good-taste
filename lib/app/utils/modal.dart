@@ -4,7 +4,10 @@ Future<String> showModal(BuildContext context, dynamic screenForm) async {
   final result = await showModalBottomSheet(
     context: context,
     builder: (_) {
-      return screenForm;
+      return SizedBox(
+        height: 900,
+        child: screenForm,
+      );
     },
   );
 

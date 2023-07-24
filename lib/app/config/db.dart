@@ -12,7 +12,7 @@ class DB {
         // raw_materials - matérias-primas
 
         db.execute(
-          "CREATE TABLE feedstocks (id INTEGER PRIMARY KEY, name TEXT NOT NULL, brand TEXT NULL, price REAL NOT NULL)",
+          "CREATE TABLE feedstocks (id INTEGER PRIMARY KEY, name TEXT NOT NULL, brand TEXT NULL, price REAL NOT NULL, unit TEXT NOT NULL)",
         );
         db.execute(
           'CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT NOT NULL, price REAL)',
