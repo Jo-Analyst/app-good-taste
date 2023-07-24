@@ -158,6 +158,7 @@ class _ProductionPageState extends State<ProductionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 235, 233, 233),
       appBar: AppBar(
         title: const Text(
           "Produção do dia",
@@ -191,294 +192,302 @@ class _ProductionPageState extends State<ProductionPage> {
         ),
         toolbarHeight: 100,
       ),
-      body: Container(
-        color: const Color.fromARGB(255, 235, 233, 233),
-        padding: const EdgeInsets.all(10),
+      body: SingleChildScrollView(
         child: Container(
+          color: const Color.fromARGB(255, 235, 233, 233),
           padding: const EdgeInsets.all(10),
-          color: Colors.white,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Form(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: productController,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              labelText: "Produto",
-                              labelStyle: const TextStyle(fontSize: 18),
-                              floatingLabelStyle: TextStyle(
-                                color: Theme.of(context).primaryColor,
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Form(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: productController,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                labelText: "Produto",
+                                labelStyle: const TextStyle(fontSize: 18),
+                                floatingLabelStyle: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 5),
-                        IconButton(
-                          onPressed: () async {
-                            FocusScope.of(context).unfocus();
-                            final data = await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => const ListPage(
-                                  labelText: "Produtos",
+                          const SizedBox(width: 5),
+                          IconButton(
+                            onPressed: () async {
+                              FocusScope.of(context).unfocus();
+                              final data = await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const ListPage(
+                                    labelText: "Produtos",
+                                  ),
+                                ),
+                              );
+
+                              if (data != null) {
+                                productController.text = data["name"];
+                                setState(() {
+                                  productId = data["id"];
+                                  productText = productController.text;
+                                  productWasSelected = true;
+                                  price = 0;
+                                  valueEntry = 0;
+                                });
+                                flavorController.text = "";
+                                flavorText = "";
+                              }
+                            },
+                            icon: Icon(
+                              Icons.select_all_sharp,
+                              size: 40,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: flavorController,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                fillColor: Colors.black,
+                                labelText: "Sabor",
+                                labelStyle: const TextStyle(fontSize: 18),
+                                floatingLabelStyle: TextStyle(
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
-                            );
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          IconButton(
+                            onPressed: !productWasSelected
+                                ? null
+                                : () async {
+                                    FocusScope.of(context).unfocus();
+                                    final data =
+                                        await Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => ListPage(
+                                          labelText: "Sabores",
+                                          productId: productId,
+                                        ),
+                                      ),
+                                    );
 
-                            if (data != null) {
-                              productController.text = data["name"];
-                              setState(() {
-                                productId = data["id"];
-                                productText = productController.text;
-                                productWasSelected = true;
-                                price = 0;
-                                valueEntry = 0;
-                              });
-                              flavorController.text = "";
-                              flavorText = "";
-                            }
-                          },
-                          icon: Icon(
-                            Icons.select_all_sharp,
-                            size: 40,
+                                    if (data != null) {
+                                      setState(() {
+                                        flavorId = data["id"];
+                                        flavorController.text = data["type"];
+                                        flavorText = data["type"];
+                                        price = data["price"];
+                                      });
+                                      calculateInputValue();
+                                      calculateProfit();
+                                    }
+                                  },
+                            icon: Icon(
+                              Icons.select_all_sharp,
+                              size: 40,
+                              color: productText.isEmpty
+                                  ? Colors.black12
+                                  : Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Divider(),
+                      TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        textInputAction: TextInputAction.next,
+                        onChanged: (value) {
+                          setState(() {
+                            quantity = value != "" ? int.parse(value) : 0;
+                          });
+                          calculateInputValue();
+                          calculateProfit();
+                        },
+                        decoration: InputDecoration(
+                          labelText: "Quantidade",
+                          labelStyle: const TextStyle(fontSize: 18),
+                          floatingLabelStyle: TextStyle(
                             color: Theme.of(context).primaryColor,
                           ),
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Divider(
+                  color: Color.fromARGB(255, 228, 108, 148),
+                  height: 2,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Matéria prima",
+                      style: TextStyle(fontSize: 18),
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: flavorController,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                              fillColor: Colors.black,
-                              labelText: "Sabor",
-                              labelStyle: const TextStyle(fontSize: 18),
-                              floatingLabelStyle: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
+                    IconButton(
+                      onPressed: () async {
+                        FocusScope.of(context).unfocus();
+                        dynamic selectedFeedstocks = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => FeedstockListPage(
+                                listOfSelectedFeedstocks, feedstocks),
                           ),
-                        ),
-                        const SizedBox(width: 5),
-                        IconButton(
-                          onPressed: !productWasSelected
-                              ? null
-                              : () async {
-                                FocusScope.of(context).unfocus();
-                                  final data = await Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => ListPage(
-                                        labelText: "Sabores",
-                                        productId: productId,
-                                      ),
-                                    ),
-                                  );
+                        );
+                        if (selectedFeedstocks != null) {
+                          setState(() {
+                            listOfSelectedFeedstocks.clear();
+                            listOfSelectedFeedstocks.addAll(selectedFeedstocks);
+                            for (var feedstock in feedstocks) {
+                              feedstock["isChecked"] = false;
+                            }
+                          });
 
-                                  if (data != null) {
-                                    setState(() {
-                                      flavorId = data["id"];
-                                      flavorController.text = data["type"];
-                                      flavorText = data["type"];
-                                      price = data["price"];
-                                    });
-                                    calculateInputValue();
-                                    calculateProfit();
-                                  }
-                                },
-                          icon: Icon(
-                            Icons.select_all_sharp,
-                            size: 40,
-                            color: productText.isEmpty
-                                ? Colors.black12
-                                : Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Divider(),
-                    TextFormField(
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      textInputAction: TextInputAction.next,
-                      onChanged: (value) {
-                        setState(() {
-                          quantity = value != "" ? int.parse(value) : 0;
-                        });
-                        calculateInputValue();
-                        calculateProfit();
+                          calculateLeave();
+                          calculateProfit();
+                        }
                       },
-                      decoration: InputDecoration(
-                        labelText: "Quantidade",
-                        labelStyle: const TextStyle(fontSize: 18),
-                        floatingLabelStyle: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                      icon: Icon(
+                        Icons.add,
+                        size: 30,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ],
+                ),
+                const Divider(
+                  color: Color.fromARGB(255, 228, 108, 148),
+                  height: 2,
+                ),
+                listOfSelectedFeedstocks.isEmpty
+                    ? const SizedBox(
+                        height: 225,
+                        child: Center(
+                          child: Text(
+                            "Não há matéria prima adicionada.",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ))
+                    : SizedBox(
+                        height: 225,
+                        child: ListView.builder(
+                          itemCount: listOfSelectedFeedstocks.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                ListTile(
+                                  title: Text(
+                                    "${listOfSelectedFeedstocks[index]['name']}",
+                                    style: const TextStyle(fontSize: 18),
+                                  ),
+                                  subtitle: Text(
+                                    "${listOfSelectedFeedstocks[index]['brand']}",
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                  leading: CircleAvatar(
+                                    radius: 30,
+                                    child: Text(
+                                      NumberFormat("R\$ #0.00", "PT-BR").format(
+                                          listOfSelectedFeedstocks[index]
+                                              ["price"]),
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                  ),
+                                  trailing: IconButton(
+                                    onPressed: () {
+                                      decreaseOutputWhenExcludingRawMaterial(
+                                          index);
+                                      calculateProfit();
+                                      listOfSelectedFeedstocks.removeAt(index);
+                                      setState(() {});
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                                const Divider(),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "E:",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Flexible(
+                      child: Chip(
+                        backgroundColor: Colors.blue,
+                        label: Text(
+                          NumberFormat("R\$ #0.00", "PT-BR").format(valueEntry),
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    const Text(
+                      "S:",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Flexible(
+                      child: Chip(
+                        backgroundColor: Colors.red,
+                        label: Text(
+                          NumberFormat("R\$ #0.00", "PT-BR").format(valueLeave),
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ),
+                    const Text(
+                      "L:",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Flexible(
+                      child: Chip(
+                        backgroundColor: Colors.green,
+                        label: Text(
+                          NumberFormat("R\$ #0.00", "PT-BR")
+                              .format(valueProfit),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 20),
-              const Divider(
-                color: Color.fromARGB(255, 228, 108, 148),
-                height: 2,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Matéria prima",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  IconButton(
-                    onPressed: () async {
-                      FocusScope.of(context).unfocus();
-                      dynamic selectedFeedstocks = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => FeedstockListPage(
-                              listOfSelectedFeedstocks, feedstocks),
-                        ),
-                      );
-                      if (selectedFeedstocks != null) {
-                        setState(() {
-                          listOfSelectedFeedstocks.clear();
-                          listOfSelectedFeedstocks.addAll(selectedFeedstocks);
-                          for (var feedstock in feedstocks) {
-                            feedstock["isChecked"] = false;
-                          }
-                        });
-
-                        calculateLeave();
-                        calculateProfit();
-                      }
-                    },
-                    icon: Icon(
-                      Icons.add,
-                      size: 30,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                ],
-              ),
-              const Divider(
-                color: Color.fromARGB(255, 228, 108, 148),
-                height: 2,
-              ),
-              listOfSelectedFeedstocks.isEmpty
-                  ? const Flexible(
-                      child: Center(
-                      child: Text(
-                        "Não há matéria prima adicionada.",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ))
-                  : Flexible(
-                      child: ListView.builder(
-                        itemCount: listOfSelectedFeedstocks.length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              ListTile(
-                                title: Text(
-                                  "${listOfSelectedFeedstocks[index]['name']}",
-                                  style: const TextStyle(fontSize: 18),
-                                ),
-                                subtitle: Text(
-                                  "${listOfSelectedFeedstocks[index]['brand']}",
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                                leading: CircleAvatar(
-                                  radius: 30,
-                                  child: Text(
-                                    NumberFormat("R\$ #0.00", "PT-BR").format(
-                                        listOfSelectedFeedstocks[index]
-                                            ["price"]),
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                ),
-                                trailing: IconButton(
-                                  onPressed: () {
-                                    decreaseOutputWhenExcludingRawMaterial(
-                                        index);
-                                    calculateProfit();
-                                    listOfSelectedFeedstocks.removeAt(index);
-                                    setState(() {});
-                                  },
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              ),
-                              const Divider(),
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "E:",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Flexible(
-                    child: Chip(
-                      backgroundColor: Colors.blue,
-                      label: Text(
-                        NumberFormat("R\$ #0.00", "PT-BR").format(valueEntry),
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-                  const Text(
-                    "S:",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Flexible(
-                    child: Chip(
-                      backgroundColor: Colors.red,
-                      label: Text(
-                        NumberFormat("R\$ #0.00", "PT-BR").format(valueLeave),
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-                  const Text(
-                    "L:",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  Flexible(
-                    child: Chip(
-                      backgroundColor: Colors.green,
-                      label: Text(
-                        NumberFormat("R\$ #0.00", "PT-BR").format(valueProfit),
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
