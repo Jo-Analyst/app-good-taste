@@ -21,12 +21,6 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
   List<Map<String, dynamic>> itemsEntry = [];
   List<Map<String, dynamic>> itemsLeave = [];
 
-  loadProductions() async {
-    final productionController =
-        Provider.of<ProductionController>(context, listen: false);
-    await productionController.load();
-  }
-
   @override
   void initState() {
     super.initState();
@@ -35,6 +29,11 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
     setState(() {
       month = "/$currentMonth/";
     });
+
+    loadDetailsProductions();
+  }
+
+  void loadDetailsProductions() {
     getSumValueProfit();
     getSumValueEntry();
     getSumValueLeave();
@@ -230,7 +229,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                               );
 
                               if (confirm == true) {
-                                loadProductions();
+                                loadDetailsProductions();
                               }
                             } else if (option == "all-productions") {
                               Navigator.of(context).push(MaterialPageRoute(
