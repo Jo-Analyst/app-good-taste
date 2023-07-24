@@ -1,17 +1,5 @@
-import 'package:flutter/material.dart';
-
-class MonthPartils extends StatefulWidget {
-  final int numberMonth;
-  final Function(String) getNumberMonth;
-  const MonthPartils(this.numberMonth,
-      {super.key, required this.getNumberMonth});
-
-  @override
-  State<MonthPartils> createState() => _MonthPartilsState();
-}
-
-class _MonthPartilsState extends State<MonthPartils> {
-  final List<Map<String, String>> months = [
+class Month {
+  static List<Map<String, String>> listMonths = [
     {"month": "Janeiro", "number": "01"},
     {"month": "Fevereiro", "number": "02"},
     {"month": "Março", "number": "03"},
@@ -25,20 +13,4 @@ class _MonthPartilsState extends State<MonthPartils> {
     {"month": "Novembro", "number": "11"},
     {"month": "Dezembro", "number": "12"},
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    // widget.getNumberMonth(months[widget.numberMonth]["number"].toString());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      months[widget.numberMonth]["month"].toString(),
-      style: TextStyle(
-        fontSize: Theme.of(context).textTheme.displayLarge?.fontSize,
-      ),
-    );
-  }
 }

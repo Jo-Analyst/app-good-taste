@@ -3,6 +3,7 @@ import 'package:app_good_taste/app/pages/all_productions_page.dart';
 import 'package:app_good_taste/app/pages/production_page.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/movement_details_template.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../template/slide_month.dart';
@@ -15,10 +16,78 @@ class MovementDetailsPage extends StatefulWidget {
 }
 
 class _MovementDetailsPageState extends State<MovementDetailsPage> {
+  double valueProfit = 0, valueEntry = 0, valueLeave = 0;
+  String month = "";
+  List<Map<String, dynamic>> itemsEntry = [];
+  List<Map<String, dynamic>> itemsLeave = [];
+
   loadProductions() async {
     final productionController =
         Provider.of<ProductionController>(context, listen: false);
     await productionController.load();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    DateTime currentDate = DateTime.now();
+    String currentMonth = currentDate.month.toString().padLeft(2, '0');
+    setState(() {
+      month = "/$currentMonth/";
+    });
+    getSumValueProfit();
+    getSumValueEntry();
+    getSumValueLeave();
+    getSumQuantityAndValueEntry();
+    getSumPriceFeedstockAndCountFeedstockAndValueLeave();
+  }
+
+  void getSumPriceFeedstockAndCountFeedstockAndValueLeave() async {
+    final productionProvider =
+        Provider.of<ProductionController>(context, listen: false);
+    itemsLeave = await productionProvider
+        .getSumPriceFeedstockAndCountFeedstockAndValueLeave(month);
+    setState(() {});
+  }
+
+  void getSumQuantityAndValueEntry() async {
+    final productionProvider =
+        Provider.of<ProductionController>(context, listen: false);
+    itemsEntry = await productionProvider.getSumQuantityAndValueEntry(month);
+    setState(() {});
+  }
+
+  void getSumValueEntry() async {
+    final productionProvider =
+        Provider.of<ProductionController>(context, listen: false);
+    final getSumValueEntry = await productionProvider.getSumValueEntry(month);
+    setState(() {
+      valueEntry = getSumValueEntry[0]["value_entry"] == null
+          ? 0.0
+          : getSumValueEntry[0]["value_entry"] as double;
+    });
+  }
+
+  void getSumValueLeave() async {
+    final productionProvider =
+        Provider.of<ProductionController>(context, listen: false);
+    final getSumValueLeave = await productionProvider.getSumValueLeave(month);
+    setState(() {
+      valueLeave = getSumValueLeave[0]["value_leave"] == null
+          ? 0.0
+          : getSumValueLeave[0]["value_leave"] as double;
+    });
+  }
+
+  void getSumValueProfit() async {
+    final productionProvider =
+        Provider.of<ProductionController>(context, listen: false);
+    final getSumValueProfit = await productionProvider.getSumValueProfit(month);
+    setState(() {
+      valueProfit = getSumValueProfit[0]["value_profit"] == null
+          ? 0.0
+          : getSumValueProfit[0]["value_profit"] as double;
+    });
   }
 
   @override
@@ -50,18 +119,29 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                   color: Theme.of(context).primaryColor,
                 ),
                 const SizedBox(height: 28),
-                const SlideMonth(),
-                const Padding(
-                  padding: EdgeInsets.all(10.0),
+                SlideMonth(
+                  getNumberMonth: (numberMonth) => setState(() {
+                    month = "/$numberMonth/";
+                    getSumValueEntry();
+                    getSumValueLeave();
+                    getSumValueProfit();
+                    getSumQuantityAndValueEntry();
+                    getSumPriceFeedstockAndCountFeedstockAndValueLeave();
+                  }),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
                     children: [
                       MovementDetailsTemplate(
-                        price: 150,
+                        price: valueEntry,
                         description: "Entrada",
+                        items: itemsEntry,
                       ),
                       MovementDetailsTemplate(
-                        price: 50,
+                        price: valueLeave,
                         description: "Saida",
+                        items: itemsLeave,
                       ),
                     ],
                   ),
@@ -90,7 +170,8 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'R\$ 650,00',
+                          NumberFormat("R\$ #0.00", "PT-BR")
+                              .format(valueProfit),
                           style: TextStyle(
                             fontSize: 30,
                             color: Theme.of(context).primaryColor,

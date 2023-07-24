@@ -4,9 +4,11 @@ import 'package:intl/intl.dart';
 class MovementDetailsTemplate extends StatefulWidget {
   final double price;
   final String description;
+  final List<Map<String, dynamic>> items;
   const MovementDetailsTemplate({
     required this.price,
     required this.description,
+    required this.items,
     super.key,
   });
 
@@ -16,12 +18,6 @@ class MovementDetailsTemplate extends StatefulWidget {
 
 class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
   bool _expanded = false;
-  final List<Map<String, dynamic>> _items = [
-    {"name": "Açucar", "price": 39.00, "quantity": 1},
-    {"name": "Saquinho", "price": 24.50, "quantity": 1},
-    {"name": "Suco de Maracujá", "price": 13.5, "quantity": 10},
-    {"name": "Suco de Morango", "price": 27.00, "quantity": 20},
-  ];
 
   Color changeColorByDescription() {
     switch (widget.description.toLowerCase()) {
@@ -88,17 +84,17 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
               ),
               Visibility(
                 visible: _expanded,
-                child: _items.length > 3
+                child: widget.items.length > 3
                     ? SizedBox(
                         height:
                             100, // Altura máxima desejada para o conteúdo rolável
                         child: ListView.builder(
                           padding: EdgeInsets.zero, // Remover o padding
-                          itemCount: _items.length,
+                          itemCount: widget.items.length,
                           itemBuilder: (ctx, index) {
-                            final name = _items[index]['name'];
-                            final price = _items[index]['price'];
-                            final quantity = _items[index]['quantity'];
+                            final name = widget.items[index]['name'];
+                            final price = widget.items[index]['price'];
+                            final quantity = widget.items[index]['quantity'];
 
                             return Container(
                               width: double.infinity,
@@ -113,7 +109,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                                         horizontal: 10,
                                       ),
                                       child: Text(
-                                        "${quantity}x $name ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}",
+                                        "${quantity}x $name ${NumberFormat('R\$#0.00', 'PT-BT').format(price)}",
                                       ),
                                     ),
                                   ),
@@ -125,7 +121,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                         ),
                       )
                     : Column(
-                        children: _items.map(
+                        children: widget.items.map(
                           (item) {
                             final name = item['name'];
                             final price = item['price'];
