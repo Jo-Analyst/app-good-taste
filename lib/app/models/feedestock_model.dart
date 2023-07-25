@@ -16,13 +16,13 @@ class FeedstockModel {
   });
 
   static Future<List<Map<String, dynamic>>> findAll() async {
-    final db = await DB.database();
+    final db = await DB.openDatabase();
     return db.query("feedstocks", orderBy: "name asc");
   }
 
   Future<void> delete() async {
     try {
-      final db = await DB.database();
+      final db = await DB.openDatabase();
       await db.delete("feedstocks", where: "id = ?", whereArgs: [id]);
     } catch (e) {
       //
@@ -31,7 +31,7 @@ class FeedstockModel {
 
   Future<void> save() async {
     try {
-      final db = await DB.database();
+      final db = await DB.openDatabase();
       final data = {"name": name, "brand": brand, "price": price, "unit": unit};
       if (id == 0) {
         await db.insert("feedstocks", data);

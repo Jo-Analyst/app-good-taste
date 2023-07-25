@@ -13,20 +13,21 @@ class ProductModel {
     this.price,
   });
 
-  static Future<List<Map<String, dynamic>>> findAllPartsByProductId(int productId) async {
-    final db = await DB.database();
+  static Future<List<Map<String, dynamic>>> findAllPartsByProductId(
+      int productId) async {
+    final db = await DB.openDatabase();
     const String query =
         "SELECT flavors.type AS flavor, products.price, flavors.id FROM products INNER JOIN flavors ON flavors.product_id =  products.id  WHERE products.id = ?  ORDER BY flavors.type ASC";
     return db.rawQuery(query, [productId]);
   }
 
   static Future<List<Map<String, dynamic>>> findAll() async {
-    final db = await DB.database();
+    final db = await DB.openDatabase();
     return db.query("products");
   }
 
   static Future<void> delete(int id) async {
-    final db = await DB.database();
+    final db = await DB.openDatabase();
     try {
       await db.transaction((txn) async {
         txn.delete("products", where: "id = ?", whereArgs: [id]);
@@ -39,7 +40,7 @@ class ProductModel {
 
   static Future<void> save(
       List<FlavorModel> flavorModel, Map<String, dynamic> data) async {
-    final db = await DB.database();
+    final db = await DB.openDatabase();
     final id = data["id"];
     final name = data["name"];
     final price = data["price"];

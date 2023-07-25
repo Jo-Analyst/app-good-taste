@@ -13,7 +13,7 @@ class FlavorModel {
     try {
       final type = data["type"];
       final id = data["id"];
-      final db = await DB.database();
+      final db = await DB.openDatabase();
       await db.update("flavors", {"type": type},
           where: "id = ? ", whereArgs: [id]);
     } catch (e) {
@@ -23,14 +23,14 @@ class FlavorModel {
 
   static Future<void> insert(data) async {
     try {
-      final db = await DB.database();
+      final db = await DB.openDatabase();
       await db.insert("flavors", data);
     } catch (e) {
       //
     }
   }
 
-Future<void> save(Transaction txn) async {
+  Future<void> save(Transaction txn) async {
     try {
       if (id == 0) {
         await txn.insert("flavors", {
@@ -48,17 +48,17 @@ Future<void> save(Transaction txn) async {
 
   static Future<List<Map<String, dynamic>>> findByProductId(
       int productId) async {
-    final db = await DB.database();
+    final db = await DB.openDatabase();
     return db.query("flavors", where: "product_id = ?", whereArgs: [productId]);
   }
 
   static Future<List<Map<String, dynamic>>> findAll() async {
-    final db = await DB.database();
+    final db = await DB.openDatabase();
     return db.query("flavors");
   }
 
   static Future<void> delete(int id) async {
-    final db = await DB.database();
+    final db = await DB.openDatabase();
     try {
       await db.delete("flavors", where: "id = ?", whereArgs: [id]);
     } catch (e) {

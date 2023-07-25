@@ -13,6 +13,15 @@ import 'package:provider/provider.dart';
 void main() async {
   initializeDateFormatting('pt_BR', null);
   runApp(const AppGoodTaste());
+  // final db = await DB.openDatabase();
+  // final productions = await db.rawQuery(
+  //     "SELECT productions.date, productions.value_entry, productions.value_leave, productions.value_profit FROM productions WHERE productions.date LIKE '%/01/2023%'");
+
+  // for (var production in productions) {
+  //   print("__________");
+  //   print(production);
+  //   print("__________");
+  // }
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -30,9 +39,9 @@ class AppGoodTaste extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProductionController()),
       ],
       child: MaterialApp(
-           locale: const Locale('pt', 'BR'),
+        locale: const Locale('pt', 'BR'),
         supportedLocales: const [
-           Locale('pt', 'BR'),
+          Locale('pt', 'BR'),
           // Outros idiomas suportados, se necessário
         ],
         localizationsDelegates: const [
