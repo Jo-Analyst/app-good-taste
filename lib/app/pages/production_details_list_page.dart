@@ -175,7 +175,7 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
                             IconButton(
                               onPressed: () => Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (_) => const ProductionDetailsPage(),
+                                  builder: (_) =>  ProductionDetailsPage(date: data['date']),
                                 ),
                               ),
                               icon: Icon(

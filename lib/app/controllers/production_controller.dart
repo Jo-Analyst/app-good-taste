@@ -28,37 +28,37 @@ class ProductionController extends ChangeNotifier {
     _items = List<Map<String, dynamic>>.from(flavors);
     notifyListeners();
   }
-  
+
   Future<List<Map<String, dynamic>>> loadDate(String date) async {
     return await ProductionModel.findDateByYear(date);
   }
 
   Future<List<Map<String, dynamic>>> getSumQuantityAndValueEntry(
       String month) async {
-        // /07/
     return await ProductionModel.getSumQuantityAndValueEntry(month);
   }
 
-  Future<List<Map<String, dynamic>>> getSumPriceFeedstockAndCountFeedstockAndValueLeave(
-      String month) async {
-        // /07/
-    return await ProductionModel.getSumPriceFeedstockAndCountFeedstockAndValueLeave(month);
+  Future<List<Map<String, dynamic>>>
+      getSumPriceFeedstockAndCountFeedstockAndValueLeave(String month) async {
+    return await ProductionModel
+        .getSumPriceFeedstockAndCountFeedstockAndValueLeave(month);
   }
-  Future<List<Map<String, dynamic>>> getSumValueProfit(
-      String month) async {
-        // /07/
+
+  Future<List<Map<String, dynamic>>> getSumValueProfit(String month) async {
     return await ProductionModel.getSumValueProfit(month);
   }
 
-  Future<List<Map<String, dynamic>>> getSumValueEntry(
-      String month) async {
-        // /07/
+  Future<List<Map<String, dynamic>>> getSumValueEntry(String month) async {
     return await ProductionModel.getSumValueEntry(month);
   }
 
-  Future<List<Map<String, dynamic>>> getSumValueLeave(
-      String month) async {
-        // /07/
+  Future<List<Map<String, dynamic>>> getSumValueLeave(String month) async {
     return await ProductionModel.getSumValueLeave(month);
+  }
+  Future<List<Map<String, dynamic>>> getDetailsFlavors(String date) async {
+    return await ProductionModel.getDetailsFlavors(date);
+  }
+  Future<List<Map<String, dynamic>>> getDetailsFeedstocks(String date) async {
+    return await ProductionModel.getDetailsFeedstocks(date);
   }
 }

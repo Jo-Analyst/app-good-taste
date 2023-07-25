@@ -1,9 +1,14 @@
+import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/pages/production_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../controllers/production_controller.dart';
 
 class ProductionDetailsPage extends StatefulWidget {
-  const ProductionDetailsPage({super.key});
+  final String date;
+  const ProductionDetailsPage({super.key, required this.date});
 
   @override
   State<ProductionDetailsPage> createState() => _ProductionDetailsPageState();
@@ -12,55 +17,38 @@ class ProductionDetailsPage extends StatefulWidget {
 class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   bool lineWasPressed = false;
   int selectedLine = -1;
-  final List<Map<String, dynamic>> productions = [
-    {
-      "id": 1,
-      "flavor": "Morango",
-      "quantity": 12,
-      "subtotal": 18.0,
-      "price": 1.35
-    },
-    {"id": 2, "flavor": "Uva", "quantity": 13, "subtotal": 19.5, "price": 1.35},
-    {
-      "id": 3,
-      "flavor": "Baunilha com limão",
-      "quantity": 12,
-      "subtotal": 18.0,
-      "price": 1.35
-    },
-    {
-      "id": 4,
-      "flavor": "Azul",
-      "quantity": 13,
-      "subtotal": 19.5,
-      "price": 1.35
-    },
-    {
-      "id": 5,
-      "flavor": "Chocolate",
-      "quantity": 12,
-      "subtotal": 18.0,
-      "price": 1.35
-    },
-    {
-      "id": 6,
-      "flavor": "Leite condensado",
-      "quantity": 10,
-      "subtotal": 15.0,
-      "price": 1.35
-    },
-  ];
+  List<Map<String, dynamic>> productions = [];
 
-  final List<Map<String, bool>> rowsPressed = [];
-  final List<Map<String, dynamic>> feedstocks = [
-    {"id": 1, "name": "Açucar", "brand": "", "price": 19.5},
-    {"id": 2, "name": "suco de morando", "brand": "TANG", "price": 1.35},
-    {"id": 3, "name": "uva", "brand": "MID", "price": 1.25},
-    {"id": 4, "name": "Baunilha com limão", "brand": "", "price": 10.0},
-    {"id": 5, "name": "Azul", "brand": "Nestle", "price": 8},
-    {"id": 6, "name": "Chocolate", "brand": "", "price": 4.75},
-    {"id": 7, "name": "Leite condensado", "brand": "", "price": 4.75},
-  ];
+  List<Map<String, bool>> rowsPressed = [];
+  List<Map<String, dynamic>> feedstocks = [];
+
+  @override
+  initState() {
+    super.initState();
+    getDetailsFlavors();
+    getDetailsFeedstocks();
+    checkIfProductionsIsGreaterThanZeroAndFillInTheListRowsPressed();
+  }
+
+  void getDetailsFlavors() async {
+    final productionProvider =
+        Provider.of<ProductionController>(context, listen: false);
+    final productionsList =
+        await productionProvider.getDetailsFlavors(widget.date);
+    setState(() {
+      productions = productionsList;
+    });
+  }
+
+  void getDetailsFeedstocks() async {
+    final productionProvider =
+        Provider.of<ProductionController>(context, listen: false);
+    final feedstocksList =
+        await productionProvider.getDetailsFeedstocks(widget.date);
+    setState(() {
+      feedstocks = feedstocksList;
+    });
+  }
 
   void checkIfProductionsIsGreaterThanZeroAndFillInTheListRowsPressed() {
     if (productions.isNotEmpty) {
@@ -85,12 +73,6 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
     }
     rowsPressed[index]["isPressed"] = !rowsPressed[index]["isPressed"]!;
     lineWasPressed = rowsPressed[index]["isPressed"]! ? true : false;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    checkIfProductionsIsGreaterThanZeroAndFillInTheListRowsPressed();
   }
 
   @override
@@ -267,7 +249,8 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                             Text(
                                               NumberFormat("R\$#0.00", "PT-BR")
                                                   .format(
-                                                productions[index]["subtotal"],
+                                                productions[index]
+                                                    ["value_entry"],
                                               ),
                                               style: TextStyle(
                                                 color: index == selectedLine &&
@@ -338,7 +321,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              feedstocks[index]["brand"],
+                                              feedstocks[index]["brand"] ?? "",
                                               style:
                                                   const TextStyle(fontSize: 18),
                                             ),

@@ -6,7 +6,7 @@ late Database db;
 void testSelect() async {
   db = await DB.openDatabase();
   final productions = await db.rawQuery(
-      "SELECT * FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN flavors AS f ON f.id = p.flavor_id INNER JOIN feedstocks AS fd ON fd.id = i.feedstock_id WHERE date = '25/07/2023'");
+      "SELECT  p.price_product, f.name, f.brand, f.price FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE date ='25/07/2023'");
 
   for (var production in productions) {
     print(production);
