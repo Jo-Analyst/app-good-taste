@@ -58,6 +58,11 @@ class ProductionModel {
     return db.query("productions");
   }
   
+  static Future<List<Map<String, dynamic>>> findDateByYear(String date) async {
+    final db = await DB.database();
+    return db.rawQuery("SELECT date from productions WHERE date LIKE '%$date%'");
+  }
+  
   static Future<List<Map<String, dynamic>>> getSumQuantityAndValueEntry(String month) async {
     final db = await DB.database();
     return db.rawQuery("SELECT SUM(productions.quantity) AS quantity, SUM(productions.value_entry) AS price, flavors.type AS name FROM productions INNER JOIN flavors ON productions.flavor_id = flavors.id WHERE date LIKE '%$month%' GROUP BY flavors.type");

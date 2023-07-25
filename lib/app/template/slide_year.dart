@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SlideYear extends StatefulWidget {
-  const SlideYear({super.key});
+  final Function(int) onChangedDate;
+  const SlideYear({required this.onChangedDate, super.key});
 
   @override
   State<SlideYear> createState() => _SlideYearState();
@@ -12,7 +13,7 @@ class _SlideYearState extends State<SlideYear> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width -70,
+      width: MediaQuery.of(context).size.width - 70,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -22,6 +23,7 @@ class _SlideYearState extends State<SlideYear> {
                 : () => setState(() {
                       if (numberYear == 2023) return;
                       numberYear--;
+                      widget.onChangedDate(numberYear);
                     }),
             icon: const Icon(
               Icons.keyboard_arrow_left,
@@ -35,11 +37,12 @@ class _SlideYearState extends State<SlideYear> {
             ),
           ),
           IconButton(
-            onPressed: numberYear == 2300
+            onPressed: numberYear == DateTime.now().year
                 ? null
                 : () => setState(() {
                       if (numberYear == 2300) return;
                       numberYear++;
+                      widget.onChangedDate(numberYear);
                     }),
             icon: const Icon(
               Icons.keyboard_arrow_right,

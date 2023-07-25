@@ -28,6 +28,10 @@ class ProductionController extends ChangeNotifier {
     _items = List<Map<String, dynamic>>.from(flavors);
     notifyListeners();
   }
+  
+  Future<List<Map<String, dynamic>>> loadDate(String date) async {
+    return await ProductionModel.findDateByYear(date);
+  }
 
   Future<List<Map<String, dynamic>>> getSumQuantityAndValueEntry(
       String month) async {
