@@ -66,7 +66,7 @@ void insertFeedstock() async {
     await txn.insert("feedstocks",
         {"name": "Suco de uva", "price": 1.35, "brand": "TANG", "unit": "PC"});
     await txn.insert("feedstocks",
-        {"name": "chocolate", "price": 8, "brand": "NESTLÉ", "unit": "PC"});
+        {"name": "Chocolate", "price": 8, "brand": "NESTLÉ", "unit": "PC"});
     await txn.insert("feedstocks", {
       "name": "Leite condensado",
       "price": 4.25,
@@ -122,7 +122,7 @@ void insertFeedstock() async {
       "unit": "UND"
     });
     await txn.insert("feedstocks", {
-      "name": "vodk",
+      "name": "Vodka",
       "price": 14,
       "brand": "",
       "unit": "UND"
