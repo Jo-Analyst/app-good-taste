@@ -102,7 +102,7 @@ class ProductionModel {
   static Future<List<Map<String, dynamic>>> getDetailsFlavors(String date) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
-        "SELECT f.type AS flavor, p.quantity, p.value_entry, p.price_product FROM productions AS p INNER JOIN flavors AS f ON f.id = p.flavor_id WHERE date = '$date'");
+        "SELECT f.type AS flavor, p.quantity, p.value_entry, p.price_product AS price FROM productions AS p INNER JOIN flavors AS f ON f.id = p.flavor_id WHERE date = '$date'");
   }
   
   static Future<List<Map<String, dynamic>>> getDetailsFeedstocks(String date) async {
