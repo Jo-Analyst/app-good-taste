@@ -53,7 +53,7 @@ class FeedstockList extends StatelessWidget {
               onPressed: () async {
                 final confirmEdit = await showExitDialogFeedstock(
                   context,
-                  Feedstock(feedstockItem: feedstockItem),
+                  FeedstockForm(feedstockItem: feedstockItem),
                 );
 
                 if (confirmEdit == true) {

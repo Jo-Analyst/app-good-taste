@@ -40,7 +40,7 @@ class _FeedstockPageState extends State<FeedstockPage> {
               onPressed: () async {
                 final result = await showExitDialogFeedstock(
                   context,
-                  const Feedstock(
+                  const FeedstockForm(
                     feedstockItem: {},
                   ),
                 );

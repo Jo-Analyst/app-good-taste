@@ -13,7 +13,14 @@ class AllProductionsPage extends StatefulWidget {
 }
 
 class _AllProductionsPageState extends State<AllProductionsPage> {
-  final List<Map<String, dynamic>> date = Month.listMonths;
+  final List<Map<String, dynamic>> date = Month.listMonths.map((dt) {
+    return {
+      "number": dt["number"],
+      "month": dt["month"],
+      "there_is_production": false
+    };
+  }).toList();
+
   String yearSelected = "";
 
   @override
@@ -32,10 +39,11 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
     return dateProductions.isNotEmpty;
   }
 
-  void openScreen() {
+  void openScreen(int index) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => const ProductionDetailsListPage(),
+        builder: (_) => ProductionDetailsListPage(
+            monthAndYear: "${date[index]["number"]}/$yearSelected"),
       ),
     );
   }
@@ -45,7 +53,7 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
       bool thereIsProduction =
           await getDateProductions("${dt["number"]}/$yearSelected");
       setState(() {
-        dt["there_is_production"] = thereIsProduction.toString();
+        dt["there_is_production"] = thereIsProduction;
       });
     }
   }
@@ -117,14 +125,13 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
                     date.length,
                     (index) {
                       return InkWell(
-                        onTap: bool.parse(date[index]["there_is_production"])
-                            ? () => openScreen()
+                        onTap: date[index]["there_is_production"]
+                            ? () => openScreen(index)
                             : null,
                         child: Card(
                           elevation: 8,
                           child: Container(
-                            decoration: bool.parse(
-                                    date[index]["there_is_production"])
+                            decoration: date[index]["there_is_production"]
                                 ? BoxDecoration(
                                     gradient: LinearGradient(
                                       begin: Alignment.topLeft,
@@ -136,10 +143,9 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
                                     ),
                                   )
                                 : null,
-                            color:
-                                bool.parse(date[index]["there_is_production"])
-                                    ? null
-                                    : Colors.black54,
+                            color: date[index]["there_is_production"]
+                                ? null
+                                : Colors.black54,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

@@ -61,7 +61,7 @@ class ProductionModel {
   static Future<List<Map<String, dynamic>>> findDateByYear(String date) async {
     final db = await DB.openDatabase();
     return db
-        .rawQuery("SELECT date from productions WHERE date LIKE '%$date%'");
+        .rawQuery("SELECT date, value_entry, value_leave, value_profit from productions WHERE date LIKE '%$date%'");
   }
 
   static Future<List<Map<String, dynamic>>> getSumQuantityAndValueEntry(

@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class Feedstock extends StatefulWidget {
+class FeedstockForm extends StatefulWidget {
   final Map<String, dynamic> feedstockItem;
-  const Feedstock({required this.feedstockItem, super.key});
+  const FeedstockForm({required this.feedstockItem, super.key});
 
   @override
-  State<Feedstock> createState() => _FeedstockState();
+  State<FeedstockForm> createState() => _FeedstockState();
 }
 
-class _FeedstockState extends State<Feedstock> {
+class _FeedstockState extends State<FeedstockForm> {
   final _key = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _price = TextEditingController();
@@ -40,7 +40,7 @@ class _FeedstockState extends State<Feedstock> {
         "id": _id,
         "name": _name.text.trim(),
         "brand": _brand.text.trim(),
-        "unit": _unit.text.trim().toLowerCase(),
+        "unit": _unit.text.trim().toUpperCase(),
         "price": double.parse(_price.text.replaceAll(RegExp(r','), '.')),
       });
 
@@ -51,16 +51,8 @@ class _FeedstockState extends State<Feedstock> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      // child: Padding(
-      //   padding: EdgeInsets.only(
-      //     left: 30,
-      //     right: 30,
-      //     top: 10,
-      //     bottom: 10 + MediaQuery.of(context).viewInsets.bottom,
-      //   ),
       child: Column(
         children: [
-          // const ScrollButtomModal(),
           Form(
             key: _key,
             child: Column(
@@ -104,11 +96,9 @@ class _FeedstockState extends State<Feedstock> {
                   onFieldSubmitted: (_) => save(),
                 ),
                 TextFormField(
-                  // keyboardType: TextInputType.number,
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   controller: _price,
                   decoration: InputDecoration(
                     labelText: "Preço",
@@ -131,14 +121,14 @@ class _FeedstockState extends State<Feedstock> {
                         0) {
                       return "Este não um valor válido";
                     }
-
+    
                     return null;
                   },
                   onFieldSubmitted: (_) => save(),
                 ),
                 TextFormField(
                   keyboardType: TextInputType.text,
-                  // textCapitalization: TextCapitalization.characters,
+                  textCapitalization: TextCapitalization.characters,
                   controller: _unit,
                   decoration: InputDecoration(
                     labelText: "Unidade/Embalagem",
@@ -157,7 +147,7 @@ class _FeedstockState extends State<Feedstock> {
                     if (unidade!.isEmpty) {
                       return "Informe a Unidade/Embalagem!";
                     }
-
+    
                     return null;
                   },
                   onFieldSubmitted: (_) => save(),

@@ -1,9 +1,12 @@
+import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:app_good_taste/app/pages/production_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ProductionDetailsListPage extends StatefulWidget {
-  const ProductionDetailsListPage({super.key});
+  final String monthAndYear;
+  const ProductionDetailsListPage({required this.monthAndYear, super.key});
 
   @override
   State<ProductionDetailsListPage> createState() =>
@@ -11,27 +14,43 @@ class ProductionDetailsListPage extends StatefulWidget {
 }
 
 class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
-  final List<Map<String, dynamic>> productionDetailsListPage = [
-    {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
-    {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
-    {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
-    {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
-    {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
-    {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
-    {"date": "12/07/2023", "value-entry": 30, "value-leave": 10, "profit": 20},
-    {"date": "16/07/2023", "value-entry": 50, "value-leave": 25, "profit": 25},
-    {"date": "17/07/2023", "value-entry": 60, "value-leave": 30, "profit": 30},
-    {"date": "12/07/2023", "value-entry": 30, "value-leave": 10, "profit": 20},
-    {"date": "16/07/2023", "value-entry": 50, "value-leave": 25, "profit": 25},
-    {"date": "18/07/2023", "value-entry": 70, "value-leave": 30, "profit": 30},
-    {"date": "19/07/2023", "value-entry": 80, "value-leave": 30, "profit": 30},
-    {"date": "21/07/2023", "value-entry": 90, "value-leave": 30, "profit": 30},
-    {"date": "22/07/2023", "value-entry": 100, "value-leave": 30, "profit": 30},
-    {"date": "25/07/2023", "value-entry": 110, "value-leave": 30, "profit": 30},
+  List<Map<String, dynamic>> productionDetailsListPage = [
+    // {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
+    // {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
+    // {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
+    // {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
+    // {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
+    // {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
+    // {"date": "12/07/2023", "value-entry": 30, "value-leave": 10, "profit": 20},
+    // {"date": "16/07/2023", "value-entry": 50, "value-leave": 25, "profit": 25},
+    // {"date": "17/07/2023", "value-entry": 60, "value-leave": 30, "profit": 30},
+    // {"date": "12/07/2023", "value-entry": 30, "value-leave": 10, "profit": 20},
+    // {"date": "16/07/2023", "value-entry": 50, "value-leave": 25, "profit": 25},
+    // {"date": "18/07/2023", "value-entry": 70, "value-leave": 30, "profit": 30},
+    // {"date": "19/07/2023", "value-entry": 80, "value-leave": 30, "profit": 30},
+    // {"date": "21/07/2023", "value-entry": 90, "value-leave": 30, "profit": 30},
+    // {"date": "22/07/2023", "value-entry": 100, "value-leave": 30, "profit": 30},
+    // {"date": "25/07/2023", "value-entry": 110, "value-leave": 30, "profit": 30},
   ];
 
   bool _sortAscending = true;
   int _sortColumnIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    loadProductionDetailsListPage();
+  }
+
+  void loadProductionDetailsListPage() async {
+    final productionController =
+        Provider.of<ProductionController>(context, listen: false);
+    final productions =
+        await productionController.loadDate(widget.monthAndYear);
+    setState(() {
+      productionDetailsListPage = productions;
+    });
+  }
 
   void _onSort(int columnIndex, bool ascending) {
     setState(() {
@@ -154,19 +173,19 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
                           DataCell(
                             Text(
                               NumberFormat("R\$ #0.00", "PT-BR")
-                                  .format(data['value-entry']),
+                                  .format(data['value_entry']),
                             ),
                           ),
                           DataCell(
                             Text(
                               NumberFormat("R\$ #0.00", "PT-BR")
-                                  .format(data['value-leave']),
+                                  .format(data['value_leave']),
                             ),
                           ),
                           DataCell(
                             Text(
                               NumberFormat("R\$ #0.00", "PT-BR")
-                                  .format(data['profit']),
+                                  .format(data['value_profit']),
                             ),
                           ),
                           DataCell(

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'app/config/db.dart';
 import 'app/pages/good_taste_page.dart';
 import 'app/route/routes.dart';
 import 'package:provider/provider.dart';
@@ -13,15 +14,15 @@ import 'package:provider/provider.dart';
 void main() async {
   initializeDateFormatting('pt_BR', null);
   runApp(const AppGoodTaste());
-  // final db = await DB.openDatabase();
-  // final productions = await db.rawQuery(
-  //     "SELECT productions.date, productions.value_entry, productions.value_leave, productions.value_profit FROM productions WHERE productions.date LIKE '%/01/2023%'");
+  final db = await DB.openDatabase();
+  final productions = await db.rawQuery(
+      "SELECT productions.date, productions.value_entry, productions.value_leave, productions.value_profit FROM productions WHERE productions.date LIKE '%/07/2023%'");
 
-  // for (var production in productions) {
-  //   print("__________");
-  //   print(production);
-  //   print("__________");
-  // }
+  for (var production in productions) {
+    print("__________");
+    print(production);
+    print("__________");
+  }
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
