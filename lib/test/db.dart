@@ -1,4 +1,17 @@
 import 'package:app_good_taste/app/config/db.dart';
+import 'package:sqflite/sqflite.dart';
+
+late Database db;
+
+void testSelect() async {
+  db = await DB.openDatabase();
+  final productions = await db.rawQuery(
+      "SELECT * FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN flavors AS f ON f.id = p.flavor_id INNER JOIN feedstocks AS fd ON fd.id = i.feedstock_id WHERE date = '25/07/2023'");
+
+  for (var production in productions) {
+    print(production);
+  }
+}
 
 void insertInTables() {
   insertProduct();
@@ -6,7 +19,7 @@ void insertInTables() {
 }
 
 void insertProduct() async {
-  final db = await DB.openDatabase();
+  db = await DB.openDatabase();
   await db.transaction((txn) async {
     final id = await txn
         .insert("products", {"name": "Chup-Chup cremoso", "price": 1.5});
@@ -73,24 +86,12 @@ void insertFeedstock() async {
       "brand": "NESTLÉ",
       "unit": "PT"
     });
-    await txn.insert("feedstocks", {
-      "name": "BIS",
-      "price": 6.25,
-      "brand": "BIS",
-      "unit": "CX"
-    });
-    await txn.insert("feedstocks", {
-      "name": "Leite",
-      "price": 3,
-      "brand": "IV",
-      "unit": "LT"
-    });
-    await txn.insert("feedstocks", {
-      "name": "Açucar",
-      "price": 18.95,
-      "brand": "Bruçucar",
-      "unit": "ML"
-    });
+    await txn.insert("feedstocks",
+        {"name": "BIS", "price": 6.25, "brand": "BIS", "unit": "CX"});
+    await txn.insert("feedstocks",
+        {"name": "Leite", "price": 3, "brand": "IV", "unit": "LT"});
+    await txn.insert("feedstocks",
+        {"name": "Açucar", "price": 18.95, "brand": "Bruçucar", "unit": "ML"});
     await txn.insert("feedstocks", {
       "name": "Barra de chocolate",
       "price": 28.95,
@@ -109,23 +110,11 @@ void insertFeedstock() async {
       "brand": "",
       "unit": "UND"
     });
-    await txn.insert("feedstocks", {
-      "name": "Caipirinha",
-      "price": 13,
-      "brand": "",
-      "unit": "UND"
-    });
-    await txn.insert("feedstocks", {
-      "name": "Licor",
-      "price": 18,
-      "brand": "",
-      "unit": "UND"
-    });
-    await txn.insert("feedstocks", {
-      "name": "Vodka",
-      "price": 14,
-      "brand": "",
-      "unit": "UND"
-    });
+    await txn.insert("feedstocks",
+        {"name": "Caipirinha", "price": 13, "brand": "", "unit": "UND"});
+    await txn.insert("feedstocks",
+        {"name": "Licor", "price": 18, "brand": "", "unit": "UND"});
+    await txn.insert("feedstocks",
+        {"name": "Vodka", "price": 14, "brand": "", "unit": "UND"});
   });
 }

@@ -162,7 +162,7 @@ class _ProductionPageState extends State<ProductionPage> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2023),
-      lastDate: DateTime(2023, 12, 31),
+      lastDate: DateTime.now(),
     ).then(
       (date) => setState(() {
         if (date != null) {
