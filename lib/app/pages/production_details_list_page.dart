@@ -14,24 +14,7 @@ class ProductionDetailsListPage extends StatefulWidget {
 }
 
 class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
-  List<Map<String, dynamic>> productionDetailsListPage = [
-    // {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
-    // {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
-    // {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
-    // {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
-    // {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
-    // {"date": "11/07/2023", "value-entry": 40, "value-leave": 20, "profit": 20},
-    // {"date": "12/07/2023", "value-entry": 30, "value-leave": 10, "profit": 20},
-    // {"date": "16/07/2023", "value-entry": 50, "value-leave": 25, "profit": 25},
-    // {"date": "17/07/2023", "value-entry": 60, "value-leave": 30, "profit": 30},
-    // {"date": "12/07/2023", "value-entry": 30, "value-leave": 10, "profit": 20},
-    // {"date": "16/07/2023", "value-entry": 50, "value-leave": 25, "profit": 25},
-    // {"date": "18/07/2023", "value-entry": 70, "value-leave": 30, "profit": 30},
-    // {"date": "19/07/2023", "value-entry": 80, "value-leave": 30, "profit": 30},
-    // {"date": "21/07/2023", "value-entry": 90, "value-leave": 30, "profit": 30},
-    // {"date": "22/07/2023", "value-entry": 100, "value-leave": 30, "profit": 30},
-    // {"date": "25/07/2023", "value-entry": 110, "value-leave": 30, "profit": 30},
-  ];
+  List<Map<String, dynamic>> productionDetailsListPage = [];
 
   bool _sortAscending = true;
   int _sortColumnIndex = 0;
