@@ -1,4 +1,3 @@
-import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/pages/production_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -45,9 +44,6 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
         Provider.of<ProductionController>(context, listen: false);
     final feedstocksList =
         await productionProvider.getDetailsFeedstocks(widget.date);
-    for (var feeds in feedstocksList) {
-      print(feeds);
-    }
     setState(() {
       feedstocks = feedstocksList;
     });
@@ -149,11 +145,11 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
               Divider(
                 color: Colors.pink[500],
               ),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.calendar_month_outlined),
-                  Text("12/07/2023"),
+                  const Icon(Icons.calendar_month_outlined),
+                  Text(widget.date),
                 ],
               ),
               Divider(
@@ -237,7 +233,8 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                             Text(
                                               NumberFormat("R\$#0.00", "PT-BR")
                                                   .format(
-                                                productions[index]["price"] ?? 0,
+                                                productions[index]["price"] ??
+                                                    0,
                                               ),
                                               style: TextStyle(
                                                 fontSize: 16,
@@ -253,7 +250,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                               NumberFormat("R\$#0.00", "PT-BR")
                                                   .format(
                                                 productions[index]
-                                                        ["value_entry"],
+                                                    ["value_entry"],
                                               ),
                                               style: TextStyle(
                                                 color: index == selectedLine &&
@@ -332,8 +329,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                             Text(
                                               NumberFormat("R\$ #0.00", "PT-BR")
                                                   .format(
-                                                feedstocks[index]["price"] ??
-                                                    0,
+                                                feedstocks[index]["price"] ?? 0,
                                               ),
                                               style:
                                                   const TextStyle(fontSize: 16),

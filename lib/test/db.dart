@@ -9,7 +9,7 @@ void testSelect() async {
       "SELECT  p.price_product, f.name, f.brand, f.price FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE date ='25/07/2023'");
 
   for (var production in productions) {
-    print(production);
+    // print(production);
   }
 }
 
