@@ -224,6 +224,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                                 MaterialPageRoute(
                                   builder: (_) => const ProductionPage(
                                     production: {},
+                                    listFeedstock: [],
                                   ),
                                 ),
                               );

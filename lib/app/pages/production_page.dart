@@ -10,7 +10,12 @@ import '../controllers/feedstock_controller.dart';
 
 class ProductionPage extends StatefulWidget {
   final Map<String, dynamic> production;
-  const ProductionPage({required this.production, super.key});
+  final List<Map<String, dynamic>> listFeedstock;
+  const ProductionPage({
+    required this.production,
+    required this.listFeedstock,
+    super.key,
+  });
 
   @override
   State<ProductionPage> createState() => _ProductionPageState();
@@ -21,7 +26,9 @@ class _ProductionPageState extends State<ProductionPage> {
   final flavorController = TextEditingController();
   final quantityController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  List<Map<String, dynamic>> products = [], feedstocks = [];
+  List<Map<String, dynamic>> products = [],
+      feedstocks = [],
+      listOfSelectedFeedstocks = [];
   bool productWasSelected = false;
   DateTime dateSelected = DateTime.now();
 
@@ -54,6 +61,7 @@ class _ProductionPageState extends State<ProductionPage> {
     if (widget.production.isEmpty) return;
 
     loadFieldProduction();
+    listOfSelectedFeedstocks = widget.listFeedstock;
   }
 
   void loadFieldProduction() {
@@ -75,6 +83,7 @@ class _ProductionPageState extends State<ProductionPage> {
     dateSelected = DateTime(year, month, day);
     productWasSelected = true;
     productText = productController.text;
+    flavorText = flavorController.text;
     calculateProfit();
   }
 
@@ -126,8 +135,6 @@ class _ProductionPageState extends State<ProductionPage> {
 
     return list;
   }
-
-  final List<Map<String, dynamic>> listOfSelectedFeedstocks = [];
 
   int getIndexListFlavors(String flavorEditing) {
     int index = -1;
@@ -217,7 +224,10 @@ class _ProductionPageState extends State<ProductionPage> {
           ),
         ],
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            Navigator.of(context).pop();
+          },
           icon: const Icon(
             Icons.close,
             size: 35,
@@ -435,7 +445,7 @@ class _ProductionPageState extends State<ProductionPage> {
                 ),
                 listOfSelectedFeedstocks.isEmpty
                     ? const SizedBox(
-                        height: 225,
+                        height: 205,
                         child: Center(
                           child: Text(
                             "Não há matéria prima adicionada.",
@@ -443,7 +453,7 @@ class _ProductionPageState extends State<ProductionPage> {
                           ),
                         ))
                     : SizedBox(
-                        height: 225,
+                        height: 205,
                         child: ListView.builder(
                           itemCount: listOfSelectedFeedstocks.length,
                           itemBuilder: (context, index) {

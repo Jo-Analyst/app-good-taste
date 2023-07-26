@@ -1,6 +1,6 @@
 import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
 import 'package:app_good_taste/app/controllers/flavor_controller.dart';
-// import 'package:app_good_taste/app/controllers/items_productions_controller.dart';
+import 'package:app_good_taste/app/controllers/items_productions_controller.dart';
 import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ class AppGoodTaste extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProductController()),
         ChangeNotifierProvider(create: (_) => FeedstockController()),
         ChangeNotifierProvider(create: (_) => ProductionController()),
-        // ChangeNotifierProvider(create: (_) => ItemsProductionsController()),
+        ChangeNotifierProvider(create: (_) => ItemsProductionsController()),
       ],
       child: MaterialApp(
         locale: const Locale('pt', 'BR'),

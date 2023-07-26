@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../controllers/items_productions_controller.dart';
 import '../controllers/production_controller.dart';
 
 class ProductionDetailsPage extends StatefulWidget {
@@ -23,13 +24,14 @@ class ProductionDetailsPage extends StatefulWidget {
 
 class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   bool lineWasPressed = false, confirmedDeleteOrEdit = false;
-  int selectedLine = -1;
+  int selectedLine = -1, productionId = 0;
   List<Map<String, dynamic>> productions = [];
   double valueEntry = 0, valueLeave = 0, valueProfit = 0;
 
   List<Map<String, bool>> rowsPressed = [];
   List<Map<String, dynamic>> valuesProductions = [];
   List<Map<String, dynamic>> feedstocks = [];
+  List<Map<String, dynamic>> listOfSelectedFeedstocks = [];
 
   @override
   initState() {
@@ -46,6 +48,27 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
       for (var production in productions) {
         valueEntry += production["value_entry"];
       }
+    });
+  }
+
+  void loadFeedstockEdition() async {
+    final feedstockProvider =
+        Provider.of<ItemsProductionsController>(context, listen: false);
+    final feedstockItems =
+        await feedstockProvider.loadItemsProductions(productionId);
+    setState(() {
+      listOfSelectedFeedstocks.clear();
+      for (var item in feedstockItems) {
+        listOfSelectedFeedstocks.add({
+          "id": item["id"],
+          "name": item["name"],
+          "price": item["price"],
+          "brand": item["brand"],
+          "isChecked": false,
+        });
+      }
+
+      print(listOfSelectedFeedstocks);
     });
   }
 
@@ -154,8 +177,8 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (_) => ProductionPage(
-                                production: productions[selectedLine],
-                              ),
+                                  production: productions[selectedLine],
+                                  listFeedstock: listOfSelectedFeedstocks),
                             ),
                           );
                         },
@@ -264,7 +287,11 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                           setState(() {
                                             selectedLine = index;
                                             toggleRowsPressed(index);
+                                            productionId =
+                                                productions[index]["id"];
                                           });
+
+                                          loadFeedstockEdition();
                                         },
                                         child: Container(
                                           color: rowColor,
