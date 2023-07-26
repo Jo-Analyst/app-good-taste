@@ -13,7 +13,7 @@ class AllProductionsPage extends StatefulWidget {
 }
 
 class _AllProductionsPageState extends State<AllProductionsPage> {
-  final List<Map<String, dynamic>> date = Month.listMonths.map((dt) {
+  List<Map<String, dynamic>> date = Month.listMonths.map((dt) {
     return {
       "number": dt["number"],
       "month": dt["month"],
@@ -39,13 +39,15 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
     return dateProductions.isNotEmpty;
   }
 
-  void openScreen(int index) {
-    Navigator.of(context).push(
+  void openScreen(int index) async {
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => ProductionDetailsListPage(
             monthAndYear: "${date[index]["number"]}/$yearSelected"),
       ),
     );
+    getDateProductions("${date[index]["number"]}/$yearSelected");
+    changeDateList();
   }
 
   changeDateList() async {

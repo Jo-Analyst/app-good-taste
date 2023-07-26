@@ -25,6 +25,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   bool lineWasPressed = false, confirmedDeleteOrEdit = false;
   int selectedLine = -1;
   List<Map<String, dynamic>> productions = [];
+  double valueEntry = 0, valueLeave = 0, valueProfit = 0;
 
   List<Map<String, bool>> rowsPressed = [];
   List<Map<String, dynamic>> valuesProductions = [];
@@ -34,6 +35,33 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   initState() {
     super.initState();
     loadDetailsProductions();
+    // valueEntry = widget.valueEntry;
+    // valueLeave = widget.valueLeave;
+    // valueProfit = widget.valueProfit;
+  }
+
+  void sumValueEntry() {
+    setState(() {
+      valueEntry = 0;
+      for (var production in productions) {
+        valueEntry += production["value_entry"];
+      }
+    });
+  }
+
+  void sumValueLeave() {
+    setState(() {
+      valueLeave = 0;
+      for (var feedstock in feedstocks) {
+        valueLeave += feedstock["price"];
+      }
+    });
+  }
+
+  void subtractValueEntryByValueLeave() {
+    setState(() {
+      valueProfit = valueEntry - valueLeave;
+    });
   }
 
   void loadDetailsProductions() {
@@ -49,7 +77,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
     setState(() {
       productions = productionsList;
       checkIfProductionsIsGreaterThanZeroAndFillInTheListRowsPressed();
-      // getDetailsValuesProductions();
+      sumValueEntry();
     });
   }
 
@@ -60,6 +88,8 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
         await productionProvider.getDetailsFeedstocks(widget.date);
     setState(() {
       feedstocks = feedstocksList;
+      sumValueLeave();
+      subtractValueEntryByValueLeave();
     });
   }
 
@@ -206,107 +236,121 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       fontSize: 18,
                       color: Colors.black,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          Flexible(
-                            child: ListView.builder(
-                              itemCount: productions.length,
-                              itemBuilder: (context, index) {
-                                final rowColor = index == selectedLine &&
-                                        rowsPressed[index]["isPressed"]!
-                                    ? Theme.of(context).primaryColor
-                                    : index % 2 > 0
-                                        ? Colors.white
-                                        : Colors.grey.shade200;
+                    child: productions.isEmpty
+                        ? const Center(
+                            child: Text(
+                              "Sem dados a exibir...",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 10),
+                                Flexible(
+                                  child: ListView.builder(
+                                    itemCount: productions.length,
+                                    itemBuilder: (context, index) {
+                                      final rowColor = index == selectedLine &&
+                                              rowsPressed[index]["isPressed"]!
+                                          ? Theme.of(context).primaryColor
+                                          : index % 2 > 0
+                                              ? Colors.white
+                                              : Colors.grey.shade200;
 
-                                return InkWell(
-                                  onLongPress: () {
-                                    setState(() {
-                                      selectedLine = index;
-                                      toggleRowsPressed(index);
-                                    });
-                                  },
-                                  child: Container(
-                                    color: rowColor,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 15,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            productions[index]["flavor"],
-                                            style: TextStyle(
-                                              color: index == selectedLine &&
-                                                      rowsPressed[index]
-                                                          ["isPressed"]!
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                            ),
+                                      return InkWell(
+                                        onLongPress: () {
+                                          setState(() {
+                                            selectedLine = index;
+                                            toggleRowsPressed(index);
+                                          });
+                                        },
+                                        child: Container(
+                                          color: rowColor,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                            vertical: 15,
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  productions[index]["flavor"],
+                                                  style: TextStyle(
+                                                    color: index ==
+                                                                selectedLine &&
+                                                            rowsPressed[index]
+                                                                ["isPressed"]!
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    "${productions[index]["quantity"]}x",
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: index ==
+                                                                  selectedLine &&
+                                                              rowsPressed[index]
+                                                                  ["isPressed"]!
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    NumberFormat(
+                                                            "R\$#0.00", "PT-BR")
+                                                        .format(
+                                                      productions[index]
+                                                              ["price"] ??
+                                                          0,
+                                                    ),
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: index ==
+                                                                  selectedLine &&
+                                                              rowsPressed[index]
+                                                                  ["isPressed"]!
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    NumberFormat(
+                                                            "R\$#0.00", "PT-BR")
+                                                        .format(
+                                                      productions[index]
+                                                          ["value_entry"],
+                                                    ),
+                                                    style: TextStyle(
+                                                      color: index ==
+                                                                  selectedLine &&
+                                                              rowsPressed[index]
+                                                                  ["isPressed"]!
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
                                           ),
                                         ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "${productions[index]["quantity"]}x",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: index == selectedLine &&
-                                                        rowsPressed[index]
-                                                            ["isPressed"]!
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 5),
-                                            Text(
-                                              NumberFormat("R\$#0.00", "PT-BR")
-                                                  .format(
-                                                productions[index]["price"] ??
-                                                    0,
-                                              ),
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: index == selectedLine &&
-                                                        rowsPressed[index]
-                                                            ["isPressed"]!
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 5),
-                                            Text(
-                                              NumberFormat("R\$#0.00", "PT-BR")
-                                                  .format(
-                                                productions[index]
-                                                    ["value_entry"],
-                                              ),
-                                              style: TextStyle(
-                                                color: index == selectedLine &&
-                                                        rowsPressed[index]
-                                                            ["isPressed"]!
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
               ),
@@ -326,61 +370,72 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       fontSize: 18,
                       color: Colors.black,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 10),
-                          Flexible(
-                            child: ListView.builder(
-                              itemCount: feedstocks.length,
-                              itemBuilder: (context, index) {
-                                final rowColor = index % 2 > 0
-                                    ? Colors.white
-                                    : Colors.grey.shade200;
-                                return Container(
-                                  color: rowColor,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 15),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Expanded(
-                                          child: Row(
-                                        children: [
-                                          Expanded(
-                                              child: Text(
-                                                  "${feedstocks[index]["count_feedstock"]} ${feedstocks[index]["unit"]}  ${feedstocks[index]["name"]}")),
-                                        ],
-                                      )),
-                                      SizedBox(
-                                        width: 120,
+                    child: feedstocks.isEmpty
+                        ? const Center(
+                            child: Text(
+                              "Sem dados a exibir...",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                const SizedBox(height: 10),
+                                Flexible(
+                                  child: ListView.builder(
+                                    itemCount: feedstocks.length,
+                                    itemBuilder: (context, index) {
+                                      final rowColor = index % 2 > 0
+                                          ? Colors.white
+                                          : Colors.grey.shade200;
+                                      return Container(
+                                        color: rowColor,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 15),
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            const SizedBox(width: 5),
-                                            Text(
-                                              NumberFormat("R\$ #0.00", "PT-BR")
-                                                  .format(
-                                                feedstocks[index]["price"] ?? 0,
+                                            Expanded(
+                                                child: Row(
+                                              children: [
+                                                Expanded(
+                                                    child: Text(
+                                                        "${feedstocks[index]["count_feedstock"]} ${feedstocks[index]["unit"]}  ${feedstocks[index]["name"]}")),
+                                              ],
+                                            )),
+                                            SizedBox(
+                                              width: 120,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    NumberFormat("R\$ #0.00",
+                                                            "PT-BR")
+                                                        .format(
+                                                      feedstocks[index]
+                                                              ["price"] ??
+                                                          0,
+                                                    ),
+                                                    style: const TextStyle(
+                                                        fontSize: 16),
+                                                  ),
+                                                ],
                                               ),
-                                              style:
-                                                  const TextStyle(fontSize: 16),
-                                            ),
+                                            )
                                           ],
                                         ),
-                                      )
-                                    ],
+                                      );
+                                    },
                                   ),
-                                );
-                              },
+                                ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
               ),
@@ -400,8 +455,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       child: Chip(
                         backgroundColor: Colors.blue,
                         label: Text(
-                          NumberFormat("R\$ #0.00", "PT-BR")
-                              .format(widget.valueEntry),
+                          NumberFormat("R\$ #0.00", "PT-BR").format(valueEntry),
                           style: const TextStyle(fontSize: 14),
                         ),
                       ),
@@ -417,8 +471,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       child: Chip(
                         backgroundColor: Colors.red,
                         label: Text(
-                          NumberFormat("R\$ #0.00", "PT-BR")
-                              .format(widget.valueLeave),
+                          NumberFormat("R\$ #0.00", "PT-BR").format(valueLeave),
                           style: const TextStyle(fontSize: 14),
                         ),
                       ),
@@ -435,7 +488,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                         backgroundColor: Colors.green,
                         label: Text(
                           NumberFormat("R\$ #0.00", "PT-BR")
-                              .format(widget.valueProfit),
+                              .format(valueProfit),
                           style: const TextStyle(fontSize: 14),
                         ),
                       ),
