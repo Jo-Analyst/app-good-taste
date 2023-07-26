@@ -73,6 +73,8 @@ class _ProductionPageState extends State<ProductionPage> {
     int month = int.parse(widget.production["date"].toString().split("/")[1]);
     int day = int.parse(widget.production["date"].toString().split("/")[0]);
     dateSelected = DateTime(year, month, day);
+    productWasSelected = true;
+    productText = productController.text;
     calculateProfit();
   }
 

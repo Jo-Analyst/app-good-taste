@@ -102,7 +102,9 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
         ),
         toolbarHeight: 100,
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
           icon: const Icon(
             Icons.close,
             size: 35,
@@ -139,38 +141,50 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
                 child: ListView.builder(
                   itemCount: filteredFeedstocks.length,
                   itemBuilder: (ctx, index) {
-                    return Column(
-                      children: [
-                        ListTile(
-                          title: Text(filteredFeedstocks[index]["name"]),
-                          subtitle: Text(filteredFeedstocks[index]["brand"]),
-                          leading: CircleAvatar(
-                            maxRadius: 30,
-                            child: Text(
-                              NumberFormat("R\$ #0.00", "Pt-BR")
-                                  .format(filteredFeedstocks[index]["price"]),
-                              style: const TextStyle(fontSize: 12),
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          filteredFeedstocks[index]["isChecked"] =
+                              !(filteredFeedstocks[index]["isChecked"] ??
+                                  false);
+                          checkIfThereIsFeedstockSelected();
+                          addValuesSelectedFeedstock(filteredFeedstocks[index],
+                              filteredFeedstocks[index]["isChecked"] ?? false);
+                        });
+                      },
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text(filteredFeedstocks[index]["name"]),
+                            subtitle: Text(filteredFeedstocks[index]["brand"]),
+                            leading: CircleAvatar(
+                              maxRadius: 30,
+                              child: Text(
+                                NumberFormat("R\$ #0.00", "Pt-BR")
+                                    .format(filteredFeedstocks[index]["price"]),
+                                style: const TextStyle(fontSize: 12),
+                              ),
+                            ),
+                            trailing: Transform.scale(
+                              scale: 1.5,
+                              child: Checkbox(
+                                value: filteredFeedstocks[index]["isChecked"] ??
+                                    false,
+                                onChanged: (bool? checked) {
+                                  setState(() {
+                                    filteredFeedstocks[index]["isChecked"] =
+                                        checked!;
+                                    checkIfThereIsFeedstockSelected();
+                                    addValuesSelectedFeedstock(
+                                        filteredFeedstocks[index], checked);
+                                  });
+                                },
+                              ),
                             ),
                           ),
-                          trailing: Transform.scale(
-                            scale: 1.5,
-                            child: Checkbox(
-                              value: filteredFeedstocks[index]["isChecked"] ??
-                                  false,
-                              onChanged: (bool? checked) {
-                                setState(() {
-                                  filteredFeedstocks[index]["isChecked"] =
-                                      checked!;
-                                  checkIfThereIsFeedstockSelected();
-                                  addValuesSelectedFeedstock(
-                                      filteredFeedstocks[index], checked);
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        const Divider()
-                      ],
+                          const Divider()
+                        ],
+                      ),
                     );
                   },
                 ),

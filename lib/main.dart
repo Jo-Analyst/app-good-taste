@@ -1,8 +1,8 @@
 import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
 import 'package:app_good_taste/app/controllers/flavor_controller.dart';
+// import 'package:app_good_taste/app/controllers/items_productions_controller.dart';
 import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/controllers/production_controller.dart';
-import 'package:app_good_taste/test/db.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,8 +14,7 @@ import 'package:provider/provider.dart';
 void main() async {
   initializeDateFormatting('pt_BR', null);
   runApp(const AppGoodTaste());
-  insertInTables();
-
+  // insertInTables();
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -31,6 +30,7 @@ class AppGoodTaste extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProductController()),
         ChangeNotifierProvider(create: (_) => FeedstockController()),
         ChangeNotifierProvider(create: (_) => ProductionController()),
+        // ChangeNotifierProvider(create: (_) => ItemsProductionsController()),
       ],
       child: MaterialApp(
         locale: const Locale('pt', 'BR'),
