@@ -19,6 +19,7 @@ class ProductionPage extends StatefulWidget {
 class _ProductionPageState extends State<ProductionPage> {
   final productController = TextEditingController();
   final flavorController = TextEditingController();
+  final quantityController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   List<Map<String, dynamic>> products = [], feedstocks = [];
   bool productWasSelected = false;
@@ -52,13 +53,26 @@ class _ProductionPageState extends State<ProductionPage> {
 
     if (widget.production.isEmpty) return;
 
+    loadFieldProduction();
+  }
+
+  void loadFieldProduction() {
     quantity = widget.production["quantity"];
-    valueEntry = widget.production["subtotal"];
+    valueEntry = widget.production["value_entry"];
+    valueLeave = widget.production["value_leave"];
+    valueProfit = widget.production["value_profit"];
     flavorEditing = widget.production["flavor"];
-    flavorSelect = flavors[getIndexListFlavors(flavorEditing!)];
+    // flavorSelect = flavors[getIndexListFlavors(flavorEditing!)];
     price = widget.production["price"];
     productionId = widget.production["id"];
     // itemProductionId = widget.itemProductionId["id"];
+    productController.text = widget.production["name"];
+    flavorController.text = flavorEditing!;
+    quantityController.text = quantity.toString();
+    int year = int.parse(widget.production["date"].toString().split("/")[2]);
+    int month = int.parse(widget.production["date"].toString().split("/")[1]);
+    int day = int.parse(widget.production["date"].toString().split("/")[0]);
+    dateSelected = DateTime(year, month, day);
     calculateProfit();
   }
 
@@ -160,7 +174,7 @@ class _ProductionPageState extends State<ProductionPage> {
   showCalendarPicker() {
     showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: dateSelected,
       firstDate: DateTime(2023),
       lastDate: DateTime.now(),
     ).then(
@@ -330,6 +344,7 @@ class _ProductionPageState extends State<ProductionPage> {
                         children: [
                           Flexible(
                             child: TextFormField(
+                              controller: quantityController,
                               keyboardType: TextInputType.number,
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly

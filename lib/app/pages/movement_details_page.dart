@@ -232,8 +232,15 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                                 loadDetailsProductions();
                               }
                             } else if (option == "all-productions") {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => const AllProductionsPage()));
+                              final confirmUpdateAndDelete =
+                                  await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const AllProductionsPage(),
+                                ),
+                              );
+                              if (confirmUpdateAndDelete == true) {
+                                loadDetailsProductions();
+                              }
                             }
                           },
                         ),

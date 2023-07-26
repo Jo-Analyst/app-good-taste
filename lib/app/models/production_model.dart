@@ -112,7 +112,7 @@ class ProductionModel {
       String date) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
-        "SELECT p.id, f.type AS flavor, p.quantity, p.value_entry, p.price_product AS price FROM productions AS p INNER JOIN flavors AS f ON f.id = p.flavor_id WHERE date = '$date'");
+        "SELECT p.id, p.date, f.type AS flavor, p.quantity, p.value_entry, p.value_leave, p.value_profit, p.price_product AS price, ps.name FROM productions AS p INNER JOIN flavors AS f ON f.id = p.flavor_id INNER JOIN products AS ps ON ps.id = f.product_id WHERE date = '$date'");
   }
 
   static Future<List<Map<String, dynamic>>> getDetailsFeedstocks(

@@ -18,7 +18,7 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
 
   bool _sortAscending = true;
   int _sortColumnIndex = 0;
-
+  bool confirmUpdateAndDelete = false;
   @override
   void initState() {
     super.initState();
@@ -68,7 +68,7 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
         ),
         toolbarHeight: 100,
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(context).pop(confirmUpdateAndDelete),
           icon: const Icon(
             Icons.close,
             size: 35,
@@ -185,7 +185,7 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
                                 DataCell(
                                   IconButton(
                                     onPressed: () async {
-                                      final confirmedDeleteOrEdit =
+                                      final confirmUpdateAndDelete =
                                           await Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (_) => ProductionDetailsPage(
@@ -197,7 +197,10 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
                                         ),
                                       );
 
-                                      if (confirmedDeleteOrEdit == true) {
+                                      if (confirmUpdateAndDelete == true) {
+                                        setState(() {
+                                          this.confirmUpdateAndDelete = true;
+                                        });
                                         loadProductionDetailsListPage();
                                       }
                                     },

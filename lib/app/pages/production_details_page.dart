@@ -131,8 +131,8 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Detalhes do dia",
+        title: Text(
+          "Detalhes do dia ${widget.date}",
         ),
         toolbarHeight: 100,
         leading: IconButton(

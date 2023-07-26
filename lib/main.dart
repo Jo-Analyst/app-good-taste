@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 void main() async {
   initializeDateFormatting('pt_BR', null);
   runApp(const AppGoodTaste());
-  // insertInTables();
+  insertInTables();
 
 }
 

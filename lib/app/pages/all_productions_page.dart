@@ -22,6 +22,7 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
   }).toList();
 
   String yearSelected = "";
+  bool confirmUpdateAndDelete = false;
 
   @override
   void initState() {
@@ -40,14 +41,19 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
   }
 
   void openScreen(int index) async {
-    await Navigator.of(context).push(
+    final confirmUpdateAndDelete = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => ProductionDetailsListPage(
             monthAndYear: "${date[index]["number"]}/$yearSelected"),
       ),
     );
-    getDateProductions("${date[index]["number"]}/$yearSelected");
-    changeDateList();
+    if (confirmUpdateAndDelete == true) {
+      setState(() {
+        this.confirmUpdateAndDelete = true;
+      });
+      getDateProductions("${date[index]["number"]}/$yearSelected");
+      changeDateList();
+    }
   }
 
   changeDateList() async {
@@ -67,7 +73,7 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
         leading: Container(
           margin: const EdgeInsets.only(right: 5),
           child: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(context).pop(confirmUpdateAndDelete),
             icon: const Icon(
               Icons.close,
               size: 35,
