@@ -173,11 +173,22 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
                           ),
                           DataCell(
                             IconButton(
-                              onPressed: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) =>  ProductionDetailsPage(date: data['date']),
-                                ),
-                              ),
+                              onPressed: () async {
+                                final confirmedDeleteOrEdit =
+                                    await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => ProductionDetailsPage(
+                                        date: data['date'],
+                                        valueEntry: data["value_entry"],
+                                        valueLeave: data["value_leave"],
+                                        valueProfit: data["value_profit"]),
+                                  ),
+                                );
+
+                                if (confirmedDeleteOrEdit == true) {
+                                  loadProductionDetailsListPage();
+                                }
+                              },
                               icon: Icon(
                                 Icons.add_chart_sharp,
                                 size: 35,

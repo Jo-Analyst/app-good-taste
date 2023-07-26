@@ -5,12 +5,12 @@ late Database db;
 
 void testSelect() async {
   db = await DB.openDatabase();
-  final productions = await db.rawQuery(
-      "SELECT  p.price_product, f.name, f.brand, f.price FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE date ='25/07/2023'");
+  // final productions = await db.rawQuery(
+  //     "SELECT  p.price_product, f.name, f.brand, f.price FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE date ='25/07/2023'");
 
-  for (var production in productions) {
-    // print(production);
-  }
+  // for (var production in productions) {
+  //   // print(production);
+  // }
 }
 
 void insertInTables() {
@@ -31,6 +31,7 @@ void insertProduct() async {
     await txn.insert("flavors", {"type": "Limonada Suiça", "product_id": id});
     await txn.insert("flavors", {"type": "Chocolate", "product_id": id});
     await txn.insert("flavors", {"type": "Leite condensado", "product_id": id});
+    await txn.insert("flavors", {"type": "Abacaxi", "product_id": id});
   });
   await db.transaction((txn) async {
     final id = await txn
@@ -116,5 +117,7 @@ void insertFeedstock() async {
         {"name": "Licor", "price": 18, "brand": "", "unit": "UND"});
     await txn.insert("feedstocks",
         {"name": "Vodka", "price": 14, "brand": "", "unit": "UND"});
+    await txn.insert("feedstocks",
+        {"name": "Suco de abacaxi", "price": 1, "brand": "MID", "unit": "PC"});
   });
 }

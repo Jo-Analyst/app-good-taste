@@ -1,4 +1,6 @@
 import 'package:app_good_taste/app/pages/production_page.dart';
+import 'package:app_good_taste/app/utils/dialog.dart';
+import 'package:app_good_taste/app/utils/message_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -7,26 +9,36 @@ import '../controllers/production_controller.dart';
 
 class ProductionDetailsPage extends StatefulWidget {
   final String date;
-  const ProductionDetailsPage({super.key, required this.date});
+  final double valueEntry, valueLeave, valueProfit;
+  const ProductionDetailsPage(
+      {super.key,
+      required this.valueEntry,
+      required this.valueLeave,
+      required this.valueProfit,
+      required this.date});
 
   @override
   State<ProductionDetailsPage> createState() => _ProductionDetailsPageState();
 }
 
 class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
-  bool lineWasPressed = false;
+  bool lineWasPressed = false, confirmedDeleteOrEdit = false;
   int selectedLine = -1;
   List<Map<String, dynamic>> productions = [];
 
   List<Map<String, bool>> rowsPressed = [];
+  List<Map<String, dynamic>> valuesProductions = [];
   List<Map<String, dynamic>> feedstocks = [];
 
   @override
   initState() {
     super.initState();
+    loadDetailsProductions();
+  }
+
+  void loadDetailsProductions() {
     getDetailsFlavors();
     getDetailsFeedstocks();
-    checkIfProductionsIsGreaterThanZeroAndFillInTheListRowsPressed();
   }
 
   void getDetailsFlavors() async {
@@ -36,6 +48,8 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
         await productionProvider.getDetailsFlavors(widget.date);
     setState(() {
       productions = productionsList;
+      checkIfProductionsIsGreaterThanZeroAndFillInTheListRowsPressed();
+      // getDetailsValuesProductions();
     });
   }
 
@@ -46,6 +60,15 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
         await productionProvider.getDetailsFeedstocks(widget.date);
     setState(() {
       feedstocks = feedstocksList;
+    });
+  }
+
+  void getDetailsValuesProductions() async {
+    final productionProvider =
+        Provider.of<ProductionController>(context, listen: false);
+    final values = await productionProvider.loadDate(widget.date);
+    setState(() {
+      valuesProductions = values;
     });
   }
 
@@ -87,7 +110,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
             Icons.close,
             size: 35,
           ),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.of(context).pop(confirmedDeleteOrEdit),
         ),
         actions: [
           Container(
@@ -114,12 +137,24 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                 IconButton(
                   onPressed: !lineWasPressed
                       ? null
-                      : () {
-                          setState(() {
-                            productions.removeAt(selectedLine);
-                            lineWasPressed = false;
-                            clearSelection();
-                          });
+                      : () async {
+                          final confirmExit = await showExitDialog(context,
+                              ListMessageDialog.messageDialog(null)[0]);
+
+                          if (confirmExit!) {
+                            setState(() {
+                              final productionProvider =
+                                  Provider.of<ProductionController>(context,
+                                      listen: false);
+                              productionProvider
+                                  .remove(productions[selectedLine]["id"]);
+                              lineWasPressed = false;
+                              confirmedDeleteOrEdit = true;
+                              clearSelection();
+                            });
+
+                            loadDetailsProductions();
+                          }
                         },
                   icon: const Icon(
                     Icons.delete,
@@ -309,22 +344,22 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                       horizontal: 10, vertical: 15),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Expanded(
-                                          child:
-                                              Text(feedstocks[index]["name"])),
+                                          child: Row(
+                                        children: [
+                                          Expanded(
+                                              child: Text(
+                                                  "${feedstocks[index]["count_feedstock"]} ${feedstocks[index]["unit"]}  ${feedstocks[index]["name"]}")),
+                                        ],
+                                      )),
                                       SizedBox(
                                         width: 120,
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              feedstocks[index]["brand"] ?? "",
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                            ),
                                             const SizedBox(width: 5),
                                             Text(
                                               NumberFormat("R\$ #0.00", "PT-BR")
@@ -365,8 +400,9 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       child: Chip(
                         backgroundColor: Colors.blue,
                         label: Text(
-                          NumberFormat("R\$ #0.00", "PT-BR").format(100),
-                          style: const TextStyle(fontSize: 16),
+                          NumberFormat("R\$ #0.00", "PT-BR")
+                              .format(widget.valueEntry),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       ),
                     ),
@@ -381,8 +417,9 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       child: Chip(
                         backgroundColor: Colors.red,
                         label: Text(
-                          NumberFormat("R\$ #0.00", "PT-BR").format(40),
-                          style: const TextStyle(fontSize: 16),
+                          NumberFormat("R\$ #0.00", "PT-BR")
+                              .format(widget.valueLeave),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       ),
                     ),
@@ -397,8 +434,9 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       child: Chip(
                         backgroundColor: Colors.green,
                         label: Text(
-                          NumberFormat("R\$ #0.00", "PT-BR").format(60),
-                          style: const TextStyle(fontSize: 16),
+                          NumberFormat("R\$ #0.00", "PT-BR")
+                              .format(widget.valueProfit),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       ),
                     ),

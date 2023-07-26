@@ -58,7 +58,16 @@ class ProductionModel {
     return db.query("productions");
   }
 
-  static Future<List<Map<String, dynamic>>> findDateByYear(String date) async {
+  static void delete(int id) async {
+    final db = await DB.openDatabase();
+    await db.transaction((txn) async {
+      await txn.delete("productions", where: "id = ?", whereArgs: [id]);
+      await ItemsProductionModel.delete(txn, id);
+    });
+  }
+
+  static Future<List<Map<String, dynamic>>> findDateAndValuesByYear(
+      String date) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
         "SELECT date, SUM(value_entry) AS value_entry, SUM(value_leave) AS value_leave, SUM(value_profit) AS value_profit from productions WHERE date LIKE '%$date%' GROUP BY date");
@@ -99,15 +108,17 @@ class ProductionModel {
         "SELECT SUM(value_leave) AS value_leave FROM productions WHERE date LIKE '%$month%'");
   }
 
-  static Future<List<Map<String, dynamic>>> getDetailsFlavors(String date) async {
+  static Future<List<Map<String, dynamic>>> getDetailsFlavors(
+      String date) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
-        "SELECT f.type AS flavor, p.quantity, p.value_entry, p.price_product AS price FROM productions AS p INNER JOIN flavors AS f ON f.id = p.flavor_id WHERE date = '$date'");
+        "SELECT p.id, f.type AS flavor, p.quantity, p.value_entry, p.price_product AS price FROM productions AS p INNER JOIN flavors AS f ON f.id = p.flavor_id WHERE date = '$date'");
   }
-  
-  static Future<List<Map<String, dynamic>>> getDetailsFeedstocks(String date) async {
+
+  static Future<List<Map<String, dynamic>>> getDetailsFeedstocks(
+      String date) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
-        "SELECT  p.price_product, f.name, f.brand, f.price FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE date = '$date'");
+        "SELECT f.name, COUNT(f.name) count_feedstock, f.unit, SUM(f.price) AS price FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE date = '$date' GROUP BY f.name");
   }
 }

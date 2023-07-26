@@ -30,12 +30,16 @@ class ProductionController extends ChangeNotifier {
   }
 
   Future<List<Map<String, dynamic>>> loadDate(String date) async {
-    return await ProductionModel.findDateByYear(date);
+    return await ProductionModel.findDateAndValuesByYear(date);
   }
 
   Future<List<Map<String, dynamic>>> getSumQuantityAndValueEntry(
       String month) async {
     return await ProductionModel.getSumQuantityAndValueEntry(month);
+  }
+
+  void remove(int id) {
+    ProductionModel.delete(id);
   }
 
   Future<List<Map<String, dynamic>>>
@@ -55,9 +59,11 @@ class ProductionController extends ChangeNotifier {
   Future<List<Map<String, dynamic>>> getSumValueLeave(String month) async {
     return await ProductionModel.getSumValueLeave(month);
   }
+
   Future<List<Map<String, dynamic>>> getDetailsFlavors(String date) async {
     return await ProductionModel.getDetailsFlavors(date);
   }
+
   Future<List<Map<String, dynamic>>> getDetailsFeedstocks(String date) async {
     return await ProductionModel.getDetailsFeedstocks(date);
   }

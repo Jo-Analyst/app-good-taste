@@ -26,7 +26,7 @@ class DB {
         );
 
         db.execute(
-          'CREATE TABLE items_productions (id INTEGER PRIMARY KEY, price_feedstock REAL, feedstock_id INTEGER, production_id INTEGER, FOREIGN KEY (feedstock_id) REFERENCES feedstocks(id) ON DELETE SET NULL, FOREIGN KEY (production_id) REFERENCES productions(id) ON DELETE SET NULL)',
+          'CREATE TABLE items_productions (id INTEGER PRIMARY KEY, price_feedstock REAL, feedstock_id INTEGER, production_id INTEGER, FOREIGN KEY (feedstock_id) REFERENCES feedstocks(id) ON DELETE SET NULL, FOREIGN KEY (production_id) REFERENCES productions(id) ON DELETE CASCADE)',
         );
       },
       version: 1,

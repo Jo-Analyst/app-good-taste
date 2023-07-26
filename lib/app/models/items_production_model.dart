@@ -26,4 +26,9 @@ class ItemsProductionModel {
           .update("items_productions", data, where: "id = ?", whereArgs: [id]);
     }
   }
+
+ static Future<void> delete(Transaction txn, int productId) async {
+    txn.delete("items_productions",
+        where: "production_id = ?", whereArgs: [productId]);
+  }
 }
