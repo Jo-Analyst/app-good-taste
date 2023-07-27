@@ -25,6 +25,7 @@ class _ProductionPageState extends State<ProductionPage> {
   final productController = TextEditingController();
   final flavorController = TextEditingController();
   final quantityController = TextEditingController();
+  bool confirmSave = false;
   final formKey = GlobalKey<FormState>();
   List<Map<String, dynamic>> products = [],
       feedstocks = [],
@@ -70,6 +71,8 @@ class _ProductionPageState extends State<ProductionPage> {
     valueLeave = widget.production["value_leave"];
     valueProfit = widget.production["value_profit"];
     flavorEditing = widget.production["flavor"];
+    flavorId = widget.production["flavor_id"];
+    productId = widget.production["product_id"];
     // flavorSelect = flavors[getIndexListFlavors(flavorEditing!)];
     price = widget.production["price"];
     productionId = widget.production["id"];
@@ -104,13 +107,13 @@ class _ProductionPageState extends State<ProductionPage> {
     });
   }
 
-  void confirmProdution() async {
+  Future<bool> confirmProdution() async {
     final productionProvider = Provider.of<ProductionController>(
       context,
       listen: false,
     );
 
-    await productionProvider.save({
+    return await productionProvider.save({
       "id": productionId,
       "quantity": quantity,
       "date": DateFormat("dd/MM/yyyy").format(dateSelected),
@@ -212,8 +215,11 @@ class _ProductionPageState extends State<ProductionPage> {
                       productText.isNotEmpty &&
                       flavorText.isNotEmpty
                   ? () {
-                      confirmProdution();
-                      Navigator.pop(context, true);
+                      confirmProdution().then((confirmSave) {
+                        if (confirmSave) {
+                          Navigator.pop(context, [confirmSave, dateSelected]);
+                        }
+                      });
                     }
                   : null,
               icon: const Icon(
@@ -226,7 +232,7 @@ class _ProductionPageState extends State<ProductionPage> {
         leading: IconButton(
           onPressed: () {
             FocusScope.of(context).unfocus();
-            Navigator.of(context).pop();
+            Navigator.of(context).pop([false, dateSelected]);
           },
           icon: const Icon(
             Icons.close,

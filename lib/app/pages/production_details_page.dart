@@ -27,6 +27,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   int selectedLine = -1, productionId = 0;
   List<Map<String, dynamic>> productions = [];
   double valueEntry = 0, valueLeave = 0, valueProfit = 0;
+  String date = DateFormat("dd/MM/yyyy", "pt-br").format(DateTime.now());
 
   List<Map<String, bool>> rowsPressed = [];
   List<Map<String, dynamic>> valuesProductions = [];
@@ -37,9 +38,6 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   initState() {
     super.initState();
     loadDetailsProductions();
-    // valueEntry = widget.valueEntry;
-    // valueLeave = widget.valueLeave;
-    // valueProfit = widget.valueProfit;
   }
 
   void sumValueEntry() {
@@ -67,8 +65,6 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
           "isChecked": false,
         });
       }
-
-      print(listOfSelectedFeedstocks);
     });
   }
 
@@ -88,6 +84,9 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   }
 
   void loadDetailsProductions() {
+    setState(() {
+      date = widget.date;
+    });
     getDetailsFlavors();
     getDetailsFeedstocks();
   }
@@ -95,8 +94,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   void getDetailsFlavors() async {
     final productionProvider =
         Provider.of<ProductionController>(context, listen: false);
-    final productionsList =
-        await productionProvider.getDetailsFlavors(widget.date);
+    final productionsList = await productionProvider.getDetailsFlavors(date);
     setState(() {
       productions = productionsList;
       checkIfProductionsIsGreaterThanZeroAndFillInTheListRowsPressed();
@@ -107,8 +105,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   void getDetailsFeedstocks() async {
     final productionProvider =
         Provider.of<ProductionController>(context, listen: false);
-    final feedstocksList =
-        await productionProvider.getDetailsFeedstocks(widget.date);
+    final feedstocksList = await productionProvider.getDetailsFeedstocks(date);
     setState(() {
       feedstocks = feedstocksList;
       sumValueLeave();
@@ -119,7 +116,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   void getDetailsValuesProductions() async {
     final productionProvider =
         Provider.of<ProductionController>(context, listen: false);
-    final values = await productionProvider.loadDate(widget.date);
+    final values = await productionProvider.loadDate(date);
     setState(() {
       valuesProductions = values;
     });
@@ -155,7 +152,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Detalhes do dia ${widget.date}",
+          "Detalhes do dia $date",
         ),
         toolbarHeight: 100,
         leading: IconButton(
@@ -173,14 +170,26 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                 IconButton(
                   onPressed: !lineWasPressed
                       ? null
-                      : () {
-                          Navigator.of(context).push(
+                      : () async {
+                          final result = await Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (_) => ProductionPage(
                                   production: productions[selectedLine],
                                   listFeedstock: listOfSelectedFeedstocks),
                             ),
                           );
+
+                          if (result[0] == true) {
+                            setState(() {
+                              confirmedDeleteOrEdit = result[0];
+                            });
+                          }
+                          if (result[1] != null) {
+                            setState(() {
+                              date = DateFormat("dd/MM/yyyy", "pt-br")
+                                  .format(result[1]);
+                            });
+                          }
                         },
                   icon: Icon(
                     lineWasPressed ? Icons.edit_outlined : Icons.edit,
@@ -237,7 +246,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.calendar_month_outlined),
-                  Text(widget.date),
+                  Text(date),
                 ],
               ),
               Divider(

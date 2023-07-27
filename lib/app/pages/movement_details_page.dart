@@ -219,7 +219,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                           ],
                           onSelected: (option) async {
                             if (option == "production-of-the-day") {
-                              final confirm = await Navigator.push(
+                              final confirmSave = await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => const ProductionPage(
@@ -229,7 +229,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                                 ),
                               );
 
-                              if (confirm == true) {
+                              if (confirmSave[0] == true) {
                                 loadDetailsProductions();
                               }
                             } else if (option == "all-productions") {

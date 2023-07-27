@@ -23,7 +23,7 @@ class ProductionModel {
     this.flavorId,
   });
 
-  Future<void> save(int id, List<Map<String, dynamic>> itemsProduction) async {
+  Future<bool> save(int id, List<Map<String, dynamic>> itemsProduction) async {
     int lastInsertRowId = 0;
     Map<String, dynamic> data = {
       "quantity": quantity,
@@ -35,22 +35,28 @@ class ProductionModel {
       "flavor_id": flavorId,
     };
 
-    final db = await DB.openDatabase();
-    await db.transaction((txn) async {
-      if (id == 0) {
-        lastInsertRowId = await txn.insert("productions", data);
-      } else {
-        await txn.update("productions", data, where: "id = ?", whereArgs: [id]);
-      }
-      for (var items in itemsProduction) {
-        await ItemsProductionModel(
-                id: items["item_product_id"],
-                productionId: id == 0 ? lastInsertRowId : id,
-                priceFeedstock: items["price_feedstock"],
-                feedstockId: items["feedstock_id"])
-            .save(txn);
-      }
-    });
+    try {
+      final db = await DB.openDatabase();
+      await db.transaction((txn) async {
+        if (id == 0) {
+          lastInsertRowId = await txn.insert("productions", data);
+        } else {
+          await txn
+              .update("productions", data, where: "id = ?", whereArgs: [id]);
+        }
+        for (var items in itemsProduction) {
+          await ItemsProductionModel(
+                  id: items["item_product_id"],
+                  productionId: id == 0 ? lastInsertRowId : id,
+                  priceFeedstock: items["price_feedstock"],
+                  feedstockId: items["feedstock_id"])
+              .save(txn);
+        }
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   static Future<List<Map<String, dynamic>>> findAll() async {
@@ -112,7 +118,7 @@ class ProductionModel {
       String date) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
-        "SELECT p.id, p.date, f.type AS flavor, p.quantity, p.value_entry, p.value_leave, p.value_profit, p.price_product AS price, ps.name FROM productions AS p INNER JOIN flavors AS f ON f.id = p.flavor_id INNER JOIN products AS ps ON ps.id = f.product_id WHERE date = '$date'");
+        "SELECT p.id, p.date, f.type AS flavor, p.flavor_id, p.quantity, p.value_entry, p.value_leave, p.value_profit, p.price_product AS price, ps.name, ps.id AS product_id FROM productions AS p INNER JOIN flavors AS f ON f.id = p.flavor_id INNER JOIN products AS ps ON ps.id = f.product_id WHERE date = '$date'");
   }
 
   static Future<List<Map<String, dynamic>>> getDetailsFeedstocks(
