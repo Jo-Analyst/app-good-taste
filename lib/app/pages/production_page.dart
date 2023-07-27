@@ -62,7 +62,7 @@ class _ProductionPageState extends State<ProductionPage> {
     super.initState();
     loadFeedstock();
 
-    copyListOfSelectedFeedstocks.addAll(listOfSelectedFeedstocks);
+    copyListOfSelectedFeedstocks.addAll(widget.listFeedstock);
     // if (widget.production.isEmpty) return;
     if (!widget.isEdition) return;
 
