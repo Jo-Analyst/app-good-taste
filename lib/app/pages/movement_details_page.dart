@@ -225,6 +225,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                                   builder: (_) => const ProductionPage(
                                     production: {},
                                     listFeedstock: [],
+                                    isEdition: false,
                                   ),
                                 ),
                               );

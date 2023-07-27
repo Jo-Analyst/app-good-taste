@@ -11,9 +11,11 @@ import '../controllers/feedstock_controller.dart';
 class ProductionPage extends StatefulWidget {
   final Map<String, dynamic> production;
   final List<Map<String, dynamic>> listFeedstock;
+  final bool isEdition;
   const ProductionPage({
     required this.production,
     required this.listFeedstock,
+    required this.isEdition,
     super.key,
   });
 
@@ -59,7 +61,8 @@ class _ProductionPageState extends State<ProductionPage> {
     super.initState();
     loadFeedstock();
 
-    if (widget.production.isEmpty) return;
+    // if (widget.production.isEmpty) return;
+    if (!widget.isEdition) return;
 
     loadFieldProduction();
     listOfSelectedFeedstocks = widget.listFeedstock;
@@ -93,7 +96,6 @@ class _ProductionPageState extends State<ProductionPage> {
   void loadFeedstock() async {
     final feedstockProvider =
         Provider.of<FeedstockController>(context, listen: false);
-    await feedstockProvider.loadFeedstock();
     setState(() {
       for (var item in feedstockProvider.items) {
         feedstocks.add({
@@ -129,7 +131,8 @@ class _ProductionPageState extends State<ProductionPage> {
     List<Map<String, dynamic>> list = [];
     for (var listFeedstocks in listOfSelectedFeedstocks) {
       list.add({
-        "item_product_id": itemProductionId,
+        "item_production_id":
+            widget.isEdition ? listFeedstocks["item_production_id"] : 0,
         "feedstock_id": listFeedstocks["id"],
         "price_feedstock": listFeedstocks["price"],
         "production_id": productionId,

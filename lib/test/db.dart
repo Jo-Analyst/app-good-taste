@@ -14,9 +14,9 @@ void testSelect() async {
 }
 
 void deleteInTable() async {
-  final db = await DB.openDatabase();
-  print(await db.query("productions"));
-  print(await db.query("items_productions"));
+  // final db = await DB.openDatabase();
+  // print(await db.query("productions"));
+  // print(await db.query("items_productions"));
 }
 
 void insertInTables() {

@@ -46,7 +46,7 @@ class ProductionModel {
         }
         for (var items in itemsProduction) {
           await ItemsProductionModel(
-                  id: items["item_product_id"],
+                  id: items["item_production_id"],
                   productionId: id == 0 ? lastInsertRowId : id,
                   priceFeedstock: items["price_feedstock"],
                   feedstockId: items["feedstock_id"])

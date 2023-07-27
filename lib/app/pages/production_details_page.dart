@@ -62,6 +62,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
           "name": item["name"],
           "price": item["price"],
           "brand": item["brand"],
+          "item_production_id": item["item_production_id"],
           "isChecked": false,
         });
       }
@@ -151,8 +152,8 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Detalhes do dia $date",
+        title: const Text(
+          "Detalhes da produção",
         ),
         toolbarHeight: 100,
         leading: IconButton(
@@ -174,8 +175,10 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                           final result = await Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (_) => ProductionPage(
-                                  production: productions[selectedLine],
-                                  listFeedstock: listOfSelectedFeedstocks),
+                                production: productions[selectedLine],
+                                listFeedstock: listOfSelectedFeedstocks,
+                                isEdition: true,
+                              ),
                             ),
                           );
 
