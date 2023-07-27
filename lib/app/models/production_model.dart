@@ -35,6 +35,8 @@ class ProductionModel {
       "flavor_id": flavorId,
     };
 
+    // print(itemsProduction);
+    // return false;
     try {
       final db = await DB.openDatabase();
       await db.transaction((txn) async {

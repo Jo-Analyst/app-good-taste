@@ -5,12 +5,13 @@ late Database db;
 
 void testSelect() async {
   db = await DB.openDatabase();
-  // final productions = await db.rawQuery(
-  //     "SELECT  p.price_product, f.name, f.brand, f.price FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE date ='25/07/2023'");
+  final productions = await db.rawQuery(
+      "SELECT f.id, f.name, f.price, f.brand, i.id AS item_production_id FROM items_productions AS i INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE i.production_id = ?",
+      [2]);
 
-  // for (var production in productions) {
-  //   // print(production);
-  // }
+  for (var production in productions) {
+    // print(production);
+  }
 }
 
 void deleteInTable() async {

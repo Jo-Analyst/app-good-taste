@@ -31,7 +31,8 @@ class _ProductionPageState extends State<ProductionPage> {
   final formKey = GlobalKey<FormState>();
   List<Map<String, dynamic>> products = [],
       feedstocks = [],
-      listOfSelectedFeedstocks = [];
+      listOfSelectedFeedstocks = [],
+      copyListOfSelectedFeedstocks = [];
   bool productWasSelected = false;
   DateTime dateSelected = DateTime.now();
 
@@ -61,6 +62,7 @@ class _ProductionPageState extends State<ProductionPage> {
     super.initState();
     loadFeedstock();
 
+    copyListOfSelectedFeedstocks.addAll(listOfSelectedFeedstocks);
     // if (widget.production.isEmpty) return;
     if (!widget.isEdition) return;
 
@@ -96,6 +98,7 @@ class _ProductionPageState extends State<ProductionPage> {
   void loadFeedstock() async {
     final feedstockProvider =
         Provider.of<FeedstockController>(context, listen: false);
+    await feedstockProvider.loadFeedstock();
     setState(() {
       for (var item in feedstockProvider.items) {
         feedstocks.add({
@@ -131,8 +134,7 @@ class _ProductionPageState extends State<ProductionPage> {
     List<Map<String, dynamic>> list = [];
     for (var listFeedstocks in listOfSelectedFeedstocks) {
       list.add({
-        "item_production_id":
-            widget.isEdition ? listFeedstocks["item_production_id"] : 0,
+        "item_production_id": listFeedstocks["item_production_id"],
         "feedstock_id": listFeedstocks["id"],
         "price_feedstock": listFeedstocks["price"],
         "production_id": productionId,
@@ -140,6 +142,25 @@ class _ProductionPageState extends State<ProductionPage> {
     }
 
     return list;
+  }
+
+  void rewriteItemsProductIdInList() {
+    if (widget.isEdition) {
+      for (var list in listOfSelectedFeedstocks) {
+        for (var copyList in copyListOfSelectedFeedstocks) {
+          if (int.parse(copyList["id"].toString()) ==
+              int.parse(list["id"].toString())) {
+            list["item_production_id"] = copyList["item_production_id"];
+          } else {
+            list["item_production_id"] = 0;
+          }
+        }
+      }
+    } else {
+      for (var list in listOfSelectedFeedstocks) {
+        list["item_production_id"] = 0;
+      }
+    }
   }
 
   int getIndexListFlavors(String flavorEditing) {
@@ -431,6 +452,7 @@ class _ProductionPageState extends State<ProductionPage> {
                           setState(() {
                             listOfSelectedFeedstocks.clear();
                             listOfSelectedFeedstocks.addAll(selectedFeedstocks);
+                            rewriteItemsProductIdInList();
                             for (var feedstock in feedstocks) {
                               feedstock["isChecked"] = false;
                             }

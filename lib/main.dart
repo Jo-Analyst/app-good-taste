@@ -16,7 +16,8 @@ void main() async {
   initializeDateFormatting('pt_BR', null);
   runApp(const AppGoodTaste());
   // insertInTables();
-  deleteInTable();
+  // deleteInTable();
+  // testSelect();
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
