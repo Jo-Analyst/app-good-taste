@@ -45,4 +45,12 @@ class ItemsProductionModel {
         "SELECT f.id, f.name, f.price, f.brand, i.id AS item_production_id FROM items_productions AS i INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE i.production_id = ? ",
         [productionId]);
   }
+  
+  static Future<List<Map<String, dynamic>>> findItemProductionByfeedstockId(
+      int feedstockID) async {
+    final db = await DB.openDatabase();
+    return db.rawQuery(
+        "SELECT i.id AS item_production_id FROM items_productions AS i INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE i.feedstock_id = ? ",
+        [feedstockID]);
+  }
 }

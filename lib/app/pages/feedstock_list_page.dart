@@ -1,5 +1,7 @@
+import 'package:app_good_taste/app/controllers/items_productions_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class FeedstockListPage extends StatefulWidget {
   final List<Map<String, dynamic>> listOfSelectedFeedstocks;
@@ -21,6 +23,7 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
   @override
   void initState() {
     super.initState();
+    print(widget.listOfSelectedFeedstocks);
     changeIsCheckedAttribute();
     filteredFeedstocks = List.from(widget.feedstocks);
   }
@@ -54,16 +57,27 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
   }
 
   void addItemInListemoveItemsFlavors(
-      Map<String, dynamic> listFeedstock, bool isChecked) {
-    print(filteredFeedstocks);
+      Map<String, dynamic> listFeedstock, bool isChecked) async {
     if (widget.isEdition) {
       if (isChecked) {
         widget.removeItemsFlavors
             .removeWhere((feedstock) => feedstock["id"] == listFeedstock["id"]);
       } else {
+        listFeedstock["item_production_id"] =
+            await getIteMProductionId(listFeedstock["id"]);
         widget.removeItemsFlavors.add(listFeedstock);
       }
     }
+    print(widget.removeItemsFlavors);
+  }
+
+  Future<int> getIteMProductionId(int listFeedstock) async {
+    final itemProductionProvider =
+        Provider.of<ItemsProductionsController>(context, listen: false);
+    final itemProduction = await itemProductionProvider
+        .findItemProductionByfeedstockId(listFeedstock);
+    print(itemProduction);
+    return itemProduction[0]["item_production_id"];
   }
 
   void searchForFeedstock(String searchText) {
@@ -193,7 +207,8 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
                                     checkIfThereIsFeedstockSelected();
                                     addValuesSelectedFeedstock(
                                         filteredFeedstocks[index], checked);
-                                    addItemInListemoveItemsFlavors(filteredFeedstocks[index], checked);
+                                    addItemInListemoveItemsFlavors(
+                                        filteredFeedstocks[index], checked);
                                   });
                                 },
                               ),

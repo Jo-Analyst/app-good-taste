@@ -6,4 +6,9 @@ class ItemsProductionsController extends ChangeNotifier {
       int productionId) async {
     return ItemsProductionModel.findByProductionId(productionId);
   }
+
+  Future<List<Map<String, dynamic>>> findItemProductionByfeedstockId(
+      int feedstockID) {
+    return ItemsProductionModel.findItemProductionByfeedstockId(feedstockID);
+  }
 }
