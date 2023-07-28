@@ -24,8 +24,8 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
   @override
   void initState() {
     super.initState();
-    loadProductionDetailsListPage();
     monthAndYear = widget.monthAndYear;
+    loadProductionDetailsListPage();
   }
 
   void loadProductionDetailsListPage() async {
