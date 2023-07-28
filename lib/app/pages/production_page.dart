@@ -147,14 +147,22 @@ class _ProductionPageState extends State<ProductionPage> {
   void rewriteItemsProductIdInList() {
     if (widget.isEdition) {
       for (var list in listOfSelectedFeedstocks) {
+        var found =
+            false; // Variável para rastrear se foi encontrado um objeto correspondente
         for (var copyList in copyListOfSelectedFeedstocks) {
           if (int.parse(copyList["id"].toString()) ==
               int.parse(list["id"].toString())) {
             list["item_production_id"] = copyList["item_production_id"];
-          } else {
-            list["item_production_id"] = 0;
+            found =
+                true; // Definir found como true se o objeto correspondente for encontrado
+            break; // Não é necessário continuar procurando depois que o objeto correspondente é encontrado
           }
         }
+        if (!found) {
+          list["item_production_id"] =
+              0; // Definir como 0 somente se não houver correspondência encontrada
+        }
+
       }
     } else {
       for (var list in listOfSelectedFeedstocks) {
