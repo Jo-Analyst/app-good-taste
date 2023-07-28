@@ -18,18 +18,20 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
 
   bool _sortAscending = true;
   int _sortColumnIndex = 0;
-  bool confirmUpdateAndDelete = false;
+  bool result = false;
+  String monthAndYear = "";
+  String date = "";
   @override
   void initState() {
     super.initState();
     loadProductionDetailsListPage();
+    monthAndYear = widget.monthAndYear;
   }
 
   void loadProductionDetailsListPage() async {
     final productionController =
         Provider.of<ProductionController>(context, listen: false);
-    final productions =
-        await productionController.loadDate(widget.monthAndYear);
+    final productions = await productionController.loadDate(monthAndYear);
     setState(() {
       productionDetailsListPage = productions;
     });
@@ -68,7 +70,7 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
         ),
         toolbarHeight: 100,
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(confirmUpdateAndDelete),
+          onPressed: () => Navigator.of(context).pop(result),
           icon: const Icon(
             Icons.close,
             size: 35,
@@ -185,7 +187,7 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
                                 DataCell(
                                   IconButton(
                                     onPressed: () async {
-                                      final confirmUpdateAndDelete =
+                                      final result =
                                           await Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (_) => ProductionDetailsPage(
@@ -197,9 +199,12 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
                                         ),
                                       );
 
-                                      if (confirmUpdateAndDelete == true) {
+                                      if (result[0] == true) {
                                         setState(() {
-                                          this.confirmUpdateAndDelete = true;
+                                          this.result = true;
+                                          monthAndYear = result[1]
+                                              .toString()
+                                              .substring(3, 10);
                                         });
                                         loadProductionDetailsListPage();
                                       }

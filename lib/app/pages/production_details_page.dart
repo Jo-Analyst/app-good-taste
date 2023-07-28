@@ -179,7 +179,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
             Icons.close,
             size: 35,
           ),
-          onPressed: () => Navigator.of(context).pop(confirmedDeleteOrEdit),
+          onPressed: () => Navigator.of(context).pop([confirmedDeleteOrEdit, date]),
         ),
         actions: [
           Container(
