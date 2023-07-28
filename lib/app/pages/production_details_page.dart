@@ -37,7 +37,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   @override
   initState() {
     super.initState();
-    loadDetailsProductions();
+    loadDetailsProductions(widget.date);
   }
 
   void sumValueEntry() {
@@ -47,6 +47,24 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
         valueEntry += production["value_entry"];
       }
     });
+  }
+
+  void selectedItemFlavor(int index) {
+    setState(() {
+      selectedLine = index;
+      toggleRowsPressed(index);
+      productionId = productions[index]["id"];
+    });
+
+    loadFeedstockEdition();
+  }
+  
+  void updateSelectedItemFlavor(int index) {
+    setState(() {
+      productionId = productions[index]["id"];
+    });
+
+    loadFeedstockEdition();
   }
 
   void loadFeedstockEdition() async {
@@ -84,9 +102,9 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
     });
   }
 
-  void loadDetailsProductions() {
+  void loadDetailsProductions(String date) {
     setState(() {
-      date = widget.date;
+      this.date = date;
     });
     getDetailsFlavors();
     getDetailsFeedstocks();
@@ -193,6 +211,12 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                   .format(result[1]);
                             });
                           }
+
+                          if (result != null) {
+                            loadDetailsProductions(date);
+
+                            updateSelectedItemFlavor(selectedLine);
+                          }
                         },
                   icon: Icon(
                     lineWasPressed ? Icons.edit_outlined : Icons.edit,
@@ -218,7 +242,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                               clearSelection();
                             });
 
-                            loadDetailsProductions();
+                            loadDetailsProductions(date);
                           }
                         },
                   icon: const Icon(
@@ -296,14 +320,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
 
                                       return InkWell(
                                         onLongPress: () {
-                                          setState(() {
-                                            selectedLine = index;
-                                            toggleRowsPressed(index);
-                                            productionId =
-                                                productions[index]["id"];
-                                          });
-
-                                          loadFeedstockEdition();
+                                          selectedItemFlavor(index);
                                         },
                                         child: Container(
                                           color: rowColor,
