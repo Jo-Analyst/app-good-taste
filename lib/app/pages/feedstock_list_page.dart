@@ -1,15 +1,12 @@
-import 'package:app_good_taste/app/controllers/items_productions_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class FeedstockListPage extends StatefulWidget {
   final List<Map<String, dynamic>> listOfSelectedFeedstocks;
   final List<Map<String, dynamic>> feedstocks;
   final bool isEdition;
-  final List<Map<String, dynamic>> removeItemsFlavors;
-  const FeedstockListPage(this.listOfSelectedFeedstocks, this.feedstocks,
-      this.isEdition, this.removeItemsFlavors,
+  const FeedstockListPage(
+      this.listOfSelectedFeedstocks, this.feedstocks, this.isEdition,
       {super.key});
 
   @override
@@ -19,11 +16,11 @@ class FeedstockListPage extends StatefulWidget {
 class _FeedstockListPageState extends State<FeedstockListPage> {
   List<Map<String, dynamic>> filteredFeedstocks = [];
   List<Map<String, dynamic>> valuesOfSelectedFeedstock = [];
+  final List<Map<String, dynamic>> removeItemsFlavors = [];
 
   @override
   void initState() {
     super.initState();
-    print(widget.listOfSelectedFeedstocks);
     changeIsCheckedAttribute();
     filteredFeedstocks = List.from(widget.feedstocks);
   }
@@ -60,24 +57,27 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
       Map<String, dynamic> listFeedstock, bool isChecked) async {
     if (widget.isEdition) {
       if (isChecked) {
-        widget.removeItemsFlavors
+        removeItemsFlavors
             .removeWhere((feedstock) => feedstock["id"] == listFeedstock["id"]);
       } else {
-        listFeedstock["item_production_id"] =
-            await getIteMProductionId(listFeedstock["id"]);
-        widget.removeItemsFlavors.add(listFeedstock);
+        final int itemProductionid = getItemProductionId(listFeedstock["id"]);
+        if (itemProductionid > 0) {
+          listFeedstock["item_production_id"] = itemProductionid;
+          removeItemsFlavors.add(listFeedstock);
+        }
       }
     }
-    print(widget.removeItemsFlavors);
   }
 
-  Future<int> getIteMProductionId(int listFeedstock) async {
-    final itemProductionProvider =
-        Provider.of<ItemsProductionsController>(context, listen: false);
-    final itemProduction = await itemProductionProvider
-        .findItemProductionByfeedstockId(listFeedstock);
-    print(itemProduction);
-    return itemProduction[0]["item_production_id"];
+  int getItemProductionId(int itemProdutionId) {
+    int foundId = 0;
+    for (var list in widget.listOfSelectedFeedstocks) {
+      if (list["id"] == itemProdutionId) {
+        foundId = list["item_production_id"];
+        break;
+      }
+    }
+    return foundId;
   }
 
   void searchForFeedstock(String searchText) {
@@ -119,7 +119,8 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
             child: IconButton(
               onPressed: !haveSelectedFeedstock
                   ? null
-                  : () => Navigator.pop(context, valuesOfSelectedFeedstock),
+                  : () => Navigator.pop(
+                      context, [valuesOfSelectedFeedstock, removeItemsFlavors]),
               icon: const Icon(
                 Icons.check,
                 size: 35,

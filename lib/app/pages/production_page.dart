@@ -455,30 +455,33 @@ class _ProductionPageState extends State<ProductionPage> {
                     IconButton(
                       onPressed: () async {
                         FocusScope.of(context).unfocus();
-                        dynamic selectedFeedstocks = await Navigator.push(
+                        dynamic feedstockList = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => FeedstockListPage(
                               listOfSelectedFeedstocks,
                               feedstocks,
                               widget.isEdition,
-                              removeItemsFlavors,
                             ),
                           ),
                         );
-                        if (selectedFeedstocks != null) {
-                          setState(() {
-                            listOfSelectedFeedstocks.clear();
-                            listOfSelectedFeedstocks.addAll(selectedFeedstocks);
-                            rewriteItemsProductIdInList();
-                            updateFlavorsRemovalList();
-                            for (var feedstock in feedstocks) {
-                              feedstock["isChecked"] = false;
-                            }
-                          });
-
+                        if (feedstockList != null) {
+                          listOfSelectedFeedstocks.clear();
+                          listOfSelectedFeedstocks.addAll(feedstockList[0]);
+                          rewriteItemsProductIdInList();
+                          updateFlavorsRemovalList();
+                          for (var feedstock in feedstocks) {
+                            feedstock["isChecked"] = false;
+                          }
                           calculateLeave();
                           calculateProfit();
+
+                          for (var list in feedstockList[1]) {
+                            removeItemsFlavors.where((flavor) =>
+                                flavor["item_product_id"] ==
+                                list[flavor["item_product_id"]]);
+                            removeItemsFlavors.add(list);
+                          }
                         }
                       },
                       icon: Icon(
