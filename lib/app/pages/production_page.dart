@@ -127,7 +127,7 @@ class _ProductionPageState extends State<ProductionPage> {
       "value_entry": valueEntry,
       "value_leave": valueLeave,
       "value_profit": valueProfit,
-    }, getItemsProduction());
+    }, getItemsProduction(), removeItemsFlavors);
   }
 
   List<Map<String, dynamic>> getItemsProduction() {
@@ -162,7 +162,6 @@ class _ProductionPageState extends State<ProductionPage> {
           list["item_production_id"] =
               0; // Definir como 0 somente se não houver correspondência encontrada
         }
-
       }
     } else {
       for (var list in listOfSelectedFeedstocks) {
@@ -460,7 +459,11 @@ class _ProductionPageState extends State<ProductionPage> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => FeedstockListPage(
-                                listOfSelectedFeedstocks, feedstocks),
+                              listOfSelectedFeedstocks,
+                              feedstocks,
+                              widget.isEdition,
+                              removeItemsFlavors,
+                            ),
                           ),
                         );
                         if (selectedFeedstocks != null) {

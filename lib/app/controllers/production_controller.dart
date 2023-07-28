@@ -9,7 +9,7 @@ class ProductionController extends ChangeNotifier {
   }
 
   Future<bool> save(Map<String, dynamic> data,
-      List<Map<String, dynamic>> itemsProduction) async {
+      List<Map<String, dynamic>> itemsProduction, List<Map<String, dynamic>> removeItemsFlavors) async {
     return await ProductionModel(
       quantity: data["quantity"],
       date: data["date"],
@@ -18,7 +18,7 @@ class ProductionController extends ChangeNotifier {
       valueEntry: data["value_entry"],
       valueLeave: data["value_leave"],
       valueProfit: data["value_profit"],
-    ).save(data["id"], itemsProduction);
+    ).save(data["id"], itemsProduction, removeItemsFlavors);
   }
 
   Future<void> load() async {

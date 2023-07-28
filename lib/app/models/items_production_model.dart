@@ -28,9 +28,14 @@ class ItemsProductionModel {
     }
   }
 
-  static Future<void> delete(Transaction txn, int productId) async {
+  static Future<void> deleteByProductId(Transaction txn, int productId) async {
     txn.delete("items_productions",
         where: "production_id = ?", whereArgs: [productId]);
+  }
+ 
+  static Future<void> deleteById(Transaction txn, int id) async {
+    txn.delete("items_productions",
+        where: "id = ?", whereArgs: [id]);
   }
 
   static Future<List<Map<String, dynamic>>> findByProductionId(

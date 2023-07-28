@@ -4,7 +4,10 @@ import 'package:intl/intl.dart';
 class FeedstockListPage extends StatefulWidget {
   final List<Map<String, dynamic>> listOfSelectedFeedstocks;
   final List<Map<String, dynamic>> feedstocks;
+  final bool isEdition;
+  final List<Map<String, dynamic>> removeItemsFlavors;
   const FeedstockListPage(this.listOfSelectedFeedstocks, this.feedstocks,
+      this.isEdition, this.removeItemsFlavors,
       {super.key});
 
   @override
@@ -48,6 +51,19 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
             .removeWhere((feedstock) => feedstock["id"] == listFeedstock["id"]);
       }
     });
+  }
+
+  void addItemInListemoveItemsFlavors(
+      Map<String, dynamic> listFeedstock, bool isChecked) {
+    print(filteredFeedstocks);
+    if (widget.isEdition) {
+      if (isChecked) {
+        widget.removeItemsFlavors
+            .removeWhere((feedstock) => feedstock["id"] == listFeedstock["id"]);
+      } else {
+        widget.removeItemsFlavors.add(listFeedstock);
+      }
+    }
   }
 
   void searchForFeedstock(String searchText) {
@@ -177,6 +193,7 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
                                     checkIfThereIsFeedstockSelected();
                                     addValuesSelectedFeedstock(
                                         filteredFeedstocks[index], checked);
+                                    addItemInListemoveItemsFlavors(filteredFeedstocks[index], checked);
                                   });
                                 },
                               ),

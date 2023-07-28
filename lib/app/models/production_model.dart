@@ -23,7 +23,8 @@ class ProductionModel {
     this.flavorId,
   });
 
-  Future<bool> save(int id, List<Map<String, dynamic>> itemsProduction) async {
+  Future<bool> save(int id, List<Map<String, dynamic>> itemsProduction,
+      List<Map<String, dynamic>> removeItemsFlavors) async {
     int lastInsertRowId = 0;
     Map<String, dynamic> data = {
       "quantity": quantity,
@@ -34,9 +35,7 @@ class ProductionModel {
       "date": date,
       "flavor_id": flavorId,
     };
-
-    // print(itemsProduction);
-    // return false;
+    
     try {
       final db = await DB.openDatabase();
       await db.transaction((txn) async {
@@ -46,13 +45,19 @@ class ProductionModel {
           await txn
               .update("productions", data, where: "id = ?", whereArgs: [id]);
         }
-        for (var items in itemsProduction) {
+        for (var item in itemsProduction) {
           await ItemsProductionModel(
-                  id: items["item_production_id"],
+                  id: item["item_production_id"],
                   productionId: id == 0 ? lastInsertRowId : id,
-                  priceFeedstock: items["price_feedstock"],
-                  feedstockId: items["feedstock_id"])
+                  priceFeedstock: item["price_feedstock"],
+                  feedstockId: item["feedstock_id"])
               .save(txn);
+        }
+
+        if (removeItemsFlavors.isNotEmpty) {
+          for (var item in removeItemsFlavors) {
+            await ItemsProductionModel.deleteById(txn, item["item_production_id"]);
+          }
         }
       });
       return true;
@@ -70,7 +75,7 @@ class ProductionModel {
     final db = await DB.openDatabase();
     await db.transaction((txn) async {
       await txn.delete("productions", where: "id = ?", whereArgs: [id]);
-      await ItemsProductionModel.delete(txn, id);
+      await ItemsProductionModel.deleteByProductId(txn, id);
     });
   }
 
