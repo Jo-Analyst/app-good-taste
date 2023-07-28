@@ -32,7 +32,9 @@ class _ProductionPageState extends State<ProductionPage> {
   List<Map<String, dynamic>> products = [],
       feedstocks = [],
       listOfSelectedFeedstocks = [],
+      removeItemsFlavors = [],
       copyListOfSelectedFeedstocks = [];
+  final List<String> flavors = [];
   bool productWasSelected = false;
   DateTime dateSelected = DateTime.now();
 
@@ -46,8 +48,6 @@ class _ProductionPageState extends State<ProductionPage> {
       itemProductionId = 0,
       productId = 0,
       flavorId = 0;
-
-  final List<String> flavors = [];
 
   final valueNotifier = ValueNotifier("");
 
@@ -220,6 +220,13 @@ class _ProductionPageState extends State<ProductionPage> {
         }
       }),
     );
+  }
+
+  void updateFlavorsRemovalList() {
+    for (var list in listOfSelectedFeedstocks) {
+      removeItemsFlavors.removeWhere((flavor) =>
+          flavor["item_production_id"] == list["item_production_id"]);
+    }
   }
 
   @override
@@ -453,6 +460,7 @@ class _ProductionPageState extends State<ProductionPage> {
                             listOfSelectedFeedstocks.clear();
                             listOfSelectedFeedstocks.addAll(selectedFeedstocks);
                             rewriteItemsProductIdInList();
+                            updateFlavorsRemovalList();
                             for (var feedstock in feedstocks) {
                               feedstock["isChecked"] = false;
                             }
@@ -513,7 +521,12 @@ class _ProductionPageState extends State<ProductionPage> {
                                       decreaseOutputWhenExcludingRawMaterial(
                                           index);
                                       calculateProfit();
-                                      listOfSelectedFeedstocks.removeAt(index);
+                                      final itemFlavor =
+                                          listOfSelectedFeedstocks
+                                              .removeAt(index);
+                                      if (widget.isEdition) {
+                                        removeItemsFlavors.add(itemFlavor);
+                                      }
                                       setState(() {});
                                     },
                                     icon: const Icon(
