@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/load_details_productions.dart';
+
 class ProductionDetailsListPage extends StatefulWidget {
   final String monthAndYear;
   final String nameMonth;
@@ -18,6 +20,8 @@ class ProductionDetailsListPage extends StatefulWidget {
 
 class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
   List<Map<String, dynamic>> productionDetailsListPage = [];
+  double valueProfit = 0, valueEntry = 0, valueLeave = 0;
+  List<Map<String, dynamic>> itemsEntry = [], itemsLeave = [];
 
   bool _sortAscending = true;
   int _sortColumnIndex = 0;
@@ -29,6 +33,7 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
     super.initState();
     monthAndYear = widget.monthAndYear;
     loadProductionDetailsListPage();
+    loadDetailsProductions();
   }
 
   void loadProductionDetailsListPage() async {
@@ -37,6 +42,57 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
     final productions = await productionController.loadDate(monthAndYear);
     setState(() {
       productionDetailsListPage = productions;
+    });
+  }
+
+  void loadDetailsProductions() {
+    getSumValueProfit();
+    getSumValueEntry();
+    getSumValueLeave();
+    getSumQuantityAndValueEntry();
+    getSumPriceFeedstockAndCountFeedstockAndValueLeave();
+  }
+
+  void getSumPriceFeedstockAndCountFeedstockAndValueLeave() async {
+    itemsLeave = await LoadDetailsProductions
+        .getSumPriceFeedstockAndCountFeedstockAndValueLeave(
+            context, monthAndYear);
+    setState(() {});
+  }
+
+  void getSumQuantityAndValueEntry() async {
+    itemsEntry = await LoadDetailsProductions.getSumQuantityAndValueEntry(
+        context, monthAndYear);
+    setState(() {});
+  }
+
+  void getSumValueEntry() async {
+    final getSumValueEntry =
+        await LoadDetailsProductions.getSumValueEntry(context, monthAndYear);
+    setState(() {
+      valueEntry = getSumValueEntry[0]["value_entry"] == null
+          ? 0.0
+          : getSumValueEntry[0]["value_entry"] as double;
+    });
+  }
+
+  void getSumValueLeave() async {
+    final getSumValueLeave =
+        await LoadDetailsProductions.getSumValueLeave(context, monthAndYear);
+    setState(() {
+      valueLeave = getSumValueLeave[0]["value_leave"] == null
+          ? 0.0
+          : getSumValueLeave[0]["value_leave"] as double;
+    });
+  }
+
+  void getSumValueProfit() async {
+    final getSumValueProfit =
+        await LoadDetailsProductions.getSumValueProfit(context, monthAndYear);
+    setState(() {
+      valueProfit = getSumValueProfit[0]["value_profit"] == null
+          ? 0.0
+          : getSumValueProfit[0]["value_profit"] as double;
     });
   }
 
@@ -88,8 +144,9 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
                 final productionProvider =
                     Provider.of<ProductionController>(context, listen: false);
                 final productionDetails = await productionProvider
-                    .getDetailsProductions(widget.monthAndYear);
-                generateAndSharePDF(productionDetails, monthAndYear);
+                    .getSumQuantityAndValueEntry(widget.monthAndYear);
+                generateAndSharePDF(productionDetails, monthAndYear, valueEntry,
+                    itemsLeave, valueLeave, valueProfit);
               },
               icon: const Icon(
                 Icons.share_sharp,

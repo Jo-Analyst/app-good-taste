@@ -32,8 +32,8 @@ class ProductionController extends ChangeNotifier {
   }
 
   Future<List<Map<String, dynamic>>> getSumQuantityAndValueEntry(
-      String month) async {
-    return await ProductionModel.getSumQuantityAndValueEntry(month);
+      String monthAndYear) async {
+    return await ProductionModel.getSumQuantityAndValueEntry(monthAndYear);
   }
 
   void remove(int id) {
@@ -41,21 +41,21 @@ class ProductionController extends ChangeNotifier {
   }
 
   Future<List<Map<String, dynamic>>>
-      getSumPriceFeedstockAndCountFeedstockAndValueLeave(String month) async {
+      getSumPriceFeedstockAndCountFeedstockAndValueLeave(String monthAndYear) async {
     return await ProductionModel
-        .getSumPriceFeedstockAndCountFeedstockAndValueLeave(month);
+        .getSumPriceFeedstockAndCountFeedstockAndValueLeave(monthAndYear);
   }
 
-  Future<List<Map<String, dynamic>>> getSumValueProfit(String month) async {
-    return await ProductionModel.getSumValueProfit(month);
+  Future<List<Map<String, dynamic>>> getSumValueProfit(String monthAndYear) async {
+    return await ProductionModel.getSumValueProfit(monthAndYear);
   }
 
-  Future<List<Map<String, dynamic>>> getSumValueEntry(String month) async {
-    return await ProductionModel.getSumValueEntry(month);
+  Future<List<Map<String, dynamic>>> getSumValueEntry(String monthAndYear) async {
+    return await ProductionModel.getSumValueEntry(monthAndYear);
   }
 
-  Future<List<Map<String, dynamic>>> getSumValueLeave(String month) async {
-    return await ProductionModel.getSumValueLeave(month);
+  Future<List<Map<String, dynamic>>> getSumValueLeave(String monthAndYear) async {
+    return await ProductionModel.getSumValueLeave(monthAndYear);
   }
 
   Future<List<Map<String, dynamic>>> getDetailsFlavors(String date) async {
@@ -64,9 +64,5 @@ class ProductionController extends ChangeNotifier {
 
   Future<List<Map<String, dynamic>>> getDetailsFeedstocks(String date) async {
     return await ProductionModel.getDetailsFeedstocks(date);
-  }
-  
-  Future<List<Map<String, dynamic>>> getDetailsProductions(String monthAndYear) async {
-    return await ProductionModel.getDetailsProductions(monthAndYear);
   }
 }

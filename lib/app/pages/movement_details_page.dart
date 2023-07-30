@@ -2,6 +2,7 @@ import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:app_good_taste/app/pages/all_productions_page.dart';
 import 'package:app_good_taste/app/pages/production_page.dart';
 import 'package:app_good_taste/app/template/pdf_generator.dart';
+import 'package:app_good_taste/app/utils/load_details_productions.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/movement_details_template.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +19,7 @@ class MovementDetailsPage extends StatefulWidget {
 
 class _MovementDetailsPageState extends State<MovementDetailsPage> {
   double valueProfit = 0, valueEntry = 0, valueLeave = 0;
-  String month = "", year = "";
+  String monthAndYear = "", year = "";
   List<Map<String, dynamic>> itemsEntry = [],
       itemsLeave = [],
       productionDetails = [];
@@ -29,8 +30,8 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
     DateTime currentDate = DateTime.now();
     String currentMonth = currentDate.month.toString().padLeft(2, '0');
     setState(() {
-      month = "/$currentMonth/";
       year = currentDate.year.toString();
+      monthAndYear = "/$currentMonth/$year";
     });
 
     loadDetailsProductions();
@@ -41,7 +42,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
     final productionProvider =
         Provider.of<ProductionController>(context, listen: false);
     final production = await productionProvider
-        .getDetailsProductions("${month.split("/")[1]}/$year");
+        .getSumQuantityAndValueEntry("${monthAndYear.split("/")[1]}/$year");
     setState(() {
       productionDetails = production;
     });
@@ -56,24 +57,21 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
   }
 
   void getSumPriceFeedstockAndCountFeedstockAndValueLeave() async {
-    final productionProvider =
-        Provider.of<ProductionController>(context, listen: false);
-    itemsLeave = await productionProvider
-        .getSumPriceFeedstockAndCountFeedstockAndValueLeave(month);
+    itemsLeave = await LoadDetailsProductions
+        .getSumPriceFeedstockAndCountFeedstockAndValueLeave(
+            context, monthAndYear);
     setState(() {});
   }
 
   void getSumQuantityAndValueEntry() async {
-    final productionProvider =
-        Provider.of<ProductionController>(context, listen: false);
-    itemsEntry = await productionProvider.getSumQuantityAndValueEntry(month);
+    itemsEntry = await LoadDetailsProductions.getSumQuantityAndValueEntry(
+        context, monthAndYear);
     setState(() {});
   }
 
   void getSumValueEntry() async {
-    final productionProvider =
-        Provider.of<ProductionController>(context, listen: false);
-    final getSumValueEntry = await productionProvider.getSumValueEntry(month);
+    final getSumValueEntry =
+        await LoadDetailsProductions.getSumValueEntry(context, monthAndYear);
     setState(() {
       valueEntry = getSumValueEntry[0]["value_entry"] == null
           ? 0.0
@@ -82,9 +80,8 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
   }
 
   void getSumValueLeave() async {
-    final productionProvider =
-        Provider.of<ProductionController>(context, listen: false);
-    final getSumValueLeave = await productionProvider.getSumValueLeave(month);
+    final getSumValueLeave =
+        await LoadDetailsProductions.getSumValueLeave(context, monthAndYear);
     setState(() {
       valueLeave = getSumValueLeave[0]["value_leave"] == null
           ? 0.0
@@ -93,9 +90,9 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
   }
 
   void getSumValueProfit() async {
-    final productionProvider =
-        Provider.of<ProductionController>(context, listen: false);
-    final getSumValueProfit = await productionProvider.getSumValueProfit(month);
+    
+    final getSumValueProfit =
+        await LoadDetailsProductions.getSumValueProfit(context, monthAndYear);
     setState(() {
       valueProfit = getSumValueProfit[0]["value_profit"] == null
           ? 0.0
@@ -116,7 +113,12 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
             heroTag: null,
             mini: true,
             onPressed: () => generateAndSharePDF(
-                productionDetails, "${month.split("/")[1]}/$year"),
+                productionDetails,
+                "${monthAndYear.split("/")[1]}/$year",
+                valueEntry,
+                itemsLeave,
+                valueLeave,
+                valueProfit),
             child: const Icon(
               Icons.share,
               size: 30,
@@ -139,7 +141,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                 SlideMonth(
                   getNumberMonth: (numberMonth) {
                     setState(() {
-                      month = "/$numberMonth/";
+                      monthAndYear = "/$numberMonth/";
                     });
                     getSumValueEntry();
                     getSumValueLeave();

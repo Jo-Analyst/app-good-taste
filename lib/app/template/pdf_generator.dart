@@ -6,7 +6,12 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 
 Future<void> generateAndSharePDF(
-    List<Map<String, dynamic>> productionDetails, String monthAndYear) async {
+    List<Map<String, dynamic>> productionDetails,
+    String monthAndYear,
+    double valueEntry,
+    List<Map<String, dynamic>> feedstockDetails,
+    double valueLeave,
+    double valueProfit) async {
   final pdf = pw.Document();
 
   pdf.addPage(
@@ -23,7 +28,7 @@ Future<void> generateAndSharePDF(
                 ),
               ),
               pw.SizedBox(height: 40),
-               pw.Align(
+              pw.Align(
                 alignment: pw.Alignment.topRight,
                 child: pw.TableHelper.fromTextArray(
                   data: <List<String>>[
@@ -34,29 +39,92 @@ Future<void> generateAndSharePDF(
               ),
               pw.TableHelper.fromTextArray(
                 data: <List<String>>[
-                  <String>["Sabor", "Quantidade", "Preço", "Entrada"],
+                  <String>[
+                    "Sabor",
+                    "Preço",
+                    "Quantidade",
+                    "Subtotal",
+                  ],
                   ...productionDetails.map(
                     (production) => [
                       production["name"],
+                      NumberFormat("R\$ #0.00", "pt-br")
+                          .format(production["price_product"]),
                       production["quantity"].toString(),
                       NumberFormat("R\$ #0.00", "pt-br")
-                          .format(production["price"]),
-                      NumberFormat("R\$ #0.00", "pt-br")
-                          .format(production["value_entry"]),
+                          .format(production["subtotal"]),
                     ],
                   ),
                 ],
                 cellAlignment: pw.Alignment.center,
               ),
+              pw.TableHelper.fromTextArray(
+                data: <List<String>>[
+                  [
+                    "Valor total: ${NumberFormat("R\$ #0.00", "pt-br").format(valueEntry)}"
+                  ]
+                ],
+                cellAlignment: pw.Alignment.centerRight,
+              ),
+              pw.SizedBox(height: 40),
               pw.Align(
                 alignment: pw.Alignment.topRight,
                 child: pw.TableHelper.fromTextArray(
                   data: <List<String>>[
-                    ["oi"]
+                    ["Gastos"]
                   ],
                   cellAlignment: pw.Alignment.center,
                 ),
-              )
+              ),
+              pw.TableHelper.fromTextArray(
+                data: <List<String>>[
+                  <String>[
+                    "Matéria prima",
+                    "Unidade de medida",
+                    "Preço",
+                    "Quantidade",
+                    "Subtotal"
+                  ],
+                  ...feedstockDetails.map(
+                    (feedstock) => [
+                      feedstock["name"],
+                      feedstock["unit"],
+                      NumberFormat("R\$ #0.00", "pt-br")
+                          .format(feedstock["price_feedstock"]),
+                      feedstock["quantity"].toString(),
+                      NumberFormat("R\$ #0.00", "pt-br")
+                          .format(feedstock["subtotal"]),
+                    ],
+                  ),
+                ],
+                cellAlignment: pw.Alignment.center,
+              ),
+              pw.TableHelper.fromTextArray(
+                data: <List<String>>[
+                  [
+                    "Valor total: ${NumberFormat("R\$ #0.00", "pt-br").format(valueLeave)}"
+                  ]
+                ],
+                cellAlignment: pw.Alignment.centerRight,
+              ),
+              pw.SizedBox(height: 20),
+              pw.Table(
+                children: [
+                  pw.TableRow(
+                    children: [
+                      pw.Padding(
+                        padding: const pw.EdgeInsets.all(5.0),
+                        child: pw.Align(
+                          alignment: pw.Alignment.centerRight,
+                          child: pw.Text(
+                            "Lucro Total: ${NumberFormat("R\$ #0.00", "pt-br").format(valueProfit)}",
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ],
           ),
         );

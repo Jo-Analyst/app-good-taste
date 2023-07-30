@@ -93,7 +93,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                           itemCount: widget.items.length,
                           itemBuilder: (ctx, index) {
                             final name = widget.items[index]['name'];
-                            final price = widget.items[index]['price'];
+                            final price = widget.items[index]['subtotal'];
                             final quantity = widget.items[index]['quantity'];
                             final unit = widget.items[index]["unit"];
                             return Container(
@@ -126,7 +126,7 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                         children: widget.items.map(
                           (item) {
                             final name = item['name'];
-                            final price = item['price'];
+                            final price = item['subtotal'];
                             final quantity = item['quantity'];
                             final unit = item["unit"];
 

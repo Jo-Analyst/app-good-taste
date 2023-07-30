@@ -88,38 +88,38 @@ class ProductionModel {
   }
 
   static Future<List<Map<String, dynamic>>> getSumQuantityAndValueEntry(
-      String month) async {
+      String monthAndYear) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
-        "SELECT SUM(productions.quantity) AS quantity, SUM(productions.value_entry) AS price, flavors.type AS name FROM productions INNER JOIN flavors ON productions.flavor_id = flavors.id WHERE date LIKE '%$month%' GROUP BY flavors.type");
+        "SELECT SUM(productions.quantity) AS quantity, productions.price_product, SUM(productions.value_entry) AS subtotal, flavors.type AS name FROM productions INNER JOIN flavors ON productions.flavor_id = flavors.id WHERE date LIKE '%$monthAndYear%' GROUP BY flavors.type");
   }
 
   static Future<List<Map<String, dynamic>>>
-      getSumPriceFeedstockAndCountFeedstockAndValueLeave(String month) async {
+      getSumPriceFeedstockAndCountFeedstockAndValueLeave(String monthAndYear) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
-        "SELECT SUM(items_productions.price_feedstock) AS price, COUNT(feedstocks.name) AS quantity, feedstocks.name, feedstocks.unit FROM productions INNER JOIN items_productions ON productions.id = items_productions.production_id INNER JOIN feedstocks ON feedstocks.id = items_productions.feedstock_id WHERE date LIKE '%$month%' GROUP BY feedstocks.name");
+        "SELECT SUM(items_productions.price_feedstock) AS subtotal, COUNT(feedstocks.name) AS quantity, feedstocks.name, feedstocks.unit, items_productions.price_feedstock FROM productions INNER JOIN items_productions ON productions.id = items_productions.production_id INNER JOIN feedstocks ON feedstocks.id = items_productions.feedstock_id WHERE date LIKE '%$monthAndYear%' GROUP BY feedstocks.name");
   }
 
   static Future<List<Map<String, dynamic>>> getSumValueProfit(
-      String month) async {
+      String monthAndYear) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
-        "SELECT SUM(value_profit) AS value_profit FROM productions WHERE date LIKE '%$month%'");
+        "SELECT SUM(value_profit) AS value_profit FROM productions WHERE date LIKE '%$monthAndYear%'");
   }
 
   static Future<List<Map<String, dynamic>>> getSumValueEntry(
-      String month) async {
+      String monthAndYear) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
-        "SELECT SUM(value_entry) AS value_entry FROM productions WHERE date LIKE '%$month%'");
+        "SELECT SUM(value_entry) AS value_entry FROM productions WHERE date LIKE '%$monthAndYear%'");
   }
 
   static Future<List<Map<String, dynamic>>> getSumValueLeave(
-      String month) async {
+      String monthAndYear) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
-        "SELECT SUM(value_leave) AS value_leave FROM productions WHERE date LIKE '%$month%'");
+        "SELECT SUM(value_leave) AS value_leave FROM productions WHERE date LIKE '%$monthAndYear%'");
   }
 
   static Future<List<Map<String, dynamic>>> getDetailsFlavors(
@@ -134,12 +134,5 @@ class ProductionModel {
     final db = await DB.openDatabase();
     return db.rawQuery(
         "SELECT f.name, COUNT(f.name) count_feedstock, f.unit, SUM(f.price) AS price FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE date = '$date' GROUP BY f.name");
-  }
-
-  static Future<List<Map<String, dynamic>>> getDetailsProductions(
-      String monthAndYear) async {
-    final db = await DB.openDatabase();
-    return db.rawQuery(
-        "SELECT flavors.type AS name, SUM(productions.quantity) as quantity, products.price, SUM(productions.value_entry) AS value_entry FROM productions INNER JOIN flavors ON flavors.id = productions.flavor_id INNER JOIN products ON products.id = flavors.product_id WHERE productions.date LIKE '%$monthAndYear%' GROUP BY flavors.type");
   }
 }
