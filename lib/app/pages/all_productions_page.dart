@@ -83,7 +83,7 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
           ),
         ),
         title: const Text(
-          "Todas as produções",
+          "Buscar por data",
         ),
         toolbarHeight: 100,
       ),

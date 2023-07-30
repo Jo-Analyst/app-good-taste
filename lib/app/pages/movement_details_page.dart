@@ -19,8 +19,9 @@ class MovementDetailsPage extends StatefulWidget {
 class _MovementDetailsPageState extends State<MovementDetailsPage> {
   double valueProfit = 0, valueEntry = 0, valueLeave = 0;
   String month = "", year = "";
-  List<Map<String, dynamic>> itemsEntry = [];
-  List<Map<String, dynamic>> itemsLeave = [];
+  List<Map<String, dynamic>> itemsEntry = [],
+      itemsLeave = [],
+      productionDetails = [];
 
   @override
   void initState() {
@@ -33,6 +34,17 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
     });
 
     loadDetailsProductions();
+    getDetailsProductions();
+  }
+
+  void getDetailsProductions() async {
+    final productionProvider =
+        Provider.of<ProductionController>(context, listen: false);
+    final production = await productionProvider
+        .getDetailsProductions("${month.split("/")[1]}/$year");
+    setState(() {
+      productionDetails = production;
+    });
   }
 
   void loadDetailsProductions() {
@@ -98,20 +110,17 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
       floatingActionButton: SizedBox(
         width: 50,
         height: 50,
-        child: FloatingActionButton(
-          heroTag: null,
-          mini: true,
-          onPressed: () async {
-            final productionProvider =
-                Provider.of<ProductionController>(context, listen: false);
-            final productionDetails = await productionProvider
-                .getDetailsProductions("${month.split("/")[1]}/$year");
-            generateAndSharePDF(
-                productionDetails, "${month.split("/")[1]}/$year");
-          },
-          child: const Icon(
-            Icons.share,
-            size: 30,
+        child: Visibility(
+          visible: productionDetails.isNotEmpty,
+          child: FloatingActionButton(
+            heroTag: null,
+            mini: true,
+            onPressed: () => generateAndSharePDF(
+                productionDetails, "${month.split("/")[1]}/$year"),
+            child: const Icon(
+              Icons.share,
+              size: 30,
+            ),
           ),
         ),
       ),
@@ -128,14 +137,17 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                 ),
                 const SizedBox(height: 28),
                 SlideMonth(
-                  getNumberMonth: (numberMonth) => setState(() {
-                    month = "/$numberMonth/";
+                  getNumberMonth: (numberMonth) {
+                    setState(() {
+                      month = "/$numberMonth/";
+                    });
                     getSumValueEntry();
                     getSumValueLeave();
                     getSumValueProfit();
                     getSumQuantityAndValueEntry();
                     getSumPriceFeedstockAndCountFeedstockAndValueLeave();
-                  }),
+                    getDetailsProductions();
+                  },
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),

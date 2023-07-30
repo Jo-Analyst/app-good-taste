@@ -171,7 +171,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Detalhes da produção",
+          "Produção",
         ),
         toolbarHeight: 100,
         leading: IconButton(
