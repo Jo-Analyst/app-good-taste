@@ -35,7 +35,7 @@ class ProductionModel {
       "date": date,
       "flavor_id": flavorId,
     };
-    
+
     try {
       final db = await DB.openDatabase();
       await db.transaction((txn) async {
@@ -56,7 +56,8 @@ class ProductionModel {
 
         if (removeItemsFlavors.isNotEmpty) {
           for (var item in removeItemsFlavors) {
-            await ItemsProductionModel.deleteById(txn, item["item_production_id"]);
+            await ItemsProductionModel.deleteById(
+                txn, item["item_production_id"]);
           }
         }
       });
@@ -133,5 +134,12 @@ class ProductionModel {
     final db = await DB.openDatabase();
     return db.rawQuery(
         "SELECT f.name, COUNT(f.name) count_feedstock, f.unit, SUM(f.price) AS price FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE date = '$date' GROUP BY f.name");
+  }
+
+  static Future<List<Map<String, dynamic>>> getDetailsProductions(
+      String monthAndYear) async {
+    final db = await DB.openDatabase();
+    return db.rawQuery(
+        "SELECT flavors.type AS name, SUM(productions.quantity) as quantity, products.price, SUM(productions.value_entry) AS value_entry FROM productions INNER JOIN flavors ON flavors.id = productions.flavor_id INNER JOIN products ON products.id = flavors.product_id WHERE productions.date LIKE '%$monthAndYear%' GROUP BY flavors.type");
   }
 }

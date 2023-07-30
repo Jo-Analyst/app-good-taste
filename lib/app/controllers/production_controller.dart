@@ -65,4 +65,8 @@ class ProductionController extends ChangeNotifier {
   Future<List<Map<String, dynamic>>> getDetailsFeedstocks(String date) async {
     return await ProductionModel.getDetailsFeedstocks(date);
   }
+  
+  Future<List<Map<String, dynamic>>> getDetailsProductions(String monthAndYear) async {
+    return await ProductionModel.getDetailsProductions(monthAndYear);
+  }
 }

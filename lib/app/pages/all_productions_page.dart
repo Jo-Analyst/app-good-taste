@@ -44,7 +44,9 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
     final confirmUpdateAndDelete = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => ProductionDetailsListPage(
-            monthAndYear: "${date[index]["number"]}/$yearSelected"),
+          monthAndYear: "${date[index]["number"]}/$yearSelected",
+          nameMonth: date[index]["month"],
+        ),
       ),
     );
     if (confirmUpdateAndDelete == true) {

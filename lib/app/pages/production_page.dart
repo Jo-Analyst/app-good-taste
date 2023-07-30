@@ -241,8 +241,8 @@ class _ProductionPageState extends State<ProductionPage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 235, 233, 233),
       appBar: AppBar(
-        title: const Text(
-          "Produção do dia",
+        title:   Text(
+          widget.isEdition ? "Produção em ${DateFormat("dd/MM/yy").format(dateSelected)}" : "Produção do dia",
         ),
         actions: [
           Container(

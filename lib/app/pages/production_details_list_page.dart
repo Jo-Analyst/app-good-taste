@@ -1,12 +1,15 @@
 import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:app_good_taste/app/pages/production_details_page.dart';
+import 'package:app_good_taste/app/template/pdf_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class ProductionDetailsListPage extends StatefulWidget {
   final String monthAndYear;
-  const ProductionDetailsListPage({required this.monthAndYear, super.key});
+  final String nameMonth;
+  const ProductionDetailsListPage(
+      {required this.monthAndYear, required this.nameMonth, super.key});
 
   @override
   State<ProductionDetailsListPage> createState() =>
@@ -65,8 +68,9 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Detalhes das produções",
+        title: Text(
+          "Produção - Mês de ${widget.nameMonth}",
+          style: const TextStyle(fontSize: 18),
         ),
         toolbarHeight: 100,
         leading: IconButton(
@@ -76,6 +80,24 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
             size: 35,
           ),
         ),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 10),
+            child: IconButton(
+              onPressed: () async {
+                final productionProvider =
+                    Provider.of<ProductionController>(context, listen: false);
+                final productionDetails = await productionProvider
+                    .getDetailsProductions(widget.monthAndYear);
+                generateAndSharePDF(productionDetails, monthAndYear);
+              },
+              icon: const Icon(
+                Icons.share_sharp,
+                size: 30,
+              ),
+            ),
+          ),
+        ],
       ),
       body: Container(
         color: Colors.white,
@@ -199,6 +221,7 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
                                         ),
                                       );
 
+                                      if (result == null) return;
                                       if (result[0] == true) {
                                         setState(() {
                                           this.result = true;
