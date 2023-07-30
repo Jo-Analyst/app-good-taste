@@ -141,7 +141,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                 SlideMonth(
                   getNumberMonth: (numberMonth) {
                     setState(() {
-                      monthAndYear = "/$numberMonth/";
+                      monthAndYear = "/$numberMonth/$year";
                     });
                     getSumValueEntry();
                     getSumValueLeave();
