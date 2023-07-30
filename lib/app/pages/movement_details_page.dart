@@ -1,6 +1,7 @@
 import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:app_good_taste/app/pages/all_productions_page.dart';
 import 'package:app_good_taste/app/pages/production_page.dart';
+import 'package:app_good_taste/app/template/pdf_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/movement_details_template.dart';
 import 'package:intl/intl.dart';
@@ -17,7 +18,7 @@ class MovementDetailsPage extends StatefulWidget {
 
 class _MovementDetailsPageState extends State<MovementDetailsPage> {
   double valueProfit = 0, valueEntry = 0, valueLeave = 0;
-  String month = "";
+  String month = "", year = "";
   List<Map<String, dynamic>> itemsEntry = [];
   List<Map<String, dynamic>> itemsLeave = [];
 
@@ -28,6 +29,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
     String currentMonth = currentDate.month.toString().padLeft(2, '0');
     setState(() {
       month = "/$currentMonth/";
+      year = currentDate.year.toString();
     });
 
     loadDetailsProductions();
@@ -99,9 +101,16 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
         child: FloatingActionButton(
           heroTag: null,
           mini: true,
-          onPressed: () {},
+          onPressed: () async {
+            final productionProvider =
+                Provider.of<ProductionController>(context, listen: false);
+            final productionDetails = await productionProvider
+                .getDetailsProductions("${month.split("/")[1]}/$year");
+            generateAndSharePDF(
+                productionDetails, "${month.split("/")[1]}/$year");
+          },
           child: const Icon(
-            Icons.picture_as_pdf_outlined,
+            Icons.share,
             size: 30,
           ),
         ),

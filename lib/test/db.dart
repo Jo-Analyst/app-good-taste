@@ -4,12 +4,12 @@ import 'package:sqflite/sqflite.dart';
 late Database db;
 
 void testSelect() async {
-  db = await DB.openDatabase();
-  final productions = await db.rawQuery(
-      "SELECT flavors.type AS name, SUM(productions.quantity) as quantity, products.price, SUM(productions.value_entry) AS value_entry FROM productions INNER JOIN flavors ON flavors.id = productions.flavor_id INNER JOIN products ON products.id = flavors.product_id  WHERE productions.date LIKE '%07/2023%' GROUP BY flavors.type");
-  for (var production in productions) {
-    print(production);
-  }
+  // db = await DB.openDatabase();
+  // final productions = await db.rawQuery(
+  //     "SELECT flavors.type AS name, SUM(productions.quantity) as quantity, products.price, SUM(productions.value_entry) AS value_entry FROM productions INNER JOIN flavors ON flavors.id = productions.flavor_id INNER JOIN products ON products.id = flavors.product_id  WHERE productions.date LIKE '%07/2023%' GROUP BY flavors.type");
+  // for (var production in productions) {
+  //   print(production);
+  // }
 }
 
 void deleteInTable() async {

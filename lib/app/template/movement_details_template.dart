@@ -144,8 +144,8 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                                       ),
                                       child: Text(
                                         widget.description == "Saída"
-                                            ? "$quantity $unit de $name - ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}"
-                                            : "$quantity chup-chup de $name - ${NumberFormat('R\$ #0.00', 'PT-BT').format(price)}",
+                                            ? "$quantity $unit de $name - ${NumberFormat('R\$ #0.00', 'PT-BR').format(price)}"
+                                            : "$quantity chup-chup de $name - ${NumberFormat('R\$ #0.00', 'PT-BR').format(price)}",
                                       ),
                                     ),
                                   ),

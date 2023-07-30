@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../utils/month.dart';
 
 class SlideMonth extends StatefulWidget {
-  final Function(dynamic value) getNumberMonth;
+  final Function(dynamic numberMonth) getNumberMonth;
   const SlideMonth({super.key, required this.getNumberMonth});
 
   @override
@@ -13,6 +13,10 @@ class SlideMonth extends StatefulWidget {
 class _SlideMonthState extends State<SlideMonth> {
   int numberMonth = int.parse(DateTime.now().month.toString()) - 1;
   String stringMonth = "";
+
+  void getNumberMonth(int numberMonth) {
+    widget.getNumberMonth(Month.listMonths[numberMonth]["number"].toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +29,7 @@ class _SlideMonthState extends State<SlideMonth> {
               : () => setState(() {
                     if (numberMonth == 0) return;
                     numberMonth--;
-                    widget.getNumberMonth(
-                        Month.listMonths[numberMonth]["number"].toString());
+                    getNumberMonth(numberMonth);
                   }),
           icon: const Icon(
             Icons.keyboard_arrow_left,
@@ -45,8 +48,7 @@ class _SlideMonthState extends State<SlideMonth> {
               : () => setState(() {
                     if (numberMonth == 11) return;
                     numberMonth++;
-                    widget.getNumberMonth(
-                        Month.listMonths[numberMonth]["number"].toString());
+                    getNumberMonth(numberMonth);
                   }),
           icon: const Icon(
             Icons.keyboard_arrow_right,

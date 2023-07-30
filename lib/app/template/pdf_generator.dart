@@ -53,8 +53,5 @@ Future<void> generateAndSharePDF(
     await file.writeAsBytes(await pdf.save());
 
     Share.shareFiles([file.path], text: "Confira meu PDF!");
-  } else {
-    // O usuário negou a permissão
-    print("Permissão de armazenamento negada.");
   }
 }
