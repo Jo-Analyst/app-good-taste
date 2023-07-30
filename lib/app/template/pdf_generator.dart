@@ -22,7 +22,16 @@ Future<void> generateAndSharePDF(
                   fontWeight: pw.FontWeight.bold,
                 ),
               ),
-              pw.SizedBox(height: 20),
+              pw.SizedBox(height: 40),
+               pw.Align(
+                alignment: pw.Alignment.topRight,
+                child: pw.TableHelper.fromTextArray(
+                  data: <List<String>>[
+                    ["SABORES"]
+                  ],
+                  cellAlignment: pw.Alignment.center,
+                ),
+              ),
               pw.TableHelper.fromTextArray(
                 data: <List<String>>[
                   <String>["Sabor", "Quantidade", "Preço", "Entrada"],
@@ -38,6 +47,15 @@ Future<void> generateAndSharePDF(
                   ),
                 ],
                 cellAlignment: pw.Alignment.center,
+              ),
+              pw.Align(
+                alignment: pw.Alignment.topRight,
+                child: pw.TableHelper.fromTextArray(
+                  data: <List<String>>[
+                    ["oi"]
+                  ],
+                  cellAlignment: pw.Alignment.center,
+                ),
               )
             ],
           ),
