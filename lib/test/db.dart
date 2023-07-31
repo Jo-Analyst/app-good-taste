@@ -4,8 +4,8 @@ import 'package:sqflite/sqflite.dart';
 late Database db;
 
 void testSelect() async {
-  db = await DB.openDatabase();
-  print(await db.rawQuery("PRAGMA table_info(theme)"));
+  // db = await DB.openDatabase();
+  // print(await db.rawQuery("PRAGMA table_info(theme)"));
 }
 
 void deleteInTable() async {
