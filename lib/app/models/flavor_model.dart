@@ -54,7 +54,7 @@ class FlavorModel {
 
   static Future<List<Map<String, dynamic>>> findAll() async {
     final db = await DB.openDatabase();
-    return db.query("flavors");
+    return db.query("flavors", orderBy: "type");
   }
 
   static Future<void> delete(int id) async {
