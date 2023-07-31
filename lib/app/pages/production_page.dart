@@ -236,13 +236,24 @@ class _ProductionPageState extends State<ProductionPage> {
     }
   }
 
+  void changeListItemsChecked(Map<String, dynamic> listOfSelectedFeedstock) {
+    for (var feedstock in feedstocks) {
+      if (feedstock["id"] == listOfSelectedFeedstock["id"]) {
+        feedstock["isChecked"] = false;
+        break;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 235, 233, 233),
       appBar: AppBar(
-        title:   Text(
-          widget.isEdition ? "Produção de ${DateFormat("dd/MM/yy").format(dateSelected)}" : "Produção do dia",
+        title: Text(
+          widget.isEdition
+              ? "Produção de ${DateFormat("dd/MM/yy").format(dateSelected)}"
+              : "Produção do dia",
         ),
         actions: [
           Container(
@@ -465,6 +476,7 @@ class _ProductionPageState extends State<ProductionPage> {
                             ),
                           ),
                         );
+
                         if (feedstockList != null) {
                           listOfSelectedFeedstocks.clear();
                           listOfSelectedFeedstocks.addAll(feedstockList[0]);
@@ -535,12 +547,15 @@ class _ProductionPageState extends State<ProductionPage> {
                                       decreaseOutputWhenExcludingRawMaterial(
                                           index);
                                       calculateProfit();
+                                      changeListItemsChecked(
+                                          listOfSelectedFeedstocks[index]);
                                       final itemFlavor =
                                           listOfSelectedFeedstocks
                                               .removeAt(index);
                                       if (widget.isEdition) {
                                         removeItemsFlavors.add(itemFlavor);
                                       }
+
                                       setState(() {});
                                     },
                                     icon: const Icon(
