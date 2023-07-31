@@ -16,10 +16,10 @@ class BottomNavigationBarItemTemplate {
         icon: Icon(Icons.shopify_rounded),
         label: "Produtos",
       ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.settings_outlined),
-        label: "Configuração",
-      ),
+      // BottomNavigationBarItem(
+      //   icon: Icon(Icons.settings_outlined),
+      //   label: "Configuração",
+      // ),
       // BottomNavigationBarItemTemplate.buttomItem(const Icon(Icons.home), "Início"),
     ];
   }

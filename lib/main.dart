@@ -17,7 +17,7 @@ void main() async {
   runApp(const AppGoodTaste());
   // insertInTables();
   // deleteInTable();
-  testSelect();
+  // testSelect();
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

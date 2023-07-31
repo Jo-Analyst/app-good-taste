@@ -5,11 +5,7 @@ late Database db;
 
 void testSelect() async {
   db = await DB.openDatabase();
-  final productions = await db.rawQuery(
-      "SELECT SUM(items_productions.price_feedstock) AS price, COUNT(feedstocks.name) AS quantity, feedstocks.name, feedstocks.unit, items_productions.price_feedstock AS subtotal FROM productions INNER JOIN items_productions ON productions.id = items_productions.production_id INNER JOIN feedstocks ON feedstocks.id = items_productions.feedstock_id WHERE date LIKE '%/07/2023%' GROUP BY feedstocks.name");
-  for (var production in productions) {
-    print(production);
-  }
+  print(await db.rawQuery("PRAGMA table_info(theme)"));
 }
 
 void deleteInTable() async {
