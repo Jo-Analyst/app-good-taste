@@ -17,6 +17,8 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
   List<Map<String, dynamic>> filteredFeedstocks = [];
   List<Map<String, dynamic>> valuesOfSelectedFeedstock = [];
   final List<Map<String, dynamic>> removeItemsFlavors = [];
+  List<Map<String, dynamic>> listItemsChecked = [];
+  final List<bool> valuesDefault = [];
 
   @override
   void initState() {
@@ -65,6 +67,36 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
           listFeedstock["item_production_id"] = itemProductionid;
           removeItemsFlavors.add(listFeedstock);
         }
+      }
+    }
+  }
+
+  void changeListItemsChecked(Map<String, dynamic> item, bool checked) {
+    // if (listItemsChecked.isEmpty) {
+    //   return listItemsChecked.add(item);
+    // }
+    bool found = false;
+    for (var list in listItemsChecked) {
+      if (list["id"] == item["id"]) {
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      listItemsChecked.add(item);
+      valuesDefault.add(checked);
+    }
+  }
+
+  void changeListFeedstockInWaiver() {
+    for (var feedstock in widget.feedstocks) {
+      int index = 0;
+      for (var listItem in listItemsChecked) {
+        if (listItem["id"] == feedstock["id"]) {
+          feedstock["isChecked"] = valuesDefault[index];
+        }
+        index++;
       }
     }
   }
@@ -134,6 +166,7 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
         toolbarHeight: 100,
         leading: IconButton(
           onPressed: () {
+            changeListFeedstockInWaiver();
             Navigator.of(context).pop();
           },
           icon: const Icon(
@@ -210,6 +243,8 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
                                         filteredFeedstocks[index], checked);
                                     addItemInListemoveItemsFlavors(
                                         filteredFeedstocks[index], checked);
+                                    changeListItemsChecked(
+                                        filteredFeedstocks[index], !checked);
                                   });
                                 },
                               ),

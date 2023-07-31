@@ -241,8 +241,10 @@ class _ProductionPageState extends State<ProductionPage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 235, 233, 233),
       appBar: AppBar(
-        title:   Text(
-          widget.isEdition ? "Produção de ${DateFormat("dd/MM/yy").format(dateSelected)}" : "Produção do dia",
+        title: Text(
+          widget.isEdition
+              ? "Produção de ${DateFormat("dd/MM/yy").format(dateSelected)}"
+              : "Produção do dia",
         ),
         actions: [
           Container(
@@ -465,6 +467,7 @@ class _ProductionPageState extends State<ProductionPage> {
                             ),
                           ),
                         );
+                        
                         if (feedstockList != null) {
                           listOfSelectedFeedstocks.clear();
                           listOfSelectedFeedstocks.addAll(feedstockList[0]);
