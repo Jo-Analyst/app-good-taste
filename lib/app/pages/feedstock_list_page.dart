@@ -72,9 +72,6 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
   }
 
   void changeListItemsChecked(Map<String, dynamic> item, bool checked) {
-    // if (listItemsChecked.isEmpty) {
-    //   return listItemsChecked.add(item);
-    // }
     bool found = false;
     for (var list in listItemsChecked) {
       if (list["id"] == item["id"]) {
