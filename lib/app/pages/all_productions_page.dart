@@ -27,10 +27,10 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
   @override
   void initState() {
     super.initState();
-    changeDateList();
     setState(() {
       yearSelected = DateTime.now().year.toString();
     });
+    changeDateList();
   }
 
   Future<bool> getDateProductions(String dateSelected) async {
@@ -68,124 +68,135 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
     }
   }
 
+  void closeScreen() {
+    Navigator.of(context).pop(confirmUpdateAndDelete);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: Container(
-          margin: const EdgeInsets.only(right: 5),
-          child: IconButton(
-            onPressed: () => Navigator.of(context).pop(confirmUpdateAndDelete),
-            icon: const Icon(
-              Icons.close,
-              size: 35,
+    return WillPopScope(
+      onWillPop: () async {
+        closeScreen();
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: Container(
+            margin: const EdgeInsets.only(right: 5),
+            child: IconButton(
+              onPressed: () => closeScreen(),
+              icon: const Icon(
+                Icons.close,
+                size: 35,
+              ),
             ),
           ),
+          title: const Text(
+            "Buscar por data",
+          ),
+          toolbarHeight: 100,
         ),
-        title: const Text(
-          "Buscar por data",
-        ),
-        toolbarHeight: 100,
-      ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        color: const Color.fromARGB(179, 246, 245, 245),
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                const Text(
-                  "Escolha o ano e o mês:",
-                  style: TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 5),
-                Divider(
-                  color: Theme.of(context).primaryColor,
-                  height: 3,
-                ),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.calendar_month_outlined,
-                      size: 30,
-                    ),
-                    SlideYear(onChangedDate: (date) {
-                      setState(() {
-                        yearSelected = date.toString();
-                        changeDateList();
-                      });
-                    }),
-                  ],
-                ),
-                Divider(
-                  color: Theme.of(context).primaryColor,
-                  height: 3,
-                ),
-                const SizedBox(height: 5),
-                GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 5,
-                  crossAxisSpacing: 5,
-                  children: List.generate(
-                    date.length,
-                    (index) {
-                      return InkWell(
-                        onTap: date[index]["there_is_production"]
-                            ? () => openScreen(index)
-                            : null,
-                        child: Card(
-                          elevation: 8,
-                          child: Container(
-                            decoration: date[index]["there_is_production"]
-                                ? BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        const Color.fromARGB(255, 19, 83, 135),
-                                        Theme.of(context).primaryColor,
-                                      ],
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          color: const Color.fromARGB(179, 246, 245, 245),
+          padding: const EdgeInsets.all(10),
+          child: SingleChildScrollView(
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  const Text(
+                    "Escolha o ano e o mês:",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(height: 5),
+                  Divider(
+                    color: Theme.of(context).primaryColor,
+                    height: 3,
+                  ),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.calendar_month_outlined,
+                        size: 30,
+                      ),
+                      SlideYear(onChangedDate: (date) {
+                        setState(() {
+                          yearSelected = date.toString();
+                          changeDateList();
+                        });
+                      }),
+                    ],
+                  ),
+                  Divider(
+                    color: Theme.of(context).primaryColor,
+                    height: 3,
+                  ),
+                  const SizedBox(height: 5),
+                  GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 5,
+                    crossAxisSpacing: 5,
+                    children: List.generate(
+                      date.length,
+                      (index) {
+                        return InkWell(
+                          onTap: date[index]["there_is_production"]
+                              ? () => openScreen(index)
+                              : null,
+                          child: Card(
+                            elevation: 8,
+                            child: Container(
+                              decoration: date[index]["there_is_production"]
+                                  ? BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          const Color.fromARGB(
+                                              255, 19, 83, 135),
+                                          Theme.of(context).primaryColor,
+                                        ],
+                                      ),
+                                    )
+                                  : null,
+                              color: date[index]["there_is_production"]
+                                  ? null
+                                  : Colors.black54,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${date[index]["number"]}',
+                                    style: const TextStyle(
+                                      fontFamily: "YesevaOne",
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
                                     ),
-                                  )
-                                : null,
-                            color: date[index]["there_is_production"]
-                                ? null
-                                : Colors.black54,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '${date[index]["number"]}',
-                                  style: const TextStyle(
-                                    fontFamily: "YesevaOne",
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
                                   ),
-                                ),
-                                Text(
-                                  '${date[index]["month"]}',
-                                  style: const TextStyle(
-                                    fontFamily: "YesevaOne",
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                  Text(
+                                    '${date[index]["month"]}',
+                                    style: const TextStyle(
+                                      fontFamily: "YesevaOne",
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -4,6 +4,7 @@ import 'package:app_good_taste/app/controllers/items_productions_controller.dart
 import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -14,9 +15,6 @@ import 'package:provider/provider.dart';
 void main() async {
   initializeDateFormatting('pt_BR', null);
   runApp(const AppGoodTaste());
-  // insertInTables();
-  // deleteInTable();
-  // testSelect();
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -26,6 +24,8 @@ class AppGoodTaste extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Define a orientação do aplicativo como retrato (vertical) apenas.
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => FlavorController()),

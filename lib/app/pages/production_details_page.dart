@@ -58,7 +58,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
 
     loadFeedstockEdition();
   }
-  
+
   void updateSelectedItemFlavor(int index) {
     setState(() {
       productionId = productions[index]["id"];
@@ -166,393 +166,413 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
     lineWasPressed = rowsPressed[index]["isPressed"]! ? true : false;
   }
 
+  void closeScreen() {
+    Navigator.of(context).pop([confirmedDeleteOrEdit, date]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Produção",
-        ),
-        toolbarHeight: 100,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.close,
-            size: 35,
+    return 
+    WillPopScope(
+      onWillPop: () async {
+        closeScreen();
+        return false;
+      },
+      child: 
+      Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "Produção",
           ),
-          onPressed: () => Navigator.of(context).pop([confirmedDeleteOrEdit, date]),
+          toolbarHeight: 100,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.close,
+              size: 35,
+            ),
+            onPressed: () => closeScreen(),
+          ),
+          actions: [
+            Container(
+              margin: const EdgeInsets.only(right: 5),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: !lineWasPressed
+                        ? null
+                        : () async {
+                            final result = await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => ProductionPage(
+                                  production: productions[selectedLine],
+                                  listFeedstock: listOfSelectedFeedstocks,
+                                  isEdition: true,
+                                ),
+                              ),
+                            );
+                            print(result);
+                            if (result[0] == true) {
+                              setState(() {
+                                confirmedDeleteOrEdit = result[0];
+                              });
+                            }
+                            if (result[1] != null) {
+                              setState(() {
+                                date = DateFormat("dd/MM/yyyy", "pt-br")
+                                    .format(result[1]);
+                              });
+                            }
+
+                            if (result != null) {
+                              loadDetailsProductions(date);
+
+                              updateSelectedItemFlavor(selectedLine);
+                            }
+                          },
+                    icon: Icon(
+                      lineWasPressed ? Icons.edit_outlined : Icons.edit,
+                      size: 25,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: !lineWasPressed
+                        ? null
+                        : () async {
+                            final confirmExit = await showExitDialog(context,
+                                ListMessageDialog.messageDialog(null)[0]);
+
+                            if (confirmExit!) {
+                              setState(() {
+                                final productionProvider =
+                                    Provider.of<ProductionController>(context,
+                                        listen: false);
+                                productionProvider
+                                    .remove(productions[selectedLine]["id"]);
+                                lineWasPressed = false;
+                                confirmedDeleteOrEdit = true;
+                                clearSelection();
+                              });
+
+                              loadDetailsProductions(date);
+                            }
+                          },
+                    icon: const Icon(
+                      Icons.delete,
+                      size: 25,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 5),
-            child: Row(
+        body: Container(
+          color: Colors.white,
+          margin: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
+          child: DefaultTextStyle(
+            style: const TextStyle(
+              fontSize: 18,
+              color: Colors.black,
+            ),
+            child: Column(
               children: [
-                IconButton(
-                  onPressed: !lineWasPressed
-                      ? null
-                      : () async {
-                          final result = await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => ProductionPage(
-                                production: productions[selectedLine],
-                                listFeedstock: listOfSelectedFeedstocks,
-                                isEdition: true,
+                Divider(
+                  color: Colors.pink[500],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.calendar_month_outlined),
+                    Text(date),
+                  ],
+                ),
+                Divider(
+                  color: Colors.pink[500],
+                ),
+                const SizedBox(height: 10),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text("Sabores:"),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 2 - 180,
+                  width: double.infinity,
+                  child: Card(
+                    elevation: 8,
+                    child: DefaultTextStyle(
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                      child: productions.isEmpty
+                          ? const Center(
+                              child: Text(
+                                "Sem dados a exibir...",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 10),
+                                  Flexible(
+                                    child: ListView.builder(
+                                      itemCount: productions.length,
+                                      itemBuilder: (context, index) {
+                                        final rowColor = index ==
+                                                    selectedLine &&
+                                                rowsPressed[index]["isPressed"]!
+                                            ? Theme.of(context).primaryColor
+                                            : index % 2 > 0
+                                                ? Colors.white
+                                                : Colors.grey.shade200;
+
+                                        return InkWell(
+                                          onLongPress: () {
+                                            selectedItemFlavor(index);
+                                          },
+                                          child: Container(
+                                            color: rowColor,
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 15,
+                                            ),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    productions[index]
+                                                        ["flavor"],
+                                                    style: TextStyle(
+                                                      color: index ==
+                                                                  selectedLine &&
+                                                              rowsPressed[index]
+                                                                  ["isPressed"]!
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      "${productions[index]["quantity"]}x",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: index ==
+                                                                    selectedLine &&
+                                                                rowsPressed[
+                                                                        index][
+                                                                    "isPressed"]!
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 5),
+                                                    Text(
+                                                      NumberFormat("R\$#0.00",
+                                                              "PT-BR")
+                                                          .format(
+                                                        productions[index]
+                                                                ["price"] ??
+                                                            0,
+                                                      ),
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: index ==
+                                                                    selectedLine &&
+                                                                rowsPressed[
+                                                                        index][
+                                                                    "isPressed"]!
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 5),
+                                                    Text(
+                                                      NumberFormat("R\$#0.00",
+                                                              "PT-BR")
+                                                          .format(
+                                                        productions[index]
+                                                            ["value_entry"],
+                                                      ),
+                                                      style: TextStyle(
+                                                        color: index ==
+                                                                    selectedLine &&
+                                                                rowsPressed[
+                                                                        index][
+                                                                    "isPressed"]!
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          );
-
-                          if (result[0] == true) {
-                            setState(() {
-                              confirmedDeleteOrEdit = result[0];
-                            });
-                          }
-                          if (result[1] != null) {
-                            setState(() {
-                              date = DateFormat("dd/MM/yyyy", "pt-br")
-                                  .format(result[1]);
-                            });
-                          }
-
-                          if (result != null) {
-                            loadDetailsProductions(date);
-
-                            updateSelectedItemFlavor(selectedLine);
-                          }
-                        },
-                  icon: Icon(
-                    lineWasPressed ? Icons.edit_outlined : Icons.edit,
-                    size: 25,
+                    ),
                   ),
                 ),
-                IconButton(
-                  onPressed: !lineWasPressed
-                      ? null
-                      : () async {
-                          final confirmExit = await showExitDialog(context,
-                              ListMessageDialog.messageDialog(null)[0]);
-
-                          if (confirmExit!) {
-                            setState(() {
-                              final productionProvider =
-                                  Provider.of<ProductionController>(context,
-                                      listen: false);
-                              productionProvider
-                                  .remove(productions[selectedLine]["id"]);
-                              lineWasPressed = false;
-                              confirmedDeleteOrEdit = true;
-                              clearSelection();
-                            });
-
-                            loadDetailsProductions(date);
-                          }
-                        },
-                  icon: const Icon(
-                    Icons.delete,
-                    size: 25,
+                const SizedBox(height: 20),
+                const Align(
+                  alignment: Alignment.topLeft,
+                  child: Text("Gastos:"),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 2 - 180,
+                  width: double.infinity,
+                  child: Card(
+                    elevation: 8,
+                    child: DefaultTextStyle(
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                      ),
+                      child: feedstocks.isEmpty
+                          ? const Center(
+                              child: Text(
+                                "Sem dados a exibir...",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 10),
+                                  Flexible(
+                                    child: ListView.builder(
+                                      itemCount: feedstocks.length,
+                                      itemBuilder: (context, index) {
+                                        final rowColor = index % 2 > 0
+                                            ? Colors.white
+                                            : Colors.grey.shade200;
+                                        return Container(
+                                          color: rowColor,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 15),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Expanded(
+                                                  child: Row(
+                                                children: [
+                                                  Expanded(
+                                                      child: Text(
+                                                          "${feedstocks[index]["count_feedstock"]} ${feedstocks[index]["unit"]}  ${feedstocks[index]["name"]}")),
+                                                ],
+                                              )),
+                                              SizedBox(
+                                                width: 120,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    const SizedBox(width: 5),
+                                                    Text(
+                                                      NumberFormat("R\$ #0.00",
+                                                              "PT-BR")
+                                                          .format(
+                                                        feedstocks[index]
+                                                                ["price"] ??
+                                                            0,
+                                                      ),
+                                                      style: const TextStyle(
+                                                          fontSize: 16),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "E:",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Flexible(
+                        child: Chip(
+                          backgroundColor: Colors.blue,
+                          label: Text(
+                            NumberFormat("R\$ #0.00", "PT-BR")
+                                .format(valueEntry),
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ),
+                      const Text(
+                        "S:",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Flexible(
+                        child: Chip(
+                          backgroundColor: Colors.red,
+                          label: Text(
+                            NumberFormat("R\$ #0.00", "PT-BR")
+                                .format(valueLeave),
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ),
+                      const Text(
+                        "L:",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Flexible(
+                        child: Chip(
+                          backgroundColor: Colors.green,
+                          label: Text(
+                            NumberFormat("R\$ #0.00", "PT-BR")
+                                .format(valueProfit),
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-      body: Container(
-        color: Colors.white,
-        margin: const EdgeInsets.all(10),
-        padding: const EdgeInsets.all(10),
-        child: DefaultTextStyle(
-          style: const TextStyle(
-            fontSize: 18,
-            color: Colors.black,
-          ),
-          child: Column(
-            children: [
-              Divider(
-                color: Colors.pink[500],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.calendar_month_outlined),
-                  Text(date),
-                ],
-              ),
-              Divider(
-                color: Colors.pink[500],
-              ),
-              const SizedBox(height: 10),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text("Sabores:"),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 2 - 180,
-                width: double.infinity,
-                child: Card(
-                  elevation: 8,
-                  child: DefaultTextStyle(
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
-                    child: productions.isEmpty
-                        ? const Center(
-                            child: Text(
-                              "Sem dados a exibir...",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 10),
-                                Flexible(
-                                  child: ListView.builder(
-                                    itemCount: productions.length,
-                                    itemBuilder: (context, index) {
-                                      final rowColor = index == selectedLine &&
-                                              rowsPressed[index]["isPressed"]!
-                                          ? Theme.of(context).primaryColor
-                                          : index % 2 > 0
-                                              ? Colors.white
-                                              : Colors.grey.shade200;
-
-                                      return InkWell(
-                                        onLongPress: () {
-                                          selectedItemFlavor(index);
-                                        },
-                                        child: Container(
-                                          color: rowColor,
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                            vertical: 15,
-                                          ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  productions[index]["flavor"],
-                                                  style: TextStyle(
-                                                    color: index ==
-                                                                selectedLine &&
-                                                            rowsPressed[index]
-                                                                ["isPressed"]!
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                                  ),
-                                                ),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "${productions[index]["quantity"]}x",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: index ==
-                                                                  selectedLine &&
-                                                              rowsPressed[index]
-                                                                  ["isPressed"]!
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 5),
-                                                  Text(
-                                                    NumberFormat(
-                                                            "R\$#0.00", "PT-BR")
-                                                        .format(
-                                                      productions[index]
-                                                              ["price"] ??
-                                                          0,
-                                                    ),
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: index ==
-                                                                  selectedLine &&
-                                                              rowsPressed[index]
-                                                                  ["isPressed"]!
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 5),
-                                                  Text(
-                                                    NumberFormat(
-                                                            "R\$#0.00", "PT-BR")
-                                                        .format(
-                                                      productions[index]
-                                                          ["value_entry"],
-                                                    ),
-                                                    style: TextStyle(
-                                                      color: index ==
-                                                                  selectedLine &&
-                                                              rowsPressed[index]
-                                                                  ["isPressed"]!
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                    ),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Align(
-                alignment: Alignment.topLeft,
-                child: Text("Gastos:"),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 2 - 180,
-                width: double.infinity,
-                child: Card(
-                  elevation: 8,
-                  child: DefaultTextStyle(
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
-                    child: feedstocks.isEmpty
-                        ? const Center(
-                            child: Text(
-                              "Sem dados a exibir...",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              children: [
-                                const SizedBox(height: 10),
-                                Flexible(
-                                  child: ListView.builder(
-                                    itemCount: feedstocks.length,
-                                    itemBuilder: (context, index) {
-                                      final rowColor = index % 2 > 0
-                                          ? Colors.white
-                                          : Colors.grey.shade200;
-                                      return Container(
-                                        color: rowColor,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10, vertical: 15),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Expanded(
-                                                child: Row(
-                                              children: [
-                                                Expanded(
-                                                    child: Text(
-                                                        "${feedstocks[index]["count_feedstock"]} ${feedstocks[index]["unit"]}  ${feedstocks[index]["name"]}")),
-                                              ],
-                                            )),
-                                            SizedBox(
-                                              width: 120,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  const SizedBox(width: 5),
-                                                  Text(
-                                                    NumberFormat("R\$ #0.00",
-                                                            "PT-BR")
-                                                        .format(
-                                                      feedstocks[index]
-                                                              ["price"] ??
-                                                          0,
-                                                    ),
-                                                    style: const TextStyle(
-                                                        fontSize: 16),
-                                                  ),
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 5),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "E:",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Flexible(
-                      child: Chip(
-                        backgroundColor: Colors.blue,
-                        label: Text(
-                          NumberFormat("R\$ #0.00", "PT-BR").format(valueEntry),
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
-                    const Text(
-                      "S:",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Flexible(
-                      child: Chip(
-                        backgroundColor: Colors.red,
-                        label: Text(
-                          NumberFormat("R\$ #0.00", "PT-BR").format(valueLeave),
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
-                    const Text(
-                      "L:",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Flexible(
-                      child: Chip(
-                        backgroundColor: Colors.green,
-                        label: Text(
-                          NumberFormat("R\$ #0.00", "PT-BR")
-                              .format(valueProfit),
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
           ),
         ),
       ),
