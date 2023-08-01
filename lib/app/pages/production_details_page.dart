@@ -210,7 +210,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                 ),
                               ),
                             );
-                            print(result);
+                            
                             if (result[0] == true) {
                               setState(() {
                                 confirmedDeleteOrEdit = result[0];

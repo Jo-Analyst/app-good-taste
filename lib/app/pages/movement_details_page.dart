@@ -108,7 +108,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
         width: 50,
         height: 50,
         child: Visibility(
-          visible: productionDetails.isNotEmpty,
+          visible: productionDetails.isNotEmpty && valueProfit != 0.0,
           child: FloatingActionButton(
             heroTag: null,
             mini: true,
