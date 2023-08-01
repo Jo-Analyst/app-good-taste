@@ -35,7 +35,6 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
     });
 
     loadDetailsProductions();
-    getDetailsProductions();
   }
 
   void getDetailsProductions() async {
@@ -54,6 +53,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
     getSumValueLeave();
     getSumQuantityAndValueEntry();
     getSumPriceFeedstockAndCountFeedstockAndValueLeave();
+    getDetailsProductions();
   }
 
   void getSumPriceFeedstockAndCountFeedstockAndValueLeave() async {
@@ -90,7 +90,6 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
   }
 
   void getSumValueProfit() async {
-    
     final getSumValueProfit =
         await LoadDetailsProductions.getSumValueProfit(context, monthAndYear);
     setState(() {
@@ -108,7 +107,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
         width: 50,
         height: 50,
         child: Visibility(
-          visible: productionDetails.isNotEmpty && valueProfit != 0.0,
+          visible: productionDetails.isNotEmpty,
           child: FloatingActionButton(
             heroTag: null,
             mini: true,
@@ -143,12 +142,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                     setState(() {
                       monthAndYear = "/$numberMonth/$year";
                     });
-                    getSumValueEntry();
-                    getSumValueLeave();
-                    getSumValueProfit();
-                    getSumQuantityAndValueEntry();
-                    getSumPriceFeedstockAndCountFeedstockAndValueLeave();
-                    getDetailsProductions();
+                    loadDetailsProductions();                    
                   },
                 ),
                 Padding(
@@ -255,7 +249,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
 
                               if (confirmSave[0] == true) {
                                 loadDetailsProductions();
-                              }
+                             }
                             } else if (option == "all-productions") {
                               final confirmUpdateAndDelete =
                                   await Navigator.of(context).push(

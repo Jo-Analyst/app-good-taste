@@ -10,7 +10,7 @@ class BottomNavigationBarItemTemplate {
       ),
       BottomNavigationBarItem(
         icon: Icon(FontAwesomeIcons.productHunt),
-        label: "M. Prima",
+        label: "Matéria Prima",
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.shopify_rounded),
