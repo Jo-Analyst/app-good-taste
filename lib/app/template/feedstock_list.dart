@@ -72,6 +72,13 @@ class FeedstockList extends StatelessWidget {
                   if (confirmeDelete!) {
                     feedstockProvider.delete(feedstockItem["id"]);
                     onConfirmAction(true);
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Matéria prima excluido com sucesso."),
+                        duration: Duration(milliseconds: 3000),
+                      ),
+                    );
                   }
                 });
               },

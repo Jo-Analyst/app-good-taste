@@ -63,7 +63,6 @@ class _ProductionPageState extends State<ProductionPage> {
     loadFeedstock();
 
     copyListOfSelectedFeedstocks.addAll(widget.listFeedstock);
-    // if (widget.production.isEmpty) return;
     if (!widget.isEdition) return;
 
     loadFieldProduction();
@@ -78,10 +77,8 @@ class _ProductionPageState extends State<ProductionPage> {
     flavorEditing = widget.production["flavor"];
     flavorId = widget.production["flavor_id"];
     productId = widget.production["product_id"];
-    // flavorSelect = flavors[getIndexListFlavors(flavorEditing!)];
     price = widget.production["price"];
     productionId = widget.production["id"];
-    // itemProductionId = widget.itemProductionId["id"];
     productController.text = widget.production["name"];
     flavorController.text = flavorEditing!;
     quantityController.text = quantity.toString();
@@ -266,7 +263,16 @@ class _ProductionPageState extends State<ProductionPage> {
                   ? () {
                       confirmProdution().then((confirmSave) {
                         if (confirmSave) {
+                          FocusScope.of(context).unfocus();
                           Navigator.pop(context, [confirmSave, dateSelected]);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(!widget.isEdition
+                                  ? "Produção adicionado com sucesso."
+                                  : "Produção atualizado com sucesso."),
+                              duration: const Duration(milliseconds: 3000),
+                            ),
+                          );
                         }
                       });
                     }

@@ -71,7 +71,7 @@ class _ProductPageState extends State<ProductPage> {
                 final isSaved = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ProductFormPage(),
+                    builder: (context) => const ProductFormPage(product: {},),
                   ),
                 );
 

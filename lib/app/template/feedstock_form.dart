@@ -44,6 +44,12 @@ class _FeedstockState extends State<FeedstockForm> {
         "price": double.parse(_price.text.replaceAll(RegExp(r','), '.')),
       });
 
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Matéria prima salvo com sucesso."),
+          duration: Duration(milliseconds: 3000),
+        ),
+      );
       Navigator.pop(context, true);
     }
   }
@@ -121,7 +127,7 @@ class _FeedstockState extends State<FeedstockForm> {
                         0) {
                       return "Este não um valor válido";
                     }
-    
+
                     return null;
                   },
                   onFieldSubmitted: (_) => save(),
@@ -147,7 +153,7 @@ class _FeedstockState extends State<FeedstockForm> {
                     if (unidade!.isEmpty) {
                       return "Informe a Unidade/Embalagem!";
                     }
-    
+
                     return null;
                   },
                   onFieldSubmitted: (_) => save(),

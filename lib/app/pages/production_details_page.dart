@@ -172,14 +172,12 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    WillPopScope(
+    return WillPopScope(
       onWillPop: () async {
         closeScreen();
         return false;
       },
-      child: 
-      Scaffold(
+      child: Scaffold(
         appBar: AppBar(
           title: const Text(
             "Produção",
@@ -210,7 +208,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                 ),
                               ),
                             );
-                            
+
                             if (result[0] == true) {
                               setState(() {
                                 confirmedDeleteOrEdit = result[0];
@@ -254,6 +252,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                               });
 
                               loadDetailsProductions(date);
+                              showScaffoldMessage();
                             }
                           },
                     icon: const Icon(
@@ -297,7 +296,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                 ),
                 const SizedBox(height: 10),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 2 - 180,
+                  height: MediaQuery.of(context).size.height / 2 - 190,
                   width: double.infinity,
                   child: Card(
                     elevation: 8,
@@ -434,7 +433,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                 ),
                 const SizedBox(height: 10),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height / 2 - 180,
+                  height: MediaQuery.of(context).size.height / 2 - 190,
                   width: double.infinity,
                   child: Card(
                     elevation: 8,
@@ -525,12 +524,23 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                         ),
                       ),
                       Flexible(
-                        child: Chip(
-                          backgroundColor: Colors.blue,
-                          label: Text(
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 25,
+                          width: 90,
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.blue,
+                          ),
+                          child: Text(
                             NumberFormat("R\$ #0.00", "PT-BR")
                                 .format(valueEntry),
-                            style: const TextStyle(fontSize: 14),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                       ),
@@ -542,12 +552,23 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                         ),
                       ),
                       Flexible(
-                        child: Chip(
-                          backgroundColor: Colors.red,
-                          label: Text(
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 25,
+                          width: 90,
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.red,
+                          ),
+                          child: Text(
                             NumberFormat("R\$ #0.00", "PT-BR")
                                 .format(valueLeave),
-                            style: const TextStyle(fontSize: 14),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                       ),
@@ -559,12 +580,23 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                         ),
                       ),
                       Flexible(
-                        child: Chip(
-                          backgroundColor: Colors.green,
-                          label: Text(
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 25,
+                          width: 90,
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.green,
+                          ),
+                          child: Text(
                             NumberFormat("R\$ #0.00", "PT-BR")
                                 .format(valueProfit),
-                            style: const TextStyle(fontSize: 14),
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                       ),
@@ -575,6 +607,15 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void showScaffoldMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Produção excluido com sucesso."),
+        duration: Duration(milliseconds: 5000),
       ),
     );
   }

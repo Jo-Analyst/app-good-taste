@@ -3,7 +3,8 @@ import '../utils/scroll_button_modal.dart';
 
 class FlavorForm extends StatefulWidget {
   final String? type;
-  const FlavorForm({this.type, super.key});
+  final bool isEdition;
+  const FlavorForm({required this.isEdition, this.type, super.key});
 
   @override
   State<FlavorForm> createState() => _FlavorFormState();
@@ -16,7 +17,7 @@ class _FlavorFormState extends State<FlavorForm> {
   @override
   void initState() {
     super.initState();
-    if (widget.type == null) return;
+    if (!widget.isEdition) return;
 
     textController.text = widget.type!;
   }
@@ -58,10 +59,10 @@ class _FlavorFormState extends State<FlavorForm> {
                   children: [
                     ElevatedButton(
                       onPressed: () => addFlavor(),
-                      child: const Row(
+                      child: Row(
                         children: [
-                          Icon(Icons.add),
-                          Text("Adicionar"),
+                          Icon(!widget.isEdition ? Icons.add : Icons.edit),
+                          Text(!widget.isEdition ? "Adicionar" : "Atualizar"),
                         ],
                       ),
                     ),

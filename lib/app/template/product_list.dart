@@ -49,6 +49,17 @@ class _ProductListState extends State<ProductList> {
     widget.onConfirmAction(true);
   }
 
+  void showScaffoldMessage(String type) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(type == "new"
+            ? "Novo sabor adicionado com sucesso."
+            : "Produto excluido com sucesso."),
+        duration: const Duration(milliseconds: 3000),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -146,6 +157,7 @@ class _ProductListState extends State<ProductList> {
                     Provider.of<ProductController>(context, listen: false);
                 await productProvider.delete(widget.productItem["id"]);
                 widget.onConfirmAction(true);
+                showScaffoldMessage("delete");
               }
             });
           } else if (option.toLowerCase() == "edit") {
@@ -164,11 +176,14 @@ class _ProductListState extends State<ProductList> {
           } else if (option == "new") {
             final type = await showModal(
               context,
-              const FlavorForm(),
+              const FlavorForm(
+                isEdition: false,
+              ),
             );
 
             if (type.isEmpty) return;
             save({"type": type, "product_id": widget.productItem["id"]});
+            showScaffoldMessage("new");
           }
         },
       ),

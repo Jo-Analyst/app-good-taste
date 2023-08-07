@@ -1,4 +1,4 @@
-// ignore_for_file: 
+// ignore_for_file:
 
 import 'package:app_good_taste/app/controllers/flavor_controller.dart';
 import 'package:app_good_taste/app/controllers/product_controller.dart';
@@ -12,10 +12,10 @@ import '../../main.dart';
 import '../utils/modal.dart';
 
 class ProductFormPage extends StatefulWidget {
-  final Map<String, dynamic>? product;
+  final Map<String, dynamic> product;
   final List<Map<String, dynamic>>? flavors;
   const ProductFormPage({
-    this.product,
+    required this.product,
     this.flavors,
     super.key,
   });
@@ -38,15 +38,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
   void initState() {
     super.initState();
     flavorController = Provider.of<FlavorController>(context, listen: false);
-    if (widget.product == null) return;
+    if (widget.product.isEmpty) return;
 
-    name = widget.product!["name"];
-    price = widget.product!["price"];
-    productId =
-        widget.product!["id"] == null ? 0 : widget.product!["id"] as int;
+    name = widget.product["name"];
+    price = widget.product["price"];
+    productId = widget.product["id"] == null ? 0 : widget.product["id"] as int;
 
     _nameController.text = name;
-    _priceController.text = price.toStringAsFixed(2).replaceAll(RegExp(r'\.'), ',');
+    _priceController.text =
+        price.toStringAsFixed(2).replaceAll(RegExp(r'\.'), ',');
 
     for (var flavor in widget.flavors!) {
       if (flavor["product_id"] == productId) {
@@ -156,6 +156,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     final typeOrFlavor = await showModal(
         context,
         FlavorForm(
+          isEdition: type.isNotEmpty,
           type: type,
         ));
     if (typeOrFlavor.isNotEmpty && type.isEmpty) {
@@ -164,7 +165,6 @@ class _ProductFormPageState extends State<ProductFormPage> {
       updateFlavor(index!, typeOrFlavor);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -201,6 +201,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 onPressed: name.isNotEmpty && price > 0
                     ? () {
                         confirmProduct();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Produto salvo com sucesso."),
+                            duration: Duration(milliseconds: 3000),
+                          ),
+                        );
+
                         Navigator.of(context).pop(true);
                       }
                     : null,
@@ -258,7 +265,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                   setState(() {
                                     price = (priceProduct != null &&
                                             priceProduct != "")
-                                        ? double.parse(priceProduct.replaceAll(RegExp(r','), '.'))
+                                        ? double.parse(priceProduct.replaceAll(
+                                            RegExp(r','), '.'))
                                         : 0.0;
                                   });
                                 },
@@ -339,7 +347,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
                                             },
                                             icon: const Icon(
                                               Icons.edit,
-                                              color: Color.fromARGB(255, 22, 104, 171),
+                                              color: Color.fromARGB(
+                                                  255, 22, 104, 171),
                                             ),
                                           ),
                                           IconButton(

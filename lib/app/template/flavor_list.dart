@@ -38,6 +38,17 @@ class _FlavorListState extends State<FlavorList> {
     widget.onConfirmAction(true);
   }
 
+  void showScaffoldMessage(bool isEdition) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(isEdition
+            ? "Sabor salvo com sucesso."
+            : "Sabor excluido com sucesso."),
+        duration: const Duration(milliseconds: 3000),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -119,6 +130,7 @@ class _FlavorListState extends State<FlavorList> {
                                     listen: false);
                             await flavorProvider.delete(flavor["id"]);
                             widget.onConfirmAction(true);
+                            showScaffoldMessage(false);
                           }
                         });
                       } else if (option == "edit") {
@@ -126,6 +138,7 @@ class _FlavorListState extends State<FlavorList> {
                           context,
                           FlavorForm(
                             type: flavor["type"],
+                            isEdition: true,
                           ),
                         );
 
@@ -136,6 +149,7 @@ class _FlavorListState extends State<FlavorList> {
                           "type": type,
                           "product_id": flavor["product_id"]
                         });
+                        showScaffoldMessage(true);
                       }
                     },
                   ),
