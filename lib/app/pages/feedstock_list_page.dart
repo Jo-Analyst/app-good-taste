@@ -1,13 +1,21 @@
+import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
+import 'package:app_good_taste/app/template/dialog_feedstock.dart';
+import 'package:app_good_taste/app/template/feedstock_form.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class FeedstockListPage extends StatefulWidget {
   final List<Map<String, dynamic>> listOfSelectedFeedstocks;
   final List<Map<String, dynamic>> feedstocks;
+
   final bool isEdition;
   const FeedstockListPage(
-      this.listOfSelectedFeedstocks, this.feedstocks, this.isEdition,
-      {super.key});
+    this.listOfSelectedFeedstocks,
+    this.feedstocks,
+    this.isEdition, {
+    super.key,
+  });
 
   @override
   State<FeedstockListPage> createState() => _FeedstockListPageState();
@@ -27,6 +35,26 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
     filteredFeedstocks = List.from(widget.feedstocks);
   }
 
+  void loadFeedstock() async {
+    widget.feedstocks.clear();
+    final feedstockProvider =
+        Provider.of<FeedstockController>(context, listen: false);
+    await feedstockProvider.loadFeedstock();
+    setState(() {
+      for (var item in feedstockProvider.items) {
+        widget.feedstocks.add({
+          "id": item["id"],
+          "name": item["name"],
+          "price": item["price"],
+          "brand": item["brand"],
+          "isChecked": false,
+        });
+      }
+    });
+
+    filteredFeedstocks = List.from(widget.feedstocks);
+  }
+
   void changeIsCheckedAttribute() {
     if (widget.listOfSelectedFeedstocks.isEmpty) return;
 
@@ -41,6 +69,7 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
         }
       }
     }
+    setState(() {});
   }
 
   void addValuesSelectedFeedstock(
@@ -143,6 +172,25 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
+          IconButton(
+            onPressed: () async {
+              final confirm = await showExitDialogFeedstock(
+                context,
+                const FeedstockForm(
+                  feedstockItem: {},
+                ),
+              );
+
+              if (confirm != null) {
+                changeIsCheckedAttribute();
+                loadFeedstock();
+              }
+            },
+            icon: const Icon(
+              Icons.add,
+              size: 35,
+            ),
+          ),
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(

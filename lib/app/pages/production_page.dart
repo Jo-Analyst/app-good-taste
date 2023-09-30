@@ -3,6 +3,7 @@ import 'package:app_good_taste/app/pages/feedstock_list_page.dart';
 import 'package:app_good_taste/app/pages/list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -242,395 +243,452 @@ class _ProductionPageState extends State<ProductionPage> {
     }
   }
 
+  void addFeedstock() async {
+    FocusScope.of(context).unfocus();
+    dynamic feedstockList = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => FeedstockListPage(
+          listOfSelectedFeedstocks,
+          feedstocks,
+          widget.isEdition,
+        ),
+      ),
+    );
+
+    if (feedstockList != null) {
+      listOfSelectedFeedstocks.clear();
+      listOfSelectedFeedstocks.addAll(feedstockList[0]);
+      rewriteItemsProductIdInList();
+      updateFlavorsRemovalList();
+      for (var feedstock in feedstocks) {
+        feedstock["isChecked"] = false;
+      }
+      calculateLeave();
+      calculateProfit();
+
+      for (var list in feedstockList[1]) {
+        removeItemsFlavors.where((flavor) =>
+            flavor["item_product_id"] == list[flavor["item_product_id"]]);
+        removeItemsFlavors.add(list);
+      }
+    }
+  }
+
+  Future<bool> closeScreen() async {
+    FocusScope.of(context).unfocus();
+    Navigator.of(context).pop([false, dateSelected]);
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 235, 233, 233),
-      appBar: AppBar(
-        title: Text(
-          widget.isEdition
-              ? "Produção de ${DateFormat("dd/MM/yy").format(dateSelected)}"
-              : "Produção do dia",
-        ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 10),
-            child: IconButton(
-              onPressed: quantity > 0 &&
-                      listOfSelectedFeedstocks.isNotEmpty &&
-                      productText.isNotEmpty &&
-                      flavorText.isNotEmpty
-                  ? () {
-                      confirmProdution().then((confirmSave) {
-                        if (confirmSave) {
-                          FocusScope.of(context).unfocus();
-                          Navigator.pop(context, [confirmSave, dateSelected]);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(!widget.isEdition
-                                  ? "Produção adicionado com sucesso."
-                                  : "Produção atualizado com sucesso."),
-                              duration: const Duration(milliseconds: 3000),
-                            ),
-                          );
-                        }
-                      });
-                    }
-                  : null,
-              icon: const Icon(
-                Icons.check,
-                size: 35,
+    return WillPopScope(
+      onWillPop: () => closeScreen(),
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 235, 233, 233),
+        appBar: AppBar(
+          title: Text(
+            widget.isEdition
+                ? "Produção de ${DateFormat("dd/MM/yy").format(dateSelected)}"
+                : "Produção do dia",
+          ),
+          actions: [
+            Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: IconButton(
+                onPressed: quantity > 0 &&
+                        listOfSelectedFeedstocks.isNotEmpty &&
+                        productText.isNotEmpty &&
+                        flavorText.isNotEmpty
+                    ? () {
+                        confirmProdution().then((confirmSave) {
+                          if (confirmSave) {
+                            FocusScope.of(context).unfocus();
+                            Navigator.pop(context, [confirmSave, dateSelected]);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(!widget.isEdition
+                                    ? "Produção adicionado com sucesso."
+                                    : "Produção atualizado com sucesso."),
+                                duration: const Duration(milliseconds: 3000),
+                              ),
+                            );
+                          }
+                        });
+                      }
+                    : null,
+                icon: const Icon(
+                  Icons.check,
+                  size: 35,
+                ),
               ),
             ),
+          ],
+          leading: IconButton(
+            onPressed: () => closeScreen(),
+            icon: const Icon(
+              Icons.close,
+              size: 35,
+            ),
           ),
-        ],
-        leading: IconButton(
-          onPressed: () {
-            FocusScope.of(context).unfocus();
-            Navigator.of(context).pop([false, dateSelected]);
-          },
-          icon: const Icon(
-            Icons.close,
-            size: 35,
-          ),
+          toolbarHeight: 100,
         ),
-        toolbarHeight: 100,
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: const Color.fromARGB(255, 235, 233, 233),
-          padding: const EdgeInsets.all(10),
+        body: SingleChildScrollView(
           child: Container(
+            color: const Color.fromARGB(255, 235, 233, 233),
             padding: const EdgeInsets.all(10),
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Form(
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: productController,
-                              readOnly: true,
-                              decoration: InputDecoration(
-                                labelText: "Produto",
-                                labelStyle: const TextStyle(fontSize: 18),
-                                floatingLabelStyle: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          IconButton(
-                            onPressed: () async {
-                              FocusScope.of(context).unfocus();
-                              final data = await Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => const ListPage(
-                                    labelText: "Produtos",
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Form(
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: productController,
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                  labelText: "Produto",
+                                  labelStyle: const TextStyle(fontSize: 18),
+                                  floatingLabelStyle: TextStyle(
+                                    color: Theme.of(context).primaryColor,
                                   ),
                                 ),
-                              );
-
-                              if (data != null) {
-                                productController.text = data["name"];
-                                setState(() {
-                                  productId = data["id"];
-                                  productText = productController.text;
-                                  productWasSelected = true;
-                                  price = 0;
-                                  valueEntry = 0;
-                                });
-                                flavorController.text = "";
-                                flavorText = "";
-                              }
-                            },
-                            icon: Icon(
-                              Icons.select_all_sharp,
-                              size: 40,
-                              color: Theme.of(context).primaryColor,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextFormField(
-                              controller: flavorController,
-                              readOnly: true,
-                              decoration: InputDecoration(
-                                fillColor: Colors.black,
-                                labelText: "Sabor",
-                                labelStyle: const TextStyle(fontSize: 18),
-                                floatingLabelStyle: TextStyle(
-                                  color: Theme.of(context).primaryColor,
+                            const SizedBox(width: 5),
+                            IconButton(
+                              onPressed: () async {
+                                FocusScope.of(context).unfocus();
+                                final data = await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const ListPage(
+                                      labelText: "Produtos",
+                                    ),
+                                  ),
+                                );
+
+                                if (data != null) {
+                                  productController.text = data["name"];
+                                  setState(() {
+                                    productId = data["id"];
+                                    productText = productController.text;
+                                    productWasSelected = true;
+                                    price = 0;
+                                    valueEntry = 0;
+                                  });
+                                  flavorController.text = "";
+                                  flavorText = "";
+                                }
+                              },
+                              icon: Icon(
+                                Icons.select_all_sharp,
+                                size: 40,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: flavorController,
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                  fillColor: Colors.black,
+                                  labelText: "Sabor",
+                                  labelStyle: const TextStyle(fontSize: 18),
+                                  floatingLabelStyle: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                               ),
                             ),
+                            const SizedBox(width: 5),
+                            IconButton(
+                              onPressed: !productWasSelected
+                                  ? null
+                                  : () async {
+                                      FocusScope.of(context).unfocus();
+                                      final data =
+                                          await Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => ListPage(
+                                            labelText: "Sabores",
+                                            productId: productId,
+                                          ),
+                                        ),
+                                      );
+
+                                      if (data != null) {
+                                        setState(() {
+                                          flavorId = data["id"];
+                                          flavorController.text = data["type"];
+                                          flavorText = data["type"];
+                                          price = data["price"];
+                                        });
+                                        calculateInputValue();
+                                        calculateProfit();
+                                      }
+                                    },
+                              icon: Icon(
+                                Icons.select_all_sharp,
+                                size: 40,
+                                color: productText.isEmpty
+                                    ? Colors.black12
+                                    : Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Divider(),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Flexible(
+                              child: TextFormField(
+                                controller: quantityController,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
+                                textInputAction: TextInputAction.next,
+                                onChanged: (value) {
+                                  setState(() {
+                                    quantity =
+                                        value != "" ? int.parse(value) : 0;
+                                  });
+                                  calculateInputValue();
+                                  calculateProfit();
+                                },
+                                decoration: InputDecoration(
+                                  labelText: "Quantidade",
+                                  labelStyle: const TextStyle(fontSize: 18),
+                                  floatingLabelStyle: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Text(
+                              DateFormat("dd 'de' MMMM 'de' yyyy", "pt-br")
+                                  .format(dateSelected),
+                              style: const TextStyle(fontSize: 19),
+                            ),
+                            IconButton(
+                              onPressed: () => showCalendarPicker(),
+                              icon: Icon(
+                                Icons.calendar_month_sharp,
+                                color: Theme.of(context).primaryColor,
+                                size: 35,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Divider(
+                    color: Color.fromARGB(255, 228, 108, 148),
+                    height: 2,
+                  ),
+                  InkWell(
+                    onTap: () => addFeedstock(),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Matéria prima",
+                            style: TextStyle(fontSize: 18),
                           ),
-                          const SizedBox(width: 5),
-                          IconButton(
-                            onPressed: !productWasSelected
-                                ? null
-                                : () async {
-                                    FocusScope.of(context).unfocus();
-                                    final data =
-                                        await Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) => ListPage(
-                                          labelText: "Sabores",
-                                          productId: productId,
+                          Icon(
+                            Icons.add,
+                            size: 30,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Divider(
+                    color: Color.fromARGB(255, 228, 108, 148),
+                    height: 2,
+                  ),
+                  listOfSelectedFeedstocks.isEmpty
+                      ? SizedBox(
+                          height: MediaQuery.of(context).size.height / 2 - 80,
+                          child: const Center(
+                            child: Text(
+                              "Não há matéria prima adicionada.",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ))
+                      : SizedBox(
+                          height: MediaQuery.of(context).size.height / 2 - 80,
+                          child: ListView.builder(
+                            itemCount: listOfSelectedFeedstocks.length,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  Slidable(
+                                    endActionPane: ActionPane(
+                                      motion: const StretchMotion(),
+                                      children: [
+                                        SlidableAction(
+                                          onPressed: (_) {
+                                            decreaseOutputWhenExcludingRawMaterial(
+                                                index);
+                                            calculateProfit();
+                                            changeListItemsChecked(
+                                                listOfSelectedFeedstocks[
+                                                    index]);
+                                            final itemFlavor =
+                                                listOfSelectedFeedstocks
+                                                    .removeAt(index);
+                                            if (widget.isEdition) {
+                                              removeItemsFlavors
+                                                  .add(itemFlavor);
+                                            }
+
+                                            setState(() {});
+                                          },
+                                          backgroundColor: Colors.red,
+                                          icon: Icons.delete,
+                                          label: "Excluir",
+                                        ),
+                                      ],
+                                    ),
+                                    child: ListTile(
+                                      title: Text(
+                                        "${listOfSelectedFeedstocks[index]['name']}",
+                                        style: const TextStyle(fontSize: 18),
+                                      ),
+                                      subtitle: Text(
+                                        "${listOfSelectedFeedstocks[index]['brand']}",
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                      leading: CircleAvatar(
+                                        radius: 30,
+                                        child: Text(
+                                          NumberFormat("R\$ #0.00", "PT-BR")
+                                              .format(listOfSelectedFeedstocks[
+                                                  index]["price"]),
+                                          style: const TextStyle(fontSize: 12),
                                         ),
                                       ),
-                                    );
-
-                                    if (data != null) {
-                                      setState(() {
-                                        flavorId = data["id"];
-                                        flavorController.text = data["type"];
-                                        flavorText = data["type"];
-                                        price = data["price"];
-                                      });
-                                      calculateInputValue();
-                                      calculateProfit();
-                                    }
-                                  },
-                            icon: Icon(
-                              Icons.select_all_sharp,
-                              size: 40,
-                              color: productText.isEmpty
-                                  ? Colors.black12
-                                  : Theme.of(context).primaryColor,
-                            ),
+                                      trailing: SizedBox(
+                                        width: 127,
+                                        child: Row(
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(
+                                                Icons.remove_circle,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                size: 30,
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 31,
+                                              alignment: Alignment.center,
+                                              child: const Text(
+                                                "1",
+                                                style: TextStyle(fontSize: 18),
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(
+                                                Icons.add_circle,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                size: 30,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const Divider(),
+                                ],
+                              );
+                            },
                           ),
-                        ],
+                        ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "E:",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                      const Divider(),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Flexible(
-                            child: TextFormField(
-                              controller: quantityController,
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              textInputAction: TextInputAction.next,
-                              onChanged: (value) {
-                                setState(() {
-                                  quantity = value != "" ? int.parse(value) : 0;
-                                });
-                                calculateInputValue();
-                                calculateProfit();
-                              },
-                              decoration: InputDecoration(
-                                labelText: "Quantidade",
-                                labelStyle: const TextStyle(fontSize: 18),
-                                floatingLabelStyle: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                            ),
+                      Flexible(
+                        child: Chip(
+                          backgroundColor: Colors.blue,
+                          label: Text(
+                            NumberFormat("R\$ #0.00", "PT-BR")
+                                .format(valueEntry),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.white),
                           ),
-                          Text(
-                            DateFormat("dd 'de' MMMM 'de' yyyy", "pt-br")
-                                .format(dateSelected),
-                            style: const TextStyle(fontSize: 19),
+                        ),
+                      ),
+                      const Text(
+                        "S:",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Flexible(
+                        child: Chip(
+                          backgroundColor: Colors.red,
+                          label: Text(
+                            NumberFormat("R\$ #0.00", "PT-BR")
+                                .format(valueLeave),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.white),
                           ),
-                          IconButton(
-                            onPressed: () => showCalendarPicker(),
-                            icon: Icon(
-                              Icons.calendar_month_sharp,
-                              color: Theme.of(context).primaryColor,
-                              size: 35,
-                            ),
+                        ),
+                      ),
+                      const Text(
+                        "L:",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Flexible(
+                        child: Chip(
+                          backgroundColor: Colors.green,
+                          label: Text(
+                            NumberFormat("R\$ #0.00", "PT-BR")
+                                .format(valueProfit),
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.white),
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 20),
-                const Divider(
-                  color: Color.fromARGB(255, 228, 108, 148),
-                  height: 2,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Matéria prima",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        FocusScope.of(context).unfocus();
-                        dynamic feedstockList = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => FeedstockListPage(
-                              listOfSelectedFeedstocks,
-                              feedstocks,
-                              widget.isEdition,
-                            ),
-                          ),
-                        );
-
-                        if (feedstockList != null) {
-                          listOfSelectedFeedstocks.clear();
-                          listOfSelectedFeedstocks.addAll(feedstockList[0]);
-                          rewriteItemsProductIdInList();
-                          updateFlavorsRemovalList();
-                          for (var feedstock in feedstocks) {
-                            feedstock["isChecked"] = false;
-                          }
-                          calculateLeave();
-                          calculateProfit();
-
-                          for (var list in feedstockList[1]) {
-                            removeItemsFlavors.where((flavor) =>
-                                flavor["item_product_id"] ==
-                                list[flavor["item_product_id"]]);
-                            removeItemsFlavors.add(list);
-                          }
-                        }
-                      },
-                      icon: Icon(
-                        Icons.add,
-                        size: 30,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ],
-                ),
-                const Divider(
-                  color: Color.fromARGB(255, 228, 108, 148),
-                  height: 2,
-                ),
-                listOfSelectedFeedstocks.isEmpty
-                    ? const SizedBox(
-                        height: 205,
-                        child: Center(
-                          child: Text(
-                            "Não há matéria prima adicionada.",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ))
-                    : SizedBox(
-                        height: 205,
-                        child: ListView.builder(
-                          itemCount: listOfSelectedFeedstocks.length,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                ListTile(
-                                  title: Text(
-                                    "${listOfSelectedFeedstocks[index]['name']}",
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                                  subtitle: Text(
-                                    "${listOfSelectedFeedstocks[index]['brand']}",
-                                    style: const TextStyle(fontSize: 14),
-                                  ),
-                                  leading: CircleAvatar(
-                                    radius: 30,
-                                    child: Text(
-                                      NumberFormat("R\$ #0.00", "PT-BR").format(
-                                          listOfSelectedFeedstocks[index]
-                                              ["price"]),
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                  ),
-                                  trailing: IconButton(
-                                    onPressed: () {
-                                      decreaseOutputWhenExcludingRawMaterial(
-                                          index);
-                                      calculateProfit();
-                                      changeListItemsChecked(
-                                          listOfSelectedFeedstocks[index]);
-                                      final itemFlavor =
-                                          listOfSelectedFeedstocks
-                                              .removeAt(index);
-                                      if (widget.isEdition) {
-                                        removeItemsFlavors.add(itemFlavor);
-                                      }
-
-                                      setState(() {});
-                                    },
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ),
-                                const Divider(),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "E:",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Flexible(
-                      child: Chip(
-                        backgroundColor: Colors.blue,
-                        label: Text(
-                          NumberFormat("R\$ #0.00", "PT-BR").format(valueEntry),
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ),
-                    const Text(
-                      "S:",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Flexible(
-                      child: Chip(
-                        backgroundColor: Colors.red,
-                        label: Text(
-                          NumberFormat("R\$ #0.00", "PT-BR").format(valueLeave),
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ),
-                    const Text(
-                      "L:",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Flexible(
-                      child: Chip(
-                        backgroundColor: Colors.green,
-                        label: Text(
-                          NumberFormat("R\$ #0.00", "PT-BR")
-                              .format(valueProfit),
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
