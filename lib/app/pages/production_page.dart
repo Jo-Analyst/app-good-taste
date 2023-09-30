@@ -58,6 +58,31 @@ class _ProductionPageState extends State<ProductionPage> {
     super.dispose();
   }
 
+  void increment(int index) {
+    setState(() {
+      listOfSelectedFeedstocks[index]['quantity']++;
+    });
+    calculateSubTotal(index);
+  }
+
+  void decrement(int index) {
+    if (listOfSelectedFeedstocks[index]['quantity'] == 1) return;
+    setState(() {
+      listOfSelectedFeedstocks[index]['quantity']--;
+    });
+    calculateSubTotal(index);
+  }
+
+  void calculateSubTotal(int index) {
+    setState(() {
+      listOfSelectedFeedstocks[index]['subtotal'] =
+          listOfSelectedFeedstocks[index]['quantity'] *
+              listOfSelectedFeedstocks[index]['price'];
+    });
+    calculateLeave();
+    calculateProfit();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -129,15 +154,20 @@ class _ProductionPageState extends State<ProductionPage> {
   }
 
   List<Map<String, dynamic>> getItemsProduction() {
+    // List<Map<String, dynamic>> newListOfSelectedFeedstocks = [];
     List<Map<String, dynamic>> list = [];
     for (var listFeedstocks in listOfSelectedFeedstocks) {
-      list.add({
-        "item_production_id": listFeedstocks["item_production_id"],
-        "feedstock_id": listFeedstocks["id"],
-        "price_feedstock": listFeedstocks["price"],
-        "production_id": productionId,
-      });
+      for (int i = 0; i < listFeedstocks["quantity"]; i++) {
+        list.add({
+          "item_production_id": listFeedstocks["item_production_id"],
+          "feedstock_id": listFeedstocks["id"],
+          "price_feedstock": listFeedstocks["price"],
+          "production_id": productionId,
+        });
+      }
     }
+
+    // for (var listFeedstocks in newListOfSelectedFeedstocks) {}
 
     return list;
   }
@@ -195,7 +225,7 @@ class _ProductionPageState extends State<ProductionPage> {
 
     setState(() {
       for (var feedstock in listOfSelectedFeedstocks) {
-        valueLeave += feedstock["price"];
+        valueLeave += feedstock["subtotal"];
       }
     });
   }
@@ -580,11 +610,16 @@ class _ProductionPageState extends State<ProductionPage> {
                                       ),
                                       leading: CircleAvatar(
                                         radius: 30,
-                                        child: Text(
-                                          NumberFormat("R\$ #0.00", "PT-BR")
-                                              .format(listOfSelectedFeedstocks[
-                                                  index]["price"]),
-                                          style: const TextStyle(fontSize: 12),
+                                        child: FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Text(
+                                            NumberFormat("R\$ #0.00", "PT-BR")
+                                                .format(
+                                                    listOfSelectedFeedstocks[
+                                                        index]["subtotal"]),
+                                            style:
+                                                const TextStyle(fontSize: 12),
+                                          ),
                                         ),
                                       ),
                                       trailing: SizedBox(
@@ -592,7 +627,7 @@ class _ProductionPageState extends State<ProductionPage> {
                                         child: Row(
                                           children: [
                                             IconButton(
-                                              onPressed: () {},
+                                              onPressed: () => decrement(index),
                                               icon: Icon(
                                                 Icons.remove_circle,
                                                 color: Theme.of(context)
@@ -603,13 +638,19 @@ class _ProductionPageState extends State<ProductionPage> {
                                             Container(
                                               width: 31,
                                               alignment: Alignment.center,
-                                              child: const Text(
-                                                "1",
-                                                style: TextStyle(fontSize: 18),
+                                              child: FittedBox(
+                                                fit: BoxFit.scaleDown,
+                                                child: Text(
+                                                  listOfSelectedFeedstocks[
+                                                          index]['quantity']
+                                                      .toString(),
+                                                  style: const TextStyle(
+                                                      fontSize: 18),
+                                                ),
                                               ),
                                             ),
                                             IconButton(
-                                              onPressed: () {},
+                                              onPressed: () => increment(index),
                                               icon: Icon(
                                                 Icons.add_circle,
                                                 color: Theme.of(context)

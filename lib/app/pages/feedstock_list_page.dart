@@ -1,9 +1,7 @@
-import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
 import 'package:app_good_taste/app/template/dialog_feedstock.dart';
 import 'package:app_good_taste/app/template/feedstock_form.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class FeedstockListPage extends StatefulWidget {
   final List<Map<String, dynamic>> listOfSelectedFeedstocks;
@@ -35,25 +33,27 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
     filteredFeedstocks = List.from(widget.feedstocks);
   }
 
-  void loadFeedstock() async {
-    widget.feedstocks.clear();
-    final feedstockProvider =
-        Provider.of<FeedstockController>(context, listen: false);
-    await feedstockProvider.loadFeedstock();
-    setState(() {
-      for (var item in feedstockProvider.items) {
-        widget.feedstocks.add({
-          "id": item["id"],
-          "name": item["name"],
-          "price": item["price"],
-          "brand": item["brand"],
-          "isChecked": false,
-        });
-      }
-    });
+  void increment() {}
 
-    filteredFeedstocks = List.from(widget.feedstocks);
-  }
+  // void loadFeedstock() async {
+  //   widget.feedstocks.clear();
+  //   final feedstockProvider =
+  //       Provider.of<FeedstockController>(context, listen: false);
+  //   await feedstockProvider.loadFeedstock();
+  //   setState(() {
+  //     for (var item in feedstockProvider.items) {
+  //       widget.feedstocks.add({
+  //         "id": item["id"],
+  //         "name": item["name"],
+  //         "price": item["price"],
+  //         "brand": item["brand"],
+  //         "isChecked": false,
+  //       });
+  //     }
+  //   });
+
+  //   filteredFeedstocks = List.from(widget.feedstocks);
+  // }
 
   void changeIsCheckedAttribute() {
     if (widget.listOfSelectedFeedstocks.isEmpty) return;
@@ -76,6 +76,8 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
       Map<String, dynamic> listFeedstock, bool isChecked) {
     setState(() {
       if (isChecked) {
+        listFeedstock["quantity"] = 1;
+        listFeedstock["subtotal"] = listFeedstock["price"];
         valuesOfSelectedFeedstock.add(listFeedstock);
       } else {
         valuesOfSelectedFeedstock
@@ -183,7 +185,7 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
 
               if (confirm != null) {
                 changeIsCheckedAttribute();
-                loadFeedstock();
+                // loadFeedstock();
               }
             },
             icon: const Icon(
