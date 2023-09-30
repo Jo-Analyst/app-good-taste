@@ -142,7 +142,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                     setState(() {
                       monthAndYear = "/$numberMonth/$year";
                     });
-                    loadDetailsProductions();                    
+                    loadDetailsProductions();
                   },
                 ),
                 Padding(
@@ -195,7 +195,6 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                           ),
                         ),
                         PopupMenuButton(
-                          // color: const Color.fromRGBO(233, 30, 98, 0.877),
                           icon: Icon(
                             Icons.more_vert,
                             color: Colors.pink.shade500,
@@ -249,7 +248,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
 
                               if (confirmSave[0] == true) {
                                 loadDetailsProductions();
-                             }
+                              }
                             } else if (option == "all-productions") {
                               final confirmUpdateAndDelete =
                                   await Navigator.of(context).push(
