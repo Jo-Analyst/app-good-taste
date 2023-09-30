@@ -2,6 +2,7 @@ import 'package:app_good_taste/app/controllers/flavor_controller.dart';
 import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/pages/product_form_page.dart';
 import 'package:app_good_taste/app/template/flavor_list.dart';
+import 'package:app_good_taste/app/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/product_list.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ class _ProductPageState extends State<ProductPage> {
   List<bool> cardTriggeredList = [];
   List<Map<String, dynamic>> flavors = [];
   int triggeredCardIndex = -1; // indíce do carro acionado
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -47,6 +49,7 @@ class _ProductPageState extends State<ProductPage> {
       products = productProvider.items;
       setListCardTriggered();
       loadFlavors();
+      isLoading = false;
     });
   }
 
@@ -71,7 +74,9 @@ class _ProductPageState extends State<ProductPage> {
                 final isSaved = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const ProductFormPage(product: {},),
+                    builder: (context) => const ProductFormPage(
+                      product: {},
+                    ),
                   ),
                 );
 
@@ -93,63 +98,68 @@ class _ProductPageState extends State<ProductPage> {
         backgroundColor: Theme.of(context).primaryColor,
         toolbarHeight: 100,
       ),
-      body: products.isNotEmpty
-          ? ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: ListView.builder(
-                    itemCount: products.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Card(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 10),
-                              child: Column(
-                                children: [
-                                  ProductList(
-                                    products[index],
-                                    flavors: flavors,
-                                    toggleCard: (expanded) {
-                                      updateListCardTriggered(index, expanded);
-                                    },
-                                    onConfirmAction: (confirm) {
-                                      if (confirm) loadProducts();
-                                    },
+      body: isLoading
+          ? Center(
+              child: loading(context, 50),
+            )
+          : products.isNotEmpty
+              ? ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ListView.builder(
+                        itemCount: products.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Column(
+                                    children: [
+                                      ProductList(
+                                        products[index],
+                                        flavors: flavors,
+                                        toggleCard: (expanded) {
+                                          updateListCardTriggered(
+                                              index, expanded);
+                                        },
+                                        onConfirmAction: (confirm) {
+                                          if (confirm) loadProducts();
+                                        },
+                                      ),
+                                      const SizedBox(height: 5),
+                                      FlavorList(
+                                        flavors: flavors,
+                                        product: products[index],
+                                        isExpanded: cardTriggeredList[index],
+                                        onConfirmAction: (confirm) {
+                                          if (confirm) {
+                                            loadFlavors();
+                                          }
+                                        },
+                                      )
+                                    ],
                                   ),
-                                  const SizedBox(height: 5),
-                                  FlavorList(
-                                    flavors: flavors,
-                                    product: products[index],
-                                    isExpanded: cardTriggeredList[index],
-                                    onConfirmAction: (confirm) {
-                                      if (confirm) {
-                                        loadFlavors();
-                                      }
-                                    },
-                                  )
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              : Center(
+                  child: Text(
+                    "Não há produto cadastrado.",
+                    style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.displayLarge!.fontSize),
                   ),
                 ),
-              ],
-            )
-          : Center(
-              child: Text(
-                "Não há produto cadastrado.",
-                style: TextStyle(
-                    fontSize:
-                        Theme.of(context).textTheme.displayLarge!.fontSize),
-              ),
-            ),
     );
   }
 }

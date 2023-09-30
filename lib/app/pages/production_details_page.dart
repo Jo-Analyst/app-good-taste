@@ -1,5 +1,6 @@
 import 'package:app_good_taste/app/pages/production_page.dart';
 import 'package:app_good_taste/app/utils/dialog.dart';
+import 'package:app_good_taste/app/utils/loading.dart';
 import 'package:app_good_taste/app/utils/message_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -23,7 +24,7 @@ class ProductionDetailsPage extends StatefulWidget {
 }
 
 class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
-  bool lineWasPressed = false, confirmedDeleteOrEdit = false;
+  bool lineWasPressed = false, confirmedDeleteOrEdit = false, isLoading = true;
   int selectedLine = -1, productionId = 0;
   List<Map<String, dynamic>> productions = [];
   double valueEntry = 0, valueLeave = 0, valueProfit = 0;
@@ -105,9 +106,10 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
   void loadDetailsProductions(String date) {
     setState(() {
       this.date = date;
+      getDetailsFlavors();
+      getDetailsFeedstocks();
+      isLoading = false;
     });
-    getDetailsFlavors();
-    getDetailsFeedstocks();
   }
 
   void getDetailsFlavors() async {
@@ -265,348 +267,376 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
             ),
           ],
         ),
-        body: Container(
-          color: Colors.white,
-          margin: const EdgeInsets.all(10),
-          padding: const EdgeInsets.all(10),
-          child: DefaultTextStyle(
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.black,
-            ),
-            child: Column(
-              children: [
-                Divider(
-                  color: Colors.pink[500],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.calendar_month_outlined),
-                    Text(date),
-                  ],
-                ),
-                Divider(
-                  color: Colors.pink[500],
-                ),
-                const SizedBox(height: 10),
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Text("Sabores:"),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 2 - 190,
-                  width: double.infinity,
-                  child: Card(
-                    elevation: 8,
-                    child: DefaultTextStyle(
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
+        body: isLoading
+            ? Center(
+                child: loading(context, 50),
+              )
+            : Container(
+                color: Colors.white,
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
+                child: DefaultTextStyle(
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                  child: Column(
+                    children: [
+                      Divider(
+                        color: Colors.pink[500],
                       ),
-                      child: productions.isEmpty
-                          ? const Center(
-                              child: Text(
-                                "Sem dados a exibir...",
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  const SizedBox(height: 10),
-                                  Flexible(
-                                    child: ListView.builder(
-                                      itemCount: productions.length,
-                                      itemBuilder: (context, index) {
-                                        final rowColor = index ==
-                                                    selectedLine &&
-                                                rowsPressed[index]["isPressed"]!
-                                            ? Theme.of(context).primaryColor
-                                            : index % 2 > 0
-                                                ? Colors.white
-                                                : Colors.grey.shade200;
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.calendar_month_outlined),
+                          Text(date),
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.pink[500],
+                      ),
+                      const SizedBox(height: 10),
+                      const Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Sabores:"),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 2 - 190,
+                        width: double.infinity,
+                        child: Card(
+                          elevation: 8,
+                          child: DefaultTextStyle(
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                            child: productions.isEmpty
+                                ? const Center(
+                                    child: Text(
+                                      "Sem dados a exibir...",
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        const SizedBox(height: 10),
+                                        Flexible(
+                                          child: ListView.builder(
+                                            itemCount: productions.length,
+                                            itemBuilder: (context, index) {
+                                              final rowColor = index ==
+                                                          selectedLine &&
+                                                      rowsPressed[index]
+                                                          ["isPressed"]!
+                                                  ? Theme.of(context)
+                                                      .primaryColor
+                                                  : index % 2 > 0
+                                                      ? Colors.white
+                                                      : Colors.grey.shade200;
 
-                                        return InkWell(
-                                          onLongPress: () {
-                                            selectedItemFlavor(index);
-                                          },
-                                          child: Container(
-                                            color: rowColor,
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 10,
-                                              vertical: 15,
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    productions[index]
-                                                        ["flavor"],
-                                                    style: TextStyle(
-                                                      color: index ==
-                                                                  selectedLine &&
-                                                              rowsPressed[index]
-                                                                  ["isPressed"]!
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                    ),
+                                              return InkWell(
+                                                onLongPress: () {
+                                                  selectedItemFlavor(index);
+                                                },
+                                                child: Container(
+                                                  color: rowColor,
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 15,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                          productions[index]
+                                                              ["flavor"],
+                                                          style: TextStyle(
+                                                            color: index ==
+                                                                        selectedLine &&
+                                                                    rowsPressed[
+                                                                            index]
+                                                                        [
+                                                                        "isPressed"]!
+                                                                ? Colors.white
+                                                                : Colors.black,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            "${productions[index]["quantity"]}x",
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              color: index ==
+                                                                          selectedLine &&
+                                                                      rowsPressed[
+                                                                              index]
+                                                                          [
+                                                                          "isPressed"]!
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black,
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 5),
+                                                          Text(
+                                                            NumberFormat(
+                                                                    "R\$#0.00",
+                                                                    "PT-BR")
+                                                                .format(
+                                                              productions[index]
+                                                                      [
+                                                                      "price"] ??
+                                                                  0,
+                                                            ),
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                              color: index ==
+                                                                          selectedLine &&
+                                                                      rowsPressed[
+                                                                              index]
+                                                                          [
+                                                                          "isPressed"]!
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black,
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                              width: 5),
+                                                          Text(
+                                                            NumberFormat(
+                                                                    "R\$#0.00",
+                                                                    "PT-BR")
+                                                                .format(
+                                                              productions[index]
+                                                                  [
+                                                                  "value_entry"],
+                                                            ),
+                                                            style: TextStyle(
+                                                              color: index ==
+                                                                          selectedLine &&
+                                                                      rowsPressed[
+                                                                              index]
+                                                                          [
+                                                                          "isPressed"]!
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    ],
                                                   ),
                                                 ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      "${productions[index]["quantity"]}x",
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        color: index ==
-                                                                    selectedLine &&
-                                                                rowsPressed[
-                                                                        index][
-                                                                    "isPressed"]!
-                                                            ? Colors.white
-                                                            : Colors.black,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 5),
-                                                    Text(
-                                                      NumberFormat("R\$#0.00",
-                                                              "PT-BR")
-                                                          .format(
-                                                        productions[index]
-                                                                ["price"] ??
-                                                            0,
-                                                      ),
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        color: index ==
-                                                                    selectedLine &&
-                                                                rowsPressed[
-                                                                        index][
-                                                                    "isPressed"]!
-                                                            ? Colors.white
-                                                            : Colors.black,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 5),
-                                                    Text(
-                                                      NumberFormat("R\$#0.00",
-                                                              "PT-BR")
-                                                          .format(
-                                                        productions[index]
-                                                            ["value_entry"],
-                                                      ),
-                                                      style: TextStyle(
-                                                        color: index ==
-                                                                    selectedLine &&
-                                                                rowsPressed[
-                                                                        index][
-                                                                    "isPressed"]!
-                                                            ? Colors.white
-                                                            : Colors.black,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
+                                              );
+                                            },
                                           ),
-                                        );
-                                      },
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Align(
-                  alignment: Alignment.topLeft,
-                  child: Text("Gastos:"),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 2 - 190,
-                  width: double.infinity,
-                  child: Card(
-                    elevation: 8,
-                    child: DefaultTextStyle(
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
+                          ),
+                        ),
                       ),
-                      child: feedstocks.isEmpty
-                          ? const Center(
-                              child: Text(
-                                "Sem dados a exibir...",
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: [
-                                  const SizedBox(height: 10),
-                                  Flexible(
-                                    child: ListView.builder(
-                                      itemCount: feedstocks.length,
-                                      itemBuilder: (context, index) {
-                                        final rowColor = index % 2 > 0
-                                            ? Colors.white
-                                            : Colors.grey.shade200;
-                                        return Container(
-                                          color: rowColor,
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 15),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Expanded(
-                                                  child: Row(
-                                                children: [
-                                                  Expanded(
-                                                      child: Text(
-                                                          "${feedstocks[index]["count_feedstock"]} ${feedstocks[index]["unit"]}  ${feedstocks[index]["name"]}")),
-                                                ],
-                                              )),
-                                              SizedBox(
-                                                width: 120,
+                      const SizedBox(height: 20),
+                      const Align(
+                        alignment: Alignment.topLeft,
+                        child: Text("Gastos:"),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 2 - 190,
+                        width: double.infinity,
+                        child: Card(
+                          elevation: 8,
+                          child: DefaultTextStyle(
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                            child: feedstocks.isEmpty
+                                ? const Center(
+                                    child: Text(
+                                      "Sem dados a exibir...",
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        const SizedBox(height: 10),
+                                        Flexible(
+                                          child: ListView.builder(
+                                            itemCount: feedstocks.length,
+                                            itemBuilder: (context, index) {
+                                              final rowColor = index % 2 > 0
+                                                  ? Colors.white
+                                                  : Colors.grey.shade200;
+                                              return Container(
+                                                color: rowColor,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 10,
+                                                        vertical: 15),
                                                 child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
-                                                          .spaceBetween,
+                                                          .spaceEvenly,
                                                   children: [
-                                                    const SizedBox(width: 5),
-                                                    Text(
-                                                      NumberFormat("R\$ #0.00",
-                                                              "PT-BR")
-                                                          .format(
-                                                        feedstocks[index]
-                                                                ["price"] ??
-                                                            0,
+                                                    Expanded(
+                                                        child: Row(
+                                                      children: [
+                                                        Expanded(
+                                                            child: Text(
+                                                                "${feedstocks[index]["count_feedstock"]} ${feedstocks[index]["unit"]}  ${feedstocks[index]["name"]}")),
+                                                      ],
+                                                    )),
+                                                    SizedBox(
+                                                      width: 120,
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          const SizedBox(
+                                                              width: 5),
+                                                          Text(
+                                                            NumberFormat(
+                                                                    "R\$ #0.00",
+                                                                    "PT-BR")
+                                                                .format(
+                                                              feedstocks[index][
+                                                                      "price"] ??
+                                                                  0,
+                                                            ),
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        16),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      style: const TextStyle(
-                                                          fontSize: 16),
-                                                    ),
+                                                    )
                                                   ],
                                                 ),
-                                              )
-                                            ],
+                                              );
+                                            },
                                           ),
-                                        );
-                                      },
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "E:",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "E:",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      Flexible(
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 25,
-                          width: 90,
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.blue,
-                          ),
-                          child: Text(
-                            NumberFormat("R\$ #0.00", "PT-BR")
-                                .format(valueEntry),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                            Flexible(
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 25,
+                                width: 90,
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.blue,
+                                ),
+                                child: Text(
+                                  NumberFormat("R\$ #0.00", "PT-BR")
+                                      .format(valueEntry),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      const Text(
-                        "S:",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      Flexible(
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 25,
-                          width: 90,
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.red,
-                          ),
-                          child: Text(
-                            NumberFormat("R\$ #0.00", "PT-BR")
-                                .format(valueLeave),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                            const Text(
+                              "S:",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                      const Text(
-                        "L:",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      Flexible(
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 25,
-                          width: 90,
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.green,
-                          ),
-                          child: Text(
-                            NumberFormat("R\$ #0.00", "PT-BR")
-                                .format(valueProfit),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
+                            Flexible(
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 25,
+                                width: 90,
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.red,
+                                ),
+                                child: Text(
+                                  NumberFormat("R\$ #0.00", "PT-BR")
+                                      .format(valueLeave),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                            const Text(
+                              "L:",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Flexible(
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 25,
+                                width: 90,
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.green,
+                                ),
+                                child: Text(
+                                  NumberFormat("R\$ #0.00", "PT-BR")
+                                      .format(valueProfit),
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
     );
   }

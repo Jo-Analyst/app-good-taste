@@ -1,4 +1,8 @@
+import 'package:app_good_taste/app/controllers/flavor_controller.dart';
 import 'package:app_good_taste/app/controllers/product_controller.dart';
+import 'package:app_good_taste/app/pages/product_form_page.dart';
+import 'package:app_good_taste/app/template/flavor_form.dart';
+import 'package:app_good_taste/app/utils/modal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +39,10 @@ class _ListPageState extends State<ListPage> {
       filteredData[index]["data_selected"] = true;
       dataWasSelected = true;
       dataSelected = widget.labelText == "Produtos"
-          ? {"name": filteredData[index]["name"], "id": filteredData[index]["id"]}
+          ? {
+              "name": filteredData[index]["name"],
+              "id": filteredData[index]["id"]
+            }
           : {
               "type": filteredData[index]["type"],
               "id": filteredData[index]["id"],
@@ -45,6 +52,7 @@ class _ListPageState extends State<ListPage> {
   }
 
   void loadData() async {
+    data.clear();
     late dynamic dataProvider;
     final productController =
         Provider.of<ProductController>(context, listen: false);
@@ -94,6 +102,40 @@ class _ListPageState extends State<ListPage> {
     });
   }
 
+  void showModalForm(String type, int? index) async {
+    await showModal(
+        context,
+        FlavorForm(
+          isEdition: type.isNotEmpty,
+          type: type,
+        ));
+  }
+
+  void addNewProductOrFlavor() async {
+    final flavorController =
+        Provider.of<FlavorController>(context, listen: false);
+    late dynamic response;
+    if (widget.labelText.toLowerCase() == "produtos") {
+      response = await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => const ProductFormPage(product: {}),
+        ),
+      );
+    } else {
+      response = await showModal(
+          context,
+          const FlavorForm(
+            isEdition: false,
+          ));
+
+      flavorController.add({"type": response, "product_id": widget.productId});
+    }
+
+    if (response != null) {
+      loadData();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,6 +143,13 @@ class _ListPageState extends State<ListPage> {
         title: Text("Lista de ${widget.labelText}"),
         toolbarHeight: 100,
         actions: [
+          IconButton(
+            onPressed: () => addNewProductOrFlavor(),
+            icon: const Icon(
+              Icons.add,
+              size: 35,
+            ),
+          ),
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(

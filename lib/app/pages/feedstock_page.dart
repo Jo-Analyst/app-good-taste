@@ -1,6 +1,7 @@
 import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
 import 'package:app_good_taste/app/template/dialog_feedstock.dart';
 import 'package:app_good_taste/app/template/feedstock_form.dart';
+import 'package:app_good_taste/app/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/template/feedstock_list.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ class FeedstockPage extends StatefulWidget {
 
 class _FeedstockPageState extends State<FeedstockPage> {
   List<Map<String, dynamic>> feedstocks = [];
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -26,6 +28,7 @@ class _FeedstockPageState extends State<FeedstockPage> {
     await feedstockProvider.loadFeedstock();
     setState(() {
       feedstocks = feedstockProvider.items;
+      isLoading = false;
     });
   }
 
@@ -62,35 +65,39 @@ class _FeedstockPageState extends State<FeedstockPage> {
         backgroundColor: Theme.of(context).primaryColor,
         toolbarHeight: 100,
       ),
-      body: feedstocks.isNotEmpty
-          ? ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: ListView.builder(
-                    itemCount: feedstocks.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return Card(
-                        child: FeedstockList(feedstocks[index],
-                            onConfirmAction: (confirmAction) {
-                          loadProducts();
-                        }),
-                      );
-                    },
+      body: isLoading
+          ? Center(
+              child: loading(context, 50),
+            )
+          : feedstocks.isNotEmpty
+              ? ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ListView.builder(
+                        itemCount: feedstocks.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Card(
+                            child: FeedstockList(feedstocks[index],
+                                onConfirmAction: (confirmAction) {
+                              loadProducts();
+                            }),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              : Center(
+                  child: Text(
+                    "Não há matéria prima cadastrada.",
+                    style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.displayLarge!.fontSize),
                   ),
                 ),
-              ],
-            )
-          : Center(
-              child: Text(
-                "Não há matéria prima cadastrada.",
-                style: TextStyle(
-                    fontSize:
-                        Theme.of(context).textTheme.displayLarge!.fontSize),
-              ),
-            ),
     );
   }
 }
