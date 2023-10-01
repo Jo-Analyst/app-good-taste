@@ -10,6 +10,7 @@ class FeedstockController with ChangeNotifier {
 
   Future<void> loadFeedstock() async {
     _items = await FeedstockModel.findAll();
+    print(_items);
   }
 
   Future<void> delete(int id) async {

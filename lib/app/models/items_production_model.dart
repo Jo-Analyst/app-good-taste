@@ -42,7 +42,7 @@ class ItemsProductionModel {
       productionId) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
-        "SELECT f.id, f.name, f.price, f.brand, i.id AS item_production_id FROM items_productions AS i INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE i.production_id = ? ",
+        "SELECT f.id, f.name, f.price, f.brand, i.id AS item_production_id, sum(f.price) as subtotal, COUNT(f.id) as quantity FROM items_productions AS i INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE i.production_id = ? GROUP BY f.name ",
         [productionId]);
   }
   

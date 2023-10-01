@@ -83,6 +83,8 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
           "brand": item["brand"],
           "item_production_id": item["item_production_id"],
           "isChecked": false,
+          "subtotal": item["subtotal"],
+          "quantity": item["quantity"],
         });
       }
     });

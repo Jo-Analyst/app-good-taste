@@ -50,14 +50,6 @@ class _ProductionPageState extends State<ProductionPage> {
       productId = 0,
       flavorId = 0;
 
-  final valueNotifier = ValueNotifier("");
-
-  @override
-  void dispose() {
-    valueNotifier.dispose();
-    super.dispose();
-  }
-
   void increment(int index) {
     setState(() {
       listOfSelectedFeedstocks[index]['quantity']++;
@@ -154,7 +146,6 @@ class _ProductionPageState extends State<ProductionPage> {
   }
 
   List<Map<String, dynamic>> getItemsProduction() {
-    // List<Map<String, dynamic>> newListOfSelectedFeedstocks = [];
     List<Map<String, dynamic>> list = [];
     for (var listFeedstocks in listOfSelectedFeedstocks) {
       for (int i = 0; i < listFeedstocks["quantity"]; i++) {
@@ -166,8 +157,6 @@ class _ProductionPageState extends State<ProductionPage> {
         });
       }
     }
-
-    // for (var listFeedstocks in newListOfSelectedFeedstocks) {}
 
     return list;
   }
