@@ -8,8 +8,10 @@ class ProductionController extends ChangeNotifier {
     return List<Map<String, dynamic>>.from(_items);
   }
 
-  Future<bool> save(Map<String, dynamic> data,
-      List<Map<String, dynamic>> itemsProduction, List<Map<String, dynamic>> removeItemsFlavors) async {
+  Future<bool> save(
+      Map<String, dynamic> data,
+      List<Map<String, dynamic>> itemsProduction,
+      List<Map<String, dynamic>> removeItemsFlavors) async {
     return await ProductionModel(
       quantity: data["quantity"],
       date: data["date"],
@@ -41,20 +43,24 @@ class ProductionController extends ChangeNotifier {
   }
 
   Future<List<Map<String, dynamic>>>
-      getSumPriceFeedstockAndCountFeedstockAndValueLeave(String monthAndYear) async {
+      getSumPriceFeedstockAndCountFeedstockAndValueLeave(
+          String monthAndYear) async {
     return await ProductionModel
         .getSumPriceFeedstockAndCountFeedstockAndValueLeave(monthAndYear);
   }
 
-  Future<List<Map<String, dynamic>>> getSumValueProfit(String monthAndYear) async {
+  Future<List<Map<String, dynamic>>> getSumValueProfit(
+      String monthAndYear) async {
     return await ProductionModel.getSumValueProfit(monthAndYear);
   }
 
-  Future<List<Map<String, dynamic>>> getSumValueEntry(String monthAndYear) async {
+  Future<List<Map<String, dynamic>>> getSumValueEntry(
+      String monthAndYear) async {
     return await ProductionModel.getSumValueEntry(monthAndYear);
   }
 
-  Future<List<Map<String, dynamic>>> getSumValueLeave(String monthAndYear) async {
+  Future<List<Map<String, dynamic>>> getSumValueLeave(
+      String monthAndYear) async {
     return await ProductionModel.getSumValueLeave(monthAndYear);
   }
 

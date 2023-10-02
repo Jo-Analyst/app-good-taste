@@ -53,6 +53,13 @@ class _ProductionPageState extends State<ProductionPage> {
   void increment(int index) {
     setState(() {
       listOfSelectedFeedstocks[index]['quantity']++;
+      for (int i = 0; i < feedstocks.length; i++) {
+        if (feedstocks[i]["id"] == listOfSelectedFeedstocks[index]["id"]) {
+          feedstocks[i]["quantity"] =
+              listOfSelectedFeedstocks[index]['quantity'];
+          break;
+        }
+      }
     });
     calculateSubTotal(index);
   }
@@ -60,7 +67,16 @@ class _ProductionPageState extends State<ProductionPage> {
   void decrement(int index) {
     if (listOfSelectedFeedstocks[index]['quantity'] == 1) return;
     setState(() {
-      listOfSelectedFeedstocks[index]['quantity']--;
+      listOfSelectedFeedstocks[index]['quantity'] -= 1;
+
+      for (int i = 0; i < feedstocks.length; i++) {
+        if (feedstocks[i]["id"] == listOfSelectedFeedstocks[index]["id"]) {
+          if (feedstocks[i]['quantity'] == 1) return;
+          feedstocks[i]["quantity"] =
+              listOfSelectedFeedstocks[index]['quantity'];
+          break;
+        }
+      }
     });
     calculateSubTotal(index);
   }
@@ -290,6 +306,7 @@ class _ProductionPageState extends State<ProductionPage> {
       ),
     );
 
+    print(feedstockList);
     if (feedstockList != null) {
       listOfSelectedFeedstocks.clear();
       listOfSelectedFeedstocks.addAll(feedstockList[0]);
