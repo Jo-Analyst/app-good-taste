@@ -39,7 +39,7 @@ class FeedstockModel {
         await db.update("feedstocks", data, where: "id = ?", whereArgs: [id]);
       }
     } catch (e) {
-      // print(e);
+      // 
     }
   }
 }

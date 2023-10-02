@@ -5,7 +5,6 @@ import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -15,7 +14,6 @@ import 'package:provider/provider.dart';
 
 void main() async {
   initializeDateFormatting('pt_BR', null);
-  dotenv.load();
   runApp(const AppGoodTaste());
 }
 

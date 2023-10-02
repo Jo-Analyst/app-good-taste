@@ -34,27 +34,6 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
   }
 
   void increment() {}
-
-  // void loadFeedstock() async {
-  //   widget.feedstocks.clear();
-  //   final feedstockProvider =
-  //       Provider.of<FeedstockController>(context, listen: false);
-  //   await feedstockProvider.loadFeedstock();
-  //   setState(() {
-  //     for (var item in feedstockProvider.items) {
-  //       widget.feedstocks.add({
-  //         "id": item["id"],
-  //         "name": item["name"],
-  //         "price": item["price"],
-  //         "brand": item["brand"],
-  //         "isChecked": false,
-  //       });
-  //     }
-  //   });
-
-  //   filteredFeedstocks = List.from(widget.feedstocks);
-  // }
-
   void changeIsCheckedAttribute() {
     if (widget.listOfSelectedFeedstocks.isEmpty) return;
 

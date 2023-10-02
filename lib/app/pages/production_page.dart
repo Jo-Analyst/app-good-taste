@@ -116,11 +116,25 @@ class _ProductionPageState extends State<ProductionPage> {
     await feedstockProvider.loadFeedstock();
     setState(() {
       for (var item in feedstockProvider.items) {
+        int quantity = 1;
+        double subtotal = item["price"];
+        if (widget.isEdition) {
+          for (var listOfSelectedFeedstock in listOfSelectedFeedstocks) {
+            if (item["id"] == listOfSelectedFeedstock["id"]) {
+              quantity = listOfSelectedFeedstock["quantity"];
+              subtotal = listOfSelectedFeedstock["subtotal"];
+              break;
+            }
+          }
+        }
+
         feedstocks.add({
           "id": item["id"],
           "name": item["name"],
           "price": item["price"],
           "brand": item["brand"],
+          "quantity": quantity,
+          "subtotal": subtotal,
           "isChecked": false,
         });
       }
@@ -264,6 +278,7 @@ class _ProductionPageState extends State<ProductionPage> {
 
   void addFeedstock() async {
     FocusScope.of(context).unfocus();
+
     dynamic feedstockList = await Navigator.push(
       context,
       MaterialPageRoute(
