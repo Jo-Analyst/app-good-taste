@@ -363,8 +363,8 @@ class _ProductionPageState extends State<ProductionPage> {
           leading: IconButton(
             onPressed: () => closeScreen(),
             icon: const Icon(
-              Icons.close,
-              size: 35,
+              Icons.keyboard_arrow_left,
+              size: 40,
             ),
           ),
           toolbarHeight: 100,

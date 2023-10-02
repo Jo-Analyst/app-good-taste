@@ -86,8 +86,8 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
             child: IconButton(
               onPressed: () => closeScreen(),
               icon: const Icon(
-                Icons.close,
-                size: 35,
+                Icons.keyboard_arrow_left,
+                size: 40,
               ),
             ),
           ),

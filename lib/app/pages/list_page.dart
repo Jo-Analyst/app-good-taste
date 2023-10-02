@@ -49,6 +49,9 @@ class _ListPageState extends State<ListPage> {
               "price": filteredData[index]["price"]
             };
     });
+
+    FocusScope.of(context).unfocus();
+    Navigator.pop(context, dataSelected);
   }
 
   void loadData() async {
@@ -143,24 +146,12 @@ class _ListPageState extends State<ListPage> {
         title: Text("Lista de ${widget.labelText}"),
         toolbarHeight: 100,
         actions: [
-          IconButton(
-            onPressed: () => addNewProductOrFlavor(),
-            icon: const Icon(
-              Icons.add,
-              size: 35,
-            ),
-          ),
           Container(
             margin: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: dataWasSelected
-                  ? () {
-                      FocusScope.of(context).unfocus();
-                      Navigator.pop(context, dataSelected);
-                    }
-                  : null,
+              onPressed: () => addNewProductOrFlavor(),
               icon: const Icon(
-                Icons.check,
+                Icons.add,
                 size: 35,
               ),
             ),
@@ -172,8 +163,8 @@ class _ListPageState extends State<ListPage> {
             Navigator.of(context).pop();
           },
           icon: const Icon(
-            Icons.close,
-            size: 35,
+            Icons.keyboard_arrow_left,
+            size: 40,
           ),
         ),
       ),
@@ -210,9 +201,7 @@ class _ListPageState extends State<ListPage> {
                     return Column(
                       children: [
                         Container(
-                          color: filteredData[index]["data_selected"]
-                              ? Theme.of(context).primaryColor
-                              : const Color.fromARGB(255, 227, 226, 226),
+                          color: const Color.fromARGB(255, 227, 226, 226),
                           child: ListTile(
                               onTap: () => selectData(index),
                               title: Text(

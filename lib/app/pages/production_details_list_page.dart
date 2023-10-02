@@ -139,8 +139,8 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
           leading: IconButton(
             onPressed: () => Navigator.of(context).pop(result),
             icon: const Icon(
-              Icons.close,
-              size: 35,
+              Icons.keyboard_arrow_left,
+              size: 40,
             ),
           ),
           actions: [

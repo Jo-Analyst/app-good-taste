@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
 
@@ -18,7 +19,7 @@ class _SettingPageState extends State<SettingPage> {
         );
       }
       return const Icon(
-        Icons.close,
+        Icons.keyboard_arrow_left,
         color: Color.fromARGB(255, 209, 207, 207),
       );
     },

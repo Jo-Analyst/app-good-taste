@@ -190,8 +190,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
               });
             },
             icon: const Icon(
-              Icons.close,
-              size: 35,
+              Icons.keyboard_arrow_left,
+              size: 40,
             ),
           ),
           actions: [

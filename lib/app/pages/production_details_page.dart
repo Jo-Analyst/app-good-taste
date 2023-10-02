@@ -1,3 +1,4 @@
+import 'package:app_good_taste/app/pages/good_taste_page.dart';
 import 'package:app_good_taste/app/pages/production_page.dart';
 import 'package:app_good_taste/app/utils/dialog.dart';
 import 'package:app_good_taste/app/utils/loading.dart';
@@ -189,8 +190,8 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
           toolbarHeight: 100,
           leading: IconButton(
             icon: const Icon(
-              Icons.close,
-              size: 35,
+              Icons.keyboard_arrow_left,
+              size: 40,
             ),
             onPressed: () => closeScreen(),
           ),
@@ -304,7 +305,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height / 2 - 190,
+                        height: MediaQuery.of(context).size.height / 2 - 210,
                         width: double.infinity,
                         child: Card(
                           elevation: 8,
@@ -340,7 +341,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                                       : Colors.grey.shade200;
 
                                               return InkWell(
-                                                onLongPress: () {
+                                                onTap: () {
                                                   selectedItemFlavor(index);
                                                 },
                                                 child: Container(
@@ -458,7 +459,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height / 2 - 190,
+                        height: MediaQuery.of(context).size.height / 2 - 210,
                         width: double.infinity,
                         child: Card(
                           elevation: 8,
@@ -545,96 +546,123 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       ),
                       const SizedBox(height: 5),
                       Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "E:",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Flexible(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 25,
+                                  width: 90,
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.blue,
+                                  ),
+                                  child: Text(
+                                    NumberFormat("R\$ #0.00", "PT-BR")
+                                        .format(valueEntry),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Text(
+                                "S:",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Flexible(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 25,
+                                  width: 90,
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.red,
+                                  ),
+                                  child: Text(
+                                    NumberFormat("R\$ #0.00", "PT-BR")
+                                        .format(valueLeave),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Text(
+                                "L:",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              Flexible(
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 25,
+                                  width: 90,
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.green,
+                                  ),
+                                  child: Text(
+                                    NumberFormat("R\$ #0.00", "PT-BR")
+                                        .format(valueProfit),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const GoodTastePage()),
+                            (route) => false,
+                          );
+                        },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
-                              "E:",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
+                            Icon(
+                              Icons.clear_all_sharp,
+                              size: 25,
                             ),
-                            Flexible(
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 25,
-                                width: 90,
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.blue,
-                                ),
-                                child: Text(
-                                  NumberFormat("R\$ #0.00", "PT-BR")
-                                      .format(valueEntry),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Text(
-                              "S:",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Flexible(
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 25,
-                                width: 90,
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.red,
-                                ),
-                                child: Text(
-                                  NumberFormat("R\$ #0.00", "PT-BR")
-                                      .format(valueLeave),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Text(
-                              "L:",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Flexible(
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 25,
-                                width: 90,
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.green,
-                                ),
-                                child: Text(
-                                  NumberFormat("R\$ #0.00", "PT-BR")
-                                      .format(valueProfit),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
+                            SizedBox(width: 10),
+                            Text(
+                              "Fechar",
+                              style: TextStyle(fontSize: 20),
                             ),
                           ],
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
