@@ -33,10 +33,9 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
     filteredFeedstocks = List.from(widget.feedstocks);
   }
 
-  void increment() {}
   void changeIsCheckedAttribute() {
     if (widget.listOfSelectedFeedstocks.isEmpty) return;
-
+    valuesOfSelectedFeedstock.clear();
     for (var feedstock in widget.feedstocks) {
       for (var list in widget.listOfSelectedFeedstocks) {
         if (list["id"] == feedstock["id"]) {
@@ -148,25 +147,35 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
     });
   }
 
+  void addNewFeedstock() async {
+    final response = await showExitDialogFeedstock(
+      context,
+      const FeedstockForm(
+        feedstockItem: {},
+      ),
+    );
+
+    if (response != null) {
+      changeIsCheckedAttribute();
+      setState(() {
+        response[1]["isChecked"] = false;
+        widget.feedstocks.add(response[1]);
+        filteredFeedstocks = widget.feedstocks
+          ..sort((a, b) => a["name"]
+              .toString()
+              .toLowerCase()
+              .compareTo(b["name"].toString().toLowerCase()));
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () async {
-              final confirm = await showExitDialogFeedstock(
-                context,
-                const FeedstockForm(
-                  feedstockItem: {},
-                ),
-              );
-
-              if (confirm != null) {
-                changeIsCheckedAttribute();
-                // loadFeedstock();
-              }
-            },
+            onPressed: () => addNewFeedstock(),
             icon: const Icon(
               Icons.add,
               size: 35,

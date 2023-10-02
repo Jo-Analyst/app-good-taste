@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-Future<bool?> showExitDialogFeedstock(
+Future<dynamic> showExitDialogFeedstock(
   BuildContext context,
   dynamic feedstock,
 ) async {
-  return showDialog<bool>(
+  return showDialog<dynamic>(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(

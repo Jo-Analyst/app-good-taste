@@ -56,7 +56,7 @@ class FeedstockList extends StatelessWidget {
                   FeedstockForm(feedstockItem: feedstockItem),
                 );
 
-                if (confirmEdit == true) {
+                if (confirmEdit != null) {
                   onConfirmAction(true);
                 }
               },

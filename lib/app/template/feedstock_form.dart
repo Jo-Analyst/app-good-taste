@@ -36,13 +36,15 @@ class _FeedstockState extends State<FeedstockForm> {
     final feedstockProvider =
         Provider.of<FeedstockController>(context, listen: false);
     if (_key.currentState!.validate()) {
-      feedstockProvider.save({
+      final data = {
         "id": _id,
         "name": _name.text.trim(),
         "brand": _brand.text.trim(),
         "unit": _unit.text.trim().toUpperCase(),
         "price": double.parse(_price.text.replaceAll(RegExp(r','), '.')),
-      });
+      };
+
+      feedstockProvider.save(data);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -50,7 +52,7 @@ class _FeedstockState extends State<FeedstockForm> {
           duration: Duration(milliseconds: 3000),
         ),
       );
-      Navigator.pop(context, true);
+      Navigator.pop(context, [true, data]);
     }
   }
 
