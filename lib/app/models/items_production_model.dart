@@ -32,10 +32,11 @@ class ItemsProductionModel {
     txn.delete("items_productions",
         where: "production_id = ?", whereArgs: [productId]);
   }
- 
-  static Future<void> deleteById(Transaction txn, int id) async {
+
+  static Future<void> deleteByProductionId(
+      Transaction txn, int productionId) async {
     txn.delete("items_productions",
-        where: "id = ?", whereArgs: [id]);
+        where: "production_id = ?", whereArgs: [productionId]);
   }
 
   static Future<List<Map<String, dynamic>>> findByProductionId(
@@ -45,7 +46,7 @@ class ItemsProductionModel {
         "SELECT f.id, f.name, f.price, f.brand, i.id AS item_production_id, sum(f.price) as subtotal, COUNT(f.id) as quantity FROM items_productions AS i INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE i.production_id = ? GROUP BY f.name ",
         [productionId]);
   }
-  
+
   static Future<List<Map<String, dynamic>>> findItemProductionByfeedstockId(
       int feedstockID) async {
     final db = await DB.openDatabase();

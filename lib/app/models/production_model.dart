@@ -23,8 +23,7 @@ class ProductionModel {
     this.flavorId,
   });
 
-  Future<bool> save(int id, List<Map<String, dynamic>> itemsProduction,
-      List<Map<String, dynamic>> removeItemsFlavors) async {
+  Future<bool> save(int id, List<Map<String, dynamic>> itemsProduction) async {
     int lastInsertRowId = 0;
     Map<String, dynamic> data = {
       "quantity": quantity,
@@ -44,21 +43,15 @@ class ProductionModel {
         } else {
           await txn
               .update("productions", data, where: "id = ?", whereArgs: [id]);
+          await ItemsProductionModel.deleteByProductionId(txn, id);
         }
         for (var item in itemsProduction) {
           await ItemsProductionModel(
-                  id: item["item_production_id"],
+                  id: 0,
                   productionId: id == 0 ? lastInsertRowId : id,
                   priceFeedstock: item["price_feedstock"],
                   feedstockId: item["feedstock_id"])
               .save(txn);
-        }
-
-        if (removeItemsFlavors.isNotEmpty) {
-          for (var item in removeItemsFlavors) {
-            await ItemsProductionModel.deleteById(
-                txn, item["item_production_id"]);
-          }
         }
       });
       return true;
@@ -95,7 +88,8 @@ class ProductionModel {
   }
 
   static Future<List<Map<String, dynamic>>>
-      getSumPriceFeedstockAndCountFeedstockAndValueLeave(String monthAndYear) async {
+      getSumPriceFeedstockAndCountFeedstockAndValueLeave(
+          String monthAndYear) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
         "SELECT SUM(items_productions.price_feedstock) AS subtotal, COUNT(feedstocks.name) AS quantity, feedstocks.name, feedstocks.unit, items_productions.price_feedstock FROM productions INNER JOIN items_productions ON productions.id = items_productions.production_id INNER JOIN feedstocks ON feedstocks.id = items_productions.feedstock_id WHERE date LIKE '%$monthAndYear%' GROUP BY feedstocks.name");
@@ -133,6 +127,6 @@ class ProductionModel {
       String date) async {
     final db = await DB.openDatabase();
     return db.rawQuery(
-        "SELECT f.name, COUNT(f.name) count_feedstock, f.unit, SUM(f.price) AS price FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE date = '$date' GROUP BY f.name");
+        "SELECT i.id, f.name, COUNT(f.name) count_feedstock, f.unit, SUM(f.price) AS price FROM productions AS p inner join items_productions AS i ON p.id = i.production_id INNER JOIN feedstocks AS f ON f.id = i.feedstock_id WHERE date = '$date' GROUP BY f.name");
   }
 }

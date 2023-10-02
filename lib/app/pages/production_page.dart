@@ -33,7 +33,6 @@ class _ProductionPageState extends State<ProductionPage> {
   List<Map<String, dynamic>> products = [],
       feedstocks = [],
       listOfSelectedFeedstocks = [],
-      removeItemsFlavors = [],
       copyListOfSelectedFeedstocks = [];
   final List<String> flavors = [];
   bool productWasSelected = false;
@@ -172,7 +171,7 @@ class _ProductionPageState extends State<ProductionPage> {
       "value_entry": valueEntry,
       "value_leave": valueLeave,
       "value_profit": valueProfit,
-    }, getItemsProduction(), removeItemsFlavors);
+    }, getItemsProduction());
   }
 
   List<Map<String, dynamic>> getItemsProduction() {
@@ -276,13 +275,6 @@ class _ProductionPageState extends State<ProductionPage> {
     );
   }
 
-  void updateFlavorsRemovalList() {
-    for (var list in listOfSelectedFeedstocks) {
-      removeItemsFlavors.removeWhere((flavor) =>
-          flavor["item_production_id"] == list["item_production_id"]);
-    }
-  }
-
   void changeListItemsChecked(Map<String, dynamic> listOfSelectedFeedstock) {
     for (var feedstock in feedstocks) {
       if (feedstock["id"] == listOfSelectedFeedstock["id"]) {
@@ -306,23 +298,15 @@ class _ProductionPageState extends State<ProductionPage> {
       ),
     );
 
-    print(feedstockList);
     if (feedstockList != null) {
       listOfSelectedFeedstocks.clear();
       listOfSelectedFeedstocks.addAll(feedstockList[0]);
       rewriteItemsProductIdInList();
-      updateFlavorsRemovalList();
       for (var feedstock in feedstocks) {
         feedstock["isChecked"] = false;
       }
       calculateLeave();
       calculateProfit();
-
-      for (var list in feedstockList[1]) {
-        removeItemsFlavors.where((flavor) =>
-            flavor["item_product_id"] == list[flavor["item_product_id"]]);
-        removeItemsFlavors.add(list);
-      }
     }
   }
 
@@ -604,13 +588,8 @@ class _ProductionPageState extends State<ProductionPage> {
                                             changeListItemsChecked(
                                                 listOfSelectedFeedstocks[
                                                     index]);
-                                            final itemFlavor =
-                                                listOfSelectedFeedstocks
-                                                    .removeAt(index);
-                                            if (widget.isEdition) {
-                                              removeItemsFlavors
-                                                  .add(itemFlavor);
-                                            }
+                                            listOfSelectedFeedstocks
+                                                .removeAt(index);
 
                                             setState(() {});
                                           },
