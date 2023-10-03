@@ -1,3 +1,4 @@
+import 'package:app_good_taste/app/utils/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -5,8 +6,10 @@ class MovementDetailsTemplate extends StatefulWidget {
   final double price;
   final String description;
   final List<Map<String, dynamic>> items;
+  final bool isLoading;
   const MovementDetailsTemplate({
     required this.price,
+    required this.isLoading,
     required this.description,
     required this.items,
     super.key,
@@ -56,17 +59,26 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                     ),
                     Chip(
                       backgroundColor: changeColorByDescription(),
-                      label: Text(
-                        NumberFormat('R\$ #0.00', 'PT-BR').format(widget.price),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: Theme.of(context)
-                              .textTheme
-                              .displayLarge
-                              ?.fontSize,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      label: widget.isLoading
+                          ? Center(
+                              child: loadingFourRotatingDots(
+                                context,
+                                20,
+                                null,
+                              ),
+                            )
+                          : Text(
+                              NumberFormat('R\$ #0.00', 'PT-BR')
+                                  .format(widget.price),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .displayLarge
+                                    ?.fontSize,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                     ),
                   ],
                 ),

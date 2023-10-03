@@ -162,8 +162,8 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
     if (response != null) {
       changeIsCheckedAttribute();
       setState(() {
-        response[1]["isChecked"] = false;
-        widget.feedstocks.add(response[1]);
+        response["isChecked"] = false;
+        widget.feedstocks.add(response);
         filteredFeedstocks = widget.feedstocks
           ..sort((a, b) => a["name"]
               .toString()

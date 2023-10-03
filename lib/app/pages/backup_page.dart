@@ -91,7 +91,7 @@ class _BackupPageState extends State<BackupPage> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(10),
                     child: isLoadingBackup
-                        ? loadingFourRotatingDots(context, 20)
+                        ? loadingFourRotatingDots(context, 20, null)
                         : const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -117,7 +117,7 @@ class _BackupPageState extends State<BackupPage> {
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(10),
                     child: isLoadingRestore
-                        ? loadingFourRotatingDots(context, 20)
+                        ? loadingFourRotatingDots(context, 20, null)
                         : const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

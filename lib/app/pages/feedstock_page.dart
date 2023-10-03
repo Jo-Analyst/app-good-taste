@@ -48,7 +48,7 @@ class _FeedstockPageState extends State<FeedstockPage> {
                   ),
                 );
 
-                if (result == true) {
+                if (result != null) {
                   loadProducts();
                 }
               },
@@ -59,8 +59,11 @@ class _FeedstockPageState extends State<FeedstockPage> {
             ),
           ),
         ],
-        title: const Text(
-          "Gerenciar M. Prima",
+        title: const FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            "Gerenciar Matéria Prima",
+          ),
         ),
         backgroundColor: Theme.of(context).primaryColor,
         toolbarHeight: 100,

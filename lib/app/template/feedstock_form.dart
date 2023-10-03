@@ -52,7 +52,7 @@ class _FeedstockState extends State<FeedstockForm> {
           duration: Duration(milliseconds: 3000),
         ),
       );
-      Navigator.pop(context, [true, data]);
+      Navigator.pop(context, data);
     }
   }
 

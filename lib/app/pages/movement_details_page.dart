@@ -130,74 +130,86 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
           ),
         ),
       ),
-      body: isLoading
-          ? Center(
-              child: loading(context, 50),
-            )
-          : Stack(
+      body:
+          // isLoading
+          //     ? Center(
+          //         child: loading(context, 50),
+          //       )
+          //     :
+          Stack(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Column(
               children: [
-                SizedBox(
+                Container(
+                  height: 150,
                   width: double.infinity,
+                  color: Theme.of(context).primaryColor,
+                ),
+                const SizedBox(height: 28),
+                SlideMonth(
+                  getNumberMonth: (numberMonth) {
+                    setState(() {
+                      monthAndYear = "/$numberMonth/$year";
+                       isLoading = true;
+                    });
+                    loadDetailsProductions();
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
                     children: [
-                      Container(
-                        height: 150,
-                        width: double.infinity,
-                        color: Theme.of(context).primaryColor,
+                      MovementDetailsTemplate(
+                        isLoading: isLoading,
+                        price: valueEntry,
+                        description: "Entrada",
+                        items: itemsEntry,
                       ),
-                      const SizedBox(height: 28),
-                      SlideMonth(
-                        getNumberMonth: (numberMonth) {
-                          setState(() {
-                            monthAndYear = "/$numberMonth/$year";
-                          });
-                          loadDetailsProductions();
-                        },
+                      MovementDetailsTemplate(
+                        isLoading: isLoading,
+                        price: valueLeave,
+                        description: "Saída",
+                        items: itemsLeave,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Column(
-                          children: [
-                            MovementDetailsTemplate(
-                              price: valueEntry,
-                              description: "Entrada",
-                              items: itemsEntry,
-                            ),
-                            MovementDetailsTemplate(
-                              price: valueLeave,
-                              description: "Saída",
-                              items: itemsLeave,
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
-                ),
-                Positioned(
-                  top: 90,
-                  left: MediaQuery.of(context).size.width / 2 - 125,
-                  width: 250,
-                  child: Card(
-                    elevation: 6,
-                    // shadowColor: Theme.of(context).primaryColor,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Lucro Total',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: 90,
+            left: MediaQuery.of(context).size.width / 2 - 125,
+            width: 250,
+            child: Card(
+              elevation: 6,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Lucro Total',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: isLoading
+                                ? Center(
+                                    child: loadingFourRotatingDots(
+                                      context,
+                                      20,
+                                      Theme.of(context).primaryColor,
+                                    ),
+                                  )
+                                : Text(
                                     NumberFormat("R\$ #0.00", "PT-BR")
                                         .format(valueProfit),
                                     style: TextStyle(
@@ -206,88 +218,85 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                ),
-                              ),
-                              PopupMenuButton(
-                                icon: Icon(
-                                  Icons.more_vert,
-                                  color: Colors.pink.shade500,
-                                ),
-                                iconSize: 30,
-                                itemBuilder: (BuildContext context) =>
-                                    <PopupMenuEntry<String>>[
-                                  const PopupMenuItem(
-                                    padding: EdgeInsets.zero,
-                                    value: "production-of-the-day",
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.add,
-                                          color: Colors.white,
-                                        ),
-                                        Text("Adicionar Produção"),
-                                      ],
-                                    ),
+                          ),
+                        ),
+                        PopupMenuButton(
+                          icon: Icon(
+                            Icons.more_vert,
+                            color: Colors.pink.shade500,
+                          ),
+                          iconSize: 30,
+                          itemBuilder: (BuildContext context) =>
+                              <PopupMenuEntry<String>>[
+                            const PopupMenuItem(
+                              padding: EdgeInsets.zero,
+                              value: "production-of-the-day",
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.add,
+                                    color: Colors.white,
                                   ),
-                                  const PopupMenuItem(
-                                    value: "all-productions",
-                                    padding: EdgeInsets.zero,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.zoom_in,
-                                          color: Colors.white,
-                                        ),
-                                        Text(
-                                          "Acessar Produções",
-                                        ),
-                                      ],
-                                    ),
+                                  Text("Adicionar Produção"),
+                                ],
+                              ),
+                            ),
+                            const PopupMenuItem(
+                              value: "all-productions",
+                              padding: EdgeInsets.zero,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.zoom_in,
+                                    color: Colors.white,
+                                  ),
+                                  Text(
+                                    "Acessar Produções",
                                   ),
                                 ],
-                                onSelected: (option) async {
-                                  if (option == "production-of-the-day") {
-                                    final confirmSave = await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => const ProductionPage(
-                                          production: {},
-                                          listFeedstock: [],
-                                          isEdition: false,
-                                        ),
-                                      ),
-                                    );
-
-                                    if (confirmSave[0] == true) {
-                                      loadDetailsProductions();
-                                    }
-                                  } else if (option == "all-productions") {
-                                    final confirmUpdateAndDelete =
-                                        await Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) =>
-                                            const AllProductionsPage(),
-                                      ),
-                                    );
-                                    if (confirmUpdateAndDelete == true) {
-                                      loadDetailsProductions();
-                                    }
-                                  }
-                                },
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
+                            ),
+                          ],
+                          onSelected: (option) async {
+                            if (option == "production-of-the-day") {
+                              final confirmSave = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const ProductionPage(
+                                    production: {},
+                                    listFeedstock: [],
+                                    isEdition: false,
+                                  ),
+                                ),
+                              );
+
+                              if (confirmSave[0] == true) {
+                                loadDetailsProductions();
+                              }
+                            } else if (option == "all-productions") {
+                              final confirmUpdateAndDelete =
+                                  await Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const AllProductionsPage(),
+                                ),
+                              );
+                              if (confirmUpdateAndDelete == true) {
+                                loadDetailsProductions();
+                              }
+                            }
+                          },
+                        ),
+                      ],
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
+          ),
+        ],
+      ),
     );
   }
 }

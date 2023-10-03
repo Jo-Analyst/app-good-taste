@@ -280,29 +280,27 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     ),
                     Container(
                       margin: const EdgeInsets.only(top: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            "Sabores ou tipos: ",
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 25,
-                              fontWeight: FontWeight.w700,
+                      child: GestureDetector(
+                        onTap: () => showModalForm("", null),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "Sabores ou tipos: ",
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 25,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              showModalForm("", null);
-                            },
-                            icon: Icon(
+                            Icon(
                               Icons.add_circle_outline,
                               color: Theme.of(context).primaryColor,
                               size: 40,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     Container(

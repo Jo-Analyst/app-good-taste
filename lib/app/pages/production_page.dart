@@ -513,19 +513,27 @@ class _ProductionPageState extends State<ProductionPage> {
                                 ),
                               ),
                             ),
-                            Text(
-                              DateFormat("dd 'de' MMMM 'de' yyyy", "pt-br")
-                                  .format(dateSelected),
-                              style: const TextStyle(fontSize: 19),
-                            ),
-                            IconButton(
-                              onPressed: () => showCalendarPicker(),
-                              icon: Icon(
-                                Icons.calendar_month_sharp,
-                                color: Theme.of(context).primaryColor,
-                                size: 35,
+                            InkWell(
+                              onTap: () => showCalendarPicker(),
+                              child: Row(
+                                children: [
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      DateFormat(
+                                              "dd 'de' MMMM 'de' yyyy", "pt-br")
+                                          .format(dateSelected),
+                                      style: const TextStyle(fontSize: 19),
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.calendar_month_sharp,
+                                    color: Theme.of(context).primaryColor,
+                                    size: 35,
+                                  ),
+                                ],
                               ),
-                            ),
+                            )
                           ],
                         ),
                       ],

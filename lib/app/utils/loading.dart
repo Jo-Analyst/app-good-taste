@@ -10,9 +10,10 @@ Widget loading(BuildContext context, double size) {
   );
 }
 
-Widget loadingFourRotatingDots(BuildContext context, double size) {
+Widget loadingFourRotatingDots(
+    BuildContext context, double size, Color? color) {
   return LoadingAnimationWidget.fourRotatingDots(
-    color: Colors.white,
+    color: color ?? Colors.white,
     size: size,
   );
 }

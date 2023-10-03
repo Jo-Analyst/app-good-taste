@@ -173,7 +173,7 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
                               child: isLoading
                                   ? Center(
                                       child:
-                                          loadingFourRotatingDots(context, 20),
+                                          loadingFourRotatingDots(context, 20, null),
                                     )
                                   : Column(
                                       mainAxisAlignment:

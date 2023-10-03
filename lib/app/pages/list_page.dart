@@ -131,7 +131,10 @@ class _ListPageState extends State<ListPage> {
             isEdition: false,
           ));
 
-      flavorController.add({"type": response, "product_id": widget.productId});
+      if (response.isNotEmpty) {
+        flavorController
+            .add({"type": response, "product_id": widget.productId});
+      }
     }
 
     if (response != null) {
