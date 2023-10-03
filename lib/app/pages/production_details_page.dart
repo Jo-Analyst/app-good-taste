@@ -297,7 +297,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                     fontSize: 18,
                     color: Colors.black,
                   ),
-                  child: Column(
+                  child: ListView(
                     children: [
                       Divider(
                         color: Colors.pink[500],
