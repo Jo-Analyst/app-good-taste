@@ -194,13 +194,18 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                NumberFormat("R\$ #0.00", "PT-BR")
-                                    .format(valueProfit),
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  color: Theme.of(context).primaryColor,
-                                  fontWeight: FontWeight.w700,
+                              Expanded(
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    NumberFormat("R\$ #0.00", "PT-BR")
+                                        .format(valueProfit),
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
                                 ),
                               ),
                               PopupMenuButton(

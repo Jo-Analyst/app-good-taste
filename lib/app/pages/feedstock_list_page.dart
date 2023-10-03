@@ -23,6 +23,7 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
   List<Map<String, dynamic>> filteredFeedstocks = [];
   List<Map<String, dynamic>> valuesOfSelectedFeedstock = [];
   final List<Map<String, dynamic>> removeItemsFlavors = [];
+  final List<Map<String, dynamic>> feedstockSelected = [];
   List<Map<String, dynamic>> listItemsChecked = [];
   final List<bool> valuesDefault = [];
 
@@ -30,7 +31,10 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
   void initState() {
     super.initState();
     changeIsCheckedAttribute();
-    filteredFeedstocks = List.from(widget.feedstocks);
+    for (var feedstock in widget.feedstocks) {
+      filteredFeedstocks.add(feedstock);
+    }
+    // filteredFeedstocks = List.from(widget.feedstocks);
   }
 
   void changeIsCheckedAttribute() {
@@ -169,6 +173,27 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
     }
   }
 
+  void addFeedstockSelected(
+      Map<String, dynamic> filteredFeedstock, bool itemChecked) {
+    if (itemChecked) {
+      feedstockSelected.add(filteredFeedstock);
+    } else {
+      feedstockSelected.removeWhere(
+          (feedstock) => feedstock["id"] == filteredFeedstock["id"]);
+    }
+  }
+
+  removeFeedstockSelected() {
+    for (var feedstock in feedstockSelected) {
+      for (var wfeedstock in widget.feedstocks) {
+        if (feedstock["id"] == wfeedstock["id"]) {
+          wfeedstock["isChecked"] = false;
+          break;
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -202,6 +227,7 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
         leading: IconButton(
           onPressed: () {
             changeListFeedstockInWaiver();
+            removeFeedstockSelected();
             Navigator.of(context).pop();
           },
           icon: const Icon(
@@ -246,6 +272,8 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
                           filteredFeedstocks[index]["isChecked"] =
                               !(filteredFeedstocks[index]["isChecked"] ??
                                   false);
+                          addFeedstockSelected(filteredFeedstocks[index],
+                              filteredFeedstocks[index]["isChecked"] ?? false);
                           checkIfThereIsFeedstockSelected();
                           addValuesSelectedFeedstock(filteredFeedstocks[index],
                               filteredFeedstocks[index]["isChecked"] ?? false);
@@ -273,6 +301,20 @@ class _FeedstockListPageState extends State<FeedstockListPage> {
                                   setState(() {
                                     filteredFeedstocks[index]["isChecked"] =
                                         checked!;
+
+                                    addFeedstockSelected(
+                                        filteredFeedstocks[index], checked);
+
+                                    if (checked) {
+                                      feedstockSelected
+                                          .add(filteredFeedstocks[index]);
+                                    } else {
+                                      feedstockSelected.removeWhere(
+                                          (feedstock) =>
+                                              feedstock["id"] ==
+                                              filteredFeedstocks[index]["id"]);
+                                    }
+
                                     checkIfThereIsFeedstockSelected();
                                     addValuesSelectedFeedstock(
                                         filteredFeedstocks[index], checked);

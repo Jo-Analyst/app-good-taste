@@ -265,6 +265,20 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       size: 25,
                     ),
                   ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const GoodTastePage()),
+                        (route) => false,
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.close,
+                      size: 25,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -305,7 +319,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height / 2 - 210,
+                        height: MediaQuery.of(context).size.height / 2 - 190,
                         width: double.infinity,
                         child: Card(
                           elevation: 8,
@@ -374,67 +388,79 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                                       ),
                                                       Row(
                                                         children: [
-                                                          Text(
-                                                            "${productions[index]["quantity"]}x",
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              color: index ==
-                                                                          selectedLine &&
-                                                                      rowsPressed[
-                                                                              index]
-                                                                          [
-                                                                          "isPressed"]!
-                                                                  ? Colors.white
-                                                                  : Colors
-                                                                      .black,
+                                                          FittedBox(
+                                                            fit: BoxFit
+                                                                .scaleDown,
+                                                            child: Text(
+                                                              "${productions[index]["quantity"]}x",
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                color: index ==
+                                                                            selectedLine &&
+                                                                        rowsPressed[index]
+                                                                            [
+                                                                            "isPressed"]!
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Colors
+                                                                        .black,
+                                                              ),
                                                             ),
                                                           ),
                                                           const SizedBox(
                                                               width: 5),
-                                                          Text(
-                                                            NumberFormat(
-                                                                    "R\$#0.00",
-                                                                    "PT-BR")
-                                                                .format(
-                                                              productions[index]
-                                                                      [
-                                                                      "price"] ??
-                                                                  0,
-                                                            ),
-                                                            style: TextStyle(
-                                                              fontSize: 16,
-                                                              color: index ==
-                                                                          selectedLine &&
-                                                                      rowsPressed[
-                                                                              index]
-                                                                          [
-                                                                          "isPressed"]!
-                                                                  ? Colors.white
-                                                                  : Colors
-                                                                      .black,
+                                                          FittedBox(
+                                                            fit: BoxFit
+                                                                .scaleDown,
+                                                            child: Text(
+                                                              NumberFormat(
+                                                                      "R\$#0.00",
+                                                                      "PT-BR")
+                                                                  .format(
+                                                                productions[index]
+                                                                        [
+                                                                        "price"] ??
+                                                                    0,
+                                                              ),
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                color: index ==
+                                                                            selectedLine &&
+                                                                        rowsPressed[index]
+                                                                            [
+                                                                            "isPressed"]!
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Colors
+                                                                        .black,
+                                                              ),
                                                             ),
                                                           ),
                                                           const SizedBox(
                                                               width: 5),
-                                                          Text(
-                                                            NumberFormat(
-                                                                    "R\$#0.00",
-                                                                    "PT-BR")
-                                                                .format(
-                                                              productions[index]
-                                                                  [
-                                                                  "value_entry"],
-                                                            ),
-                                                            style: TextStyle(
-                                                              color: index ==
-                                                                          selectedLine &&
-                                                                      rowsPressed[
-                                                                              index]
-                                                                          [
-                                                                          "isPressed"]!
-                                                                  ? Colors.white
-                                                                  : Colors
-                                                                      .black,
+                                                          FittedBox(
+                                                            fit: BoxFit
+                                                                .scaleDown,
+                                                            child: Text(
+                                                              NumberFormat(
+                                                                      "R\$#0.00",
+                                                                      "PT-BR")
+                                                                  .format(
+                                                                productions[
+                                                                        index][
+                                                                    "value_entry"],
+                                                              ),
+                                                              style: TextStyle(
+                                                                color: index ==
+                                                                            selectedLine &&
+                                                                        rowsPressed[index]
+                                                                            [
+                                                                            "isPressed"]!
+                                                                    ? Colors
+                                                                        .white
+                                                                    : Colors
+                                                                        .black,
+                                                              ),
                                                             ),
                                                           ),
                                                         ],
@@ -459,7 +485,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height / 2 - 210,
+                        height: MediaQuery.of(context).size.height / 2 - 190,
                         width: double.infinity,
                         child: Card(
                           elevation: 8,
@@ -568,13 +594,16 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.blue,
                                   ),
-                                  child: Text(
-                                    NumberFormat("R\$ #0.00", "PT-BR")
-                                        .format(valueEntry),
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      NumberFormat("R\$ #0.00", "PT-BR")
+                                          .format(valueEntry),
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -596,13 +625,16 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.red,
                                   ),
-                                  child: Text(
-                                    NumberFormat("R\$ #0.00", "PT-BR")
-                                        .format(valueLeave),
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      NumberFormat("R\$ #0.00", "PT-BR")
+                                          .format(valueLeave),
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -624,13 +656,16 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                     borderRadius: BorderRadius.circular(10),
                                     color: Colors.green,
                                   ),
-                                  child: Text(
-                                    NumberFormat("R\$ #0.00", "PT-BR")
-                                        .format(valueProfit),
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      NumberFormat("R\$ #0.00", "PT-BR")
+                                          .format(valueProfit),
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -639,30 +674,6 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                           ),
                         ),
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const GoodTastePage()),
-                            (route) => false,
-                          );
-                        },
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.clear_all_sharp,
-                              size: 25,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              "Fechar",
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 ),

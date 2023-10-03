@@ -1,6 +1,7 @@
 import 'package:app_good_taste/app/controllers/production_controller.dart';
 import 'package:app_good_taste/app/pages/production_details_list_page.dart';
 import 'package:app_good_taste/app/template/slide_year.dart';
+import 'package:app_good_taste/app/utils/loading.dart';
 import 'package:app_good_taste/app/utils/month.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ class AllProductionsPage extends StatefulWidget {
 }
 
 class _AllProductionsPageState extends State<AllProductionsPage> {
+  bool isLoading = true;
   List<Map<String, dynamic>> date = Month.listMonths.map((dt) {
     return {
       "number": dt["number"],
@@ -64,6 +66,7 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
           await getDateProductions("${dt["number"]}/$yearSelected");
       setState(() {
         dt["there_is_production"] = thereIsProduction;
+        isLoading = false;
       });
     }
   }
@@ -150,6 +153,7 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
                           child: Card(
                             elevation: 8,
                             child: Container(
+                              padding: const EdgeInsets.all(5),
                               decoration: date[index]["there_is_production"]
                                   ? BoxDecoration(
                                       gradient: LinearGradient(
@@ -166,29 +170,38 @@ class _AllProductionsPageState extends State<AllProductionsPage> {
                               color: date[index]["there_is_production"]
                                   ? null
                                   : Colors.black54,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '${date[index]["number"]}',
-                                    style: const TextStyle(
-                                      fontFamily: "YesevaOne",
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                              child: isLoading
+                                  ? Center(
+                                      child:
+                                          loadingFourRotatingDots(context, 20),
+                                    )
+                                  : Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          '${date[index]["number"]}',
+                                          style: const TextStyle(
+                                            fontFamily: "YesevaOne",
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        FittedBox(
+                                          fit: BoxFit.scaleDown,
+                                          child: Text(
+                                            '${date[index]["month"]}',
+                                            style: const TextStyle(
+                                              fontFamily: "YesevaOne",
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  Text(
-                                    '${date[index]["month"]}',
-                                    style: const TextStyle(
-                                      fontFamily: "YesevaOne",
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
                             ),
                           ),
                         );

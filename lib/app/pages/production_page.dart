@@ -680,13 +680,26 @@ class _ProductionPageState extends State<ProductionPage> {
                         ),
                       ),
                       Flexible(
-                        child: Chip(
-                          backgroundColor: Colors.blue,
-                          label: Text(
-                            NumberFormat("R\$ #0.00", "PT-BR")
-                                .format(valueEntry),
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.white),
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 25,
+                          width: 90,
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.blue,
+                          ),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              NumberFormat("R\$ #0.00", "PT-BR")
+                                  .format(valueEntry),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -698,13 +711,26 @@ class _ProductionPageState extends State<ProductionPage> {
                         ),
                       ),
                       Flexible(
-                        child: Chip(
-                          backgroundColor: Colors.red,
-                          label: Text(
-                            NumberFormat("R\$ #0.00", "PT-BR")
-                                .format(valueLeave),
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.white),
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 25,
+                          width: 90,
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.red,
+                          ),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              NumberFormat("R\$ #0.00", "PT-BR")
+                                  .format(valueLeave),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -716,13 +742,26 @@ class _ProductionPageState extends State<ProductionPage> {
                         ),
                       ),
                       Flexible(
-                        child: Chip(
-                          backgroundColor: Colors.green,
-                          label: Text(
-                            NumberFormat("R\$ #0.00", "PT-BR")
-                                .format(valueProfit),
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.white),
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 25,
+                          width: 90,
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.green,
+                          ),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              NumberFormat("R\$ #0.00", "PT-BR")
+                                  .format(valueProfit),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           ),
                         ),
                       ),
