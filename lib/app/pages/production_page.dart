@@ -523,7 +523,7 @@ class _ProductionPageState extends State<ProductionPage> {
                                       DateFormat(
                                               "dd 'de' MMMM 'de' yyyy", "pt-br")
                                           .format(dateSelected),
-                                      style: const TextStyle(fontSize: 19),
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                   ),
                                   Icon(
@@ -570,7 +570,7 @@ class _ProductionPageState extends State<ProductionPage> {
                   ),
                   listOfSelectedFeedstocks.isEmpty
                       ? SizedBox(
-                          height: MediaQuery.of(context).size.height / 2 - 80,
+                          height: MediaQuery.of(context).size.height / 2 - 120,
                           child: const Center(
                             child: Text(
                               "Não há matéria prima adicionada.",
@@ -578,7 +578,7 @@ class _ProductionPageState extends State<ProductionPage> {
                             ),
                           ))
                       : SizedBox(
-                          height: MediaQuery.of(context).size.height / 2 - 80,
+                          height: MediaQuery.of(context).size.height / 2 - 120,
                           child: ListView.builder(
                             itemCount: listOfSelectedFeedstocks.length,
                             itemBuilder: (context, index) {
@@ -603,7 +603,6 @@ class _ProductionPageState extends State<ProductionPage> {
                                           },
                                           backgroundColor: Colors.red,
                                           icon: Icons.delete,
-                                          label: "Excluir",
                                         ),
                                       ],
                                     ),
@@ -631,18 +630,9 @@ class _ProductionPageState extends State<ProductionPage> {
                                         ),
                                       ),
                                       trailing: SizedBox(
-                                        width: 127,
+                                        width: 67,
                                         child: Row(
                                           children: [
-                                            IconButton(
-                                              onPressed: () => decrement(index),
-                                              icon: Icon(
-                                                Icons.remove_circle,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                size: 30,
-                                              ),
-                                            ),
                                             Container(
                                               width: 31,
                                               alignment: Alignment.center,
@@ -657,14 +647,27 @@ class _ProductionPageState extends State<ProductionPage> {
                                                 ),
                                               ),
                                             ),
-                                            IconButton(
-                                              onPressed: () => increment(index),
-                                              icon: Icon(
-                                                Icons.add_circle,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                size: 30,
-                                              ),
+                                            Column(
+                                              children: [
+                                                InkWell(
+                                                  onTap: () => increment(index),
+                                                  child: Icon(
+                                                    Icons.keyboard_arrow_up,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                    size: 28,
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () => decrement(index),
+                                                  child: Icon(
+                                                    Icons.keyboard_arrow_down,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                    size: 28,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),

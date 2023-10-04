@@ -319,7 +319,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height / 2 - 190,
+                        height: MediaQuery.of(context).size.height / 2 - 180,
                         width: double.infinity,
                         child: Card(
                           elevation: 8,
@@ -371,18 +371,24 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                                                             .spaceBetween,
                                                     children: [
                                                       Expanded(
-                                                        child: Text(
-                                                          productions[index]
-                                                              ["flavor"],
-                                                          style: TextStyle(
-                                                            color: index ==
-                                                                        selectedLine &&
-                                                                    rowsPressed[
-                                                                            index]
-                                                                        [
-                                                                        "isPressed"]!
-                                                                ? Colors.white
-                                                                : Colors.black,
+                                                        child: FittedBox(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          fit: BoxFit.scaleDown,
+                                                          child: Text(
+                                                            productions[index]
+                                                                ["flavor"],
+                                                            style: TextStyle(
+                                                              color: index ==
+                                                                          selectedLine &&
+                                                                      rowsPressed[
+                                                                              index]
+                                                                          [
+                                                                          "isPressed"]!
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
@@ -485,7 +491,7 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                       ),
                       const SizedBox(height: 10),
                       SizedBox(
-                        height: MediaQuery.of(context).size.height / 2 - 190,
+                        height: MediaQuery.of(context).size.height / 2 - 180,
                         width: double.infinity,
                         child: Card(
                           elevation: 8,
@@ -571,107 +577,105 @@ class _ProductionDetailsPageState extends State<ProductionDetailsPage> {
                         ),
                       ),
                       const SizedBox(height: 5),
-                      Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                "E:",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "E:",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
                               ),
-                              Flexible(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 25,
-                                  width: 90,
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.blue,
-                                  ),
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      NumberFormat("R\$ #0.00", "PT-BR")
-                                          .format(valueEntry),
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                            ),
+                            Flexible(
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 25,
+                                width: 90,
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.blue,
+                                ),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    NumberFormat("R\$ #0.00", "PT-BR")
+                                        .format(valueEntry),
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
                                 ),
                               ),
-                              const Text(
-                                "S:",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                            ),
+                            const Text(
+                              "S:",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
                               ),
-                              Flexible(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 25,
-                                  width: 90,
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.red,
-                                  ),
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      NumberFormat("R\$ #0.00", "PT-BR")
-                                          .format(valueLeave),
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                            ),
+                            Flexible(
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 25,
+                                width: 90,
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.red,
+                                ),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    NumberFormat("R\$ #0.00", "PT-BR")
+                                        .format(valueLeave),
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
                                 ),
                               ),
-                              const Text(
-                                "L:",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                            ),
+                            const Text(
+                              "L:",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
                               ),
-                              Flexible(
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 25,
-                                  width: 90,
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.green,
-                                  ),
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      NumberFormat("R\$ #0.00", "PT-BR")
-                                          .format(valueProfit),
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                            ),
+                            Flexible(
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 25,
+                                width: 90,
+                                padding: const EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.green,
+                                ),
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    NumberFormat("R\$ #0.00", "PT-BR")
+                                        .format(valueProfit),
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
