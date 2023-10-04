@@ -38,11 +38,11 @@ class AppGoodTaste extends StatelessWidget {
         locale: const Locale('pt', 'BR'),
         supportedLocales: const [
           Locale('pt', 'BR'),
-          // Outros idiomas suportados, se necessário
         ],
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
         navigatorKey: navigatorKey,
         title: "APP - Good Taste",
@@ -56,7 +56,6 @@ class AppGoodTaste extends StatelessWidget {
             textStyle: TextStyle(color: Colors.white),
             color: Color.fromRGBO(233, 30, 98, 0.877),
           ),
-          // iconTheme: const IconThemeData(color: Colors.white),
           textTheme: const TextTheme(
             displayLarge: TextStyle(
               fontSize: 18,
