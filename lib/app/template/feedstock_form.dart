@@ -32,7 +32,7 @@ class _FeedstockState extends State<FeedstockForm> {
         NumberFormat("#0.00", "PT-BR").format(widget.feedstockItem["price"]);
   }
 
-  void save() {
+  void save() async {
     final feedstockProvider =
         Provider.of<FeedstockController>(context, listen: false);
     if (_key.currentState!.validate()) {
@@ -44,16 +44,19 @@ class _FeedstockState extends State<FeedstockForm> {
         "price": double.parse(_price.text.replaceAll(RegExp(r','), '.')),
       };
 
-      feedstockProvider.save(data);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Matéria prima salvo com sucesso."),
-          duration: Duration(milliseconds: 3000),
-        ),
-      );
-      Navigator.pop(context, data);
+      data["id"] = await feedstockProvider.save(data);
+      confirmSave(data);
     }
+  }
+
+  confirmSave(Map<String, Object> data) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Matéria prima salvo com sucesso."),
+        duration: Duration(milliseconds: 3000),
+      ),
+    );
+    Navigator.pop(context, data);
   }
 
   @override

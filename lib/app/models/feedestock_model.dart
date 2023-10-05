@@ -29,17 +29,20 @@ class FeedstockModel {
     }
   }
 
-  Future<void> save() async {
+  Future<int> save() async {
+    int latestId = 0;
     try {
       final db = await DB.openDatabase();
       final data = {"name": name, "brand": brand, "price": price, "unit": unit};
       if (id == 0) {
-        await db.insert("feedstocks", data);
+        latestId = await db.insert("feedstocks", data);
       } else {
         await db.update("feedstocks", data, where: "id = ?", whereArgs: [id]);
       }
     } catch (e) {
-      // 
+      //
     }
+
+    return latestId;
   }
 }

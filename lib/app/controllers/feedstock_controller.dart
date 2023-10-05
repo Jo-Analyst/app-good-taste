@@ -26,14 +26,13 @@ class FeedstockController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> save(Map<String, dynamic> data) async {
-    FeedstockModel(
+  Future<int> save(Map<String, dynamic> data) async {
+    return FeedstockModel(
       id: data["id"],
       name: data["name"],
       brand: data["brand"],
       price: data["price"],
       unit: data["unit"],
     ).save();
-    notifyListeners();
   }
 }
