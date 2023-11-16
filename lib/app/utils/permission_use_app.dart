@@ -12,3 +12,13 @@ Future<bool> isContactsPermissionGranted() async {
   var status = await Permission.contacts.request();
   return status.isGranted;
 }
+
+Future<bool> isGranted() async {
+  bool isGrantedPermission = true;
+  if (!await isGrantedRequestPermissionStorage()) {
+    openAppSettings();
+    isGrantedPermission = false;
+  }
+
+  return isGrantedPermission;
+}

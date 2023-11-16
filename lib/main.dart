@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:app_good_taste/app/controllers/feedstock_controller.dart';
 import 'package:app_good_taste/app/controllers/flavor_controller.dart';
 import 'package:app_good_taste/app/controllers/items_productions_controller.dart';
 import 'package:app_good_taste/app/controllers/product_controller.dart';
 import 'package:app_good_taste/app/controllers/production_controller.dart';
+import 'package:app_good_taste/app/pages/use_init_app_on_device.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -19,8 +22,22 @@ void main() async {
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-class AppGoodTaste extends StatelessWidget {
+class AppGoodTaste extends StatefulWidget {
   const AppGoodTaste({super.key});
+
+  @override
+  State<AppGoodTaste> createState() => _AppGoodTasteState();
+}
+
+class _AppGoodTasteState extends State<AppGoodTaste> {
+  late File file;
+  @override
+  void initState() {
+    super.initState();
+    String path =
+        '/data/user/0/com.example.app_good_taste/databases/goodtaste.db';
+    file = File(path);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +73,9 @@ class AppGoodTaste extends StatelessWidget {
             textStyle: TextStyle(color: Colors.white),
             color: Color.fromRGBO(233, 30, 98, 0.877),
           ),
+          appBarTheme: const AppBarTheme(
+            toolbarHeight: 100,
+          ),
           textTheme: const TextTheme(
             displayLarge: TextStyle(
               fontSize: 18,
@@ -66,8 +86,12 @@ class AppGoodTaste extends StatelessWidget {
             cursorColor: Colors.pink[500],
           ),
         ),
+        home: file.existsSync()
+            ? const GoodTastePage()
+            : const UseInitAppOnDevice(),
         routes: {
           AppRoutes.home: (ctx) => const GoodTastePage(),
+          AppRoutes.welcome: (ctx) => const UseInitAppOnDevice()
         },
       ),
     );

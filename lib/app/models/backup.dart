@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:app_good_taste/app/utils/path.dart';
 import 'package:share/share.dart';
 
 class Backup {
-  static String pathStorage = '/storage/emulated/0/Bom Sabor';
   static String pathDB =
       '/data/user/0/com.example.app_good_taste/databases/goodtaste.db';
 
@@ -23,9 +23,9 @@ class Backup {
     return null;
   }
 
-  static Future<String?> restore() async {
+  static Future<String?> restore(String filePath) async {
     try {
-      File saveDBFile = File("$pathStorage/goodtaste.db");
+      File saveDBFile = File(filePath);
 
       await saveDBFile.copy(pathDB);
     } catch (e) {
