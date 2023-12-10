@@ -69,7 +69,7 @@ class _ProductListState extends State<ProductList> {
           widget.toggleCard(expanded);
         },
         icon: Icon(
-          expanded ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_left,
+          expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
         ),
       ),
       title: Text(

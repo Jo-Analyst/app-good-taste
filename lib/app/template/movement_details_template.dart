@@ -87,8 +87,8 @@ class _MovementDetailsTemplate extends State<MovementDetailsTemplate> {
                         onPressed: () => setState(() => _expanded = !_expanded),
                         icon: Icon(
                           _expanded
-                              ? Icons.keyboard_arrow_down
-                              : Icons.keyboard_arrow_right,
+                              ? Icons.keyboard_arrow_up
+                              : Icons.keyboard_arrow_down,
                           color: Theme.of(context).primaryColor,
                         ),
                       )

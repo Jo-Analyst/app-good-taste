@@ -18,18 +18,15 @@ class _BackupPageState extends State<BackupPage> {
   final selectedDirectory = TextEditingController();
 
   void showMessage(Widget content, Color? color) {
-    Message.showMessage(context, content, color, 7000);
+    Message.showMessage(context, content, color, 3000);
   }
 
   Future<void> toGenerateBackup() async {
     if (!await isGranted()) return;
 
-    isLoadingBackup = true;
-
-    setState(() {});
+    setState(() => isLoadingBackup = true);
     final response = await Backup.toGenerate();
-    isLoadingBackup = false;
-    setState(() {});
+    setState(() => isLoadingBackup = false);
 
     if (response != null) {
       showMessage(
@@ -46,10 +43,13 @@ class _BackupPageState extends State<BackupPage> {
 
     showMessage(
       const ContentMessage(
-        title: "Backup foi realizado com sucesso.",
+        title: "Backup foi executado.",
         icon: Icons.info,
       ),
       null,
+    );
+    await Future.delayed(
+      const Duration(milliseconds: 300),
     );
 
     ShareUtils.share();

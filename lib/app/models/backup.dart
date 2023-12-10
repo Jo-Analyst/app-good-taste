@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:app_good_taste/app/utils/path.dart';
-import 'package:share/share.dart';
 
 class Backup {
   static String pathDB =
@@ -14,9 +13,6 @@ class Backup {
       Directory? folderPathForDbFile = Directory(pathStorage);
       await folderPathForDbFile.create();
       await ourDbFile.copy("$pathStorage/goodtaste.db");
-
-      Share.shareFiles(["$pathStorage/goodtaste.db"],
-          text: "Backup concluído!");
     } catch (e) {
       return e.toString();
     }

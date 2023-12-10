@@ -1,6 +1,7 @@
 import 'package:app_good_taste/app/models/backup.dart';
 import 'package:app_good_taste/app/pages/backup_page.dart';
 import 'package:app_good_taste/app/utils/permission_use_app.dart';
+import 'package:app_good_taste/app/utils/share.dart';
 import 'package:flutter/material.dart';
 import 'package:app_good_taste/app/pages/feedstock_page.dart';
 import 'package:app_good_taste/app/pages/movement_details_page.dart';
@@ -43,6 +44,11 @@ class _GoodTastPageState extends State<GoodTastePage> {
 
         if (isGranted) {
           await Backup.toGenerate();
+          await Future.delayed(
+            const Duration(milliseconds: 300),
+          );
+
+          ShareUtils.share();
         } else {
           openAppSettings();
           return false;
