@@ -62,7 +62,7 @@ class _AppGoodTasteState extends State<AppGoodTaste> {
           GlobalCupertinoLocalizations.delegate,
         ],
         navigatorKey: navigatorKey,
-        title: "APP - Good Taste",
+        title: "Bom Sabor",
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           // useMaterial3: true,

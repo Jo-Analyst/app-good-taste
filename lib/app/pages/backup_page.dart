@@ -49,7 +49,7 @@ class _BackupPageState extends State<BackupPage> {
       null,
     );
     await Future.delayed(
-      const Duration(milliseconds: 300),
+      const Duration(milliseconds: 3200),
     );
 
     ShareUtils.share();

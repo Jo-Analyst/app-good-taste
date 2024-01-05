@@ -20,7 +20,8 @@ class MovementDetailsPage extends StatefulWidget {
 
 class _MovementDetailsPageState extends State<MovementDetailsPage> {
   double valueProfit = 0, valueEntry = 0, valueLeave = 0;
-  String monthAndYear = "", year = "";
+  String monthAndYear = "";
+  int year = 2;
   List<Map<String, dynamic>> itemsEntry = [],
       itemsLeave = [],
       productionDetails = [];
@@ -32,7 +33,7 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
     DateTime currentDate = DateTime.now();
     String currentMonth = currentDate.month.toString().padLeft(2, '0');
     setState(() {
-      year = currentDate.year.toString();
+      year = currentDate.year;
       monthAndYear = "/$currentMonth/$year";
     });
 
@@ -149,10 +150,12 @@ class _MovementDetailsPageState extends State<MovementDetailsPage> {
                 ),
                 const SizedBox(height: 28),
                 SlideMonth(
-                  getNumberMonth: (numberMonth) {
+                  year: year,
+                  getNumberMonth: (numberMonth, year) {
                     setState(() {
+                      this.year = year;
                       monthAndYear = "/$numberMonth/$year";
-                       isLoading = true;
+                      isLoading = true;
                     });
                     loadDetailsProductions();
                   },
