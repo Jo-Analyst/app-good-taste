@@ -152,7 +152,7 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
                       Provider.of<ProductionController>(context, listen: false);
                   final productionDetails = await productionProvider
                       .getSumQuantityAndValueEntry(widget.monthAndYear);
-                  generateAndSharePDF(productionDetails, monthAndYear,
+                  generateAndSharePDF(context, productionDetails, monthAndYear,
                       valueEntry, itemsLeave, valueLeave, valueProfit);
                 },
                 icon: const Icon(
@@ -244,10 +244,10 @@ class _ProductionDetailsListPage extends State<ProductionDetailsListPage> {
                                         : Colors.grey[200];
 
                                     return DataRow(
-                                      color: MaterialStateProperty.resolveWith(
+                                      color: WidgetStateProperty.resolveWith(
                                           (states) {
                                         if (states
-                                            .contains(MaterialState.selected)) {
+                                            .contains(WidgetState.selected)) {
                                           return rowColor?.withOpacity(
                                               0.5); // Opacidade reduzida quando a linha estiver selecionada
                                         } else {

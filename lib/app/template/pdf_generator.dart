@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:app_good_taste/test.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
@@ -6,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 
 Future<void> generateAndSharePDF(
+    BuildContext context,
     List<Map<String, dynamic>> productionDetails,
     String monthAndYear,
     double valueEntry,
@@ -154,6 +157,9 @@ Future<void> generateAndSharePDF(
     final file = File("${output.path}/balancete.pdf");
     await file.writeAsBytes(await pdf.save());
 
-    Share.shareFiles([file.path], text: "Confira meu PDF!");
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => Test(path: file.path)));
+
+    // Share.shareFiles([file.path], text: "Confira meu PDF!");
   }
 }
