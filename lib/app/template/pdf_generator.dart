@@ -1,8 +1,8 @@
 import 'dart:io';
+import 'package:app_good_taste/app/utils/permission_use_app.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:share/share.dart';
 
 Future<void> generateAndSharePDF(
@@ -148,8 +148,8 @@ Future<void> generateAndSharePDF(
     );
   }
 
-  final status = await Permission.storage.request();
-  if (status.isGranted) {
+  final isGranted = await isGrantedRequestPermissionStorage();
+  if (isGranted) {
     final output = await getTemporaryDirectory();
     final file = File("${output.path}/balancete.pdf");
     await file.writeAsBytes(await pdf.save());

@@ -65,7 +65,7 @@ class _AppGoodTasteState extends State<AppGoodTaste> {
         title: "Bom Sabor",
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          // useMaterial3: true,
+          useMaterial3: false,
           scaffoldBackgroundColor: const Color.fromARGB(179, 246, 245, 245),
           primarySwatch: Colors.pink,
           primaryColor: Colors.pink[500],
